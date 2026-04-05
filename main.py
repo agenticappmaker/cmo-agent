@@ -216,6 +216,56 @@ def cmd_daemon(brand: str, platform: str):
         time.sleep(30)
 
 
+def cmd_outreach(subcommand: str, args):
+    """Dispatch outreach sub-commands."""
+    if subcommand == "research":
+        from agents.outreach_researcher import research_all_targets
+        research_all_targets(
+            force_refresh=getattr(args, "force", False),
+            category_filter=getattr(args, "category", None)
+        )
+
+    elif subcommand == "draft":
+        from agents.outreach_generator import draft_all_pitches
+        draft_all_pitches(
+            force_refresh=getattr(args, "force", False),
+            category_filter=getattr(args, "category", None)
+        )
+
+    elif subcommand == "send-emails":
+        from agents.outreach_emailer import send_all_emails
+        send_all_emails(
+            dry_run=getattr(args, "dry_run", False),
+            delay_seconds=getattr(args, "delay", 90),
+            limit=getattr(args, "limit", None)
+        )
+
+    elif subcommand == "show-dms":
+        from agents.outreach_generator import show_dm_queue
+        show_dm_queue(platform_filter=getattr(args, "platform", None))
+
+    elif subcommand == "show-emails":
+        from agents.outreach_generator import show_outbox
+        show_outbox()
+
+    elif subcommand == "mark-sent":
+        from agents.outreach_emailer import mark_dm_sent
+        handle = getattr(args, "handle", "").lstrip("@")
+        mark_dm_sent(handle)
+
+    elif subcommand == "status":
+        from agents.outreach_emailer import outreach_status
+        outreach_status()
+
+    elif subcommand == "summary":
+        from agents.outreach_researcher import show_research_summary
+        show_research_summary()
+
+    else:
+        print(f"Unknown outreach subcommand: {subcommand}")
+        print("Available: research, draft, send-emails, show-dms, show-emails, mark-sent, status, summary")
+
+
 def main():
     parser = argparse.ArgumentParser(description="CMO Agent — Autonomous social media AI")
     subparsers = parser.add_subparsers(dest="command")
@@ -239,6 +289,44 @@ def main():
     daemon.add_argument("brand", help="Brand slug")
     daemon.add_argument("--platform", default="instagram", choices=["instagram", "facebook", "linkedin", "twitter", "tiktok"])
 
+    # ── Outreach commands ──────────────────────────────────────────────────────
+    outreach = subparsers.add_parser("outreach", help="Partnership outreach: research, draft, send")
+    outreach_sub = outreach.add_subparsers(dest="outreach_cmd")
+
+    # research
+    research_p = outreach_sub.add_parser("research", help="Research all targets via Claude + web search")
+    research_p.add_argument("--force", action="store_true", help="Re-research even if cached")
+    research_p.add_argument("--category", default=None, help="Only research targets from this file (e.g. brands, delivery, influencers)")
+
+    # draft
+    draft_p = outreach_sub.add_parser("draft", help="Generate tailored pitches for all researched targets")
+    draft_p.add_argument("--force", action="store_true", help="Re-draft even if already drafted")
+    draft_p.add_argument("--category", default=None, help="Only draft for this category/file")
+
+    # send-emails
+    send_p = outreach_sub.add_parser("send-emails", help="Send all email pitches via Gmail SMTP")
+    send_p.add_argument("--dry-run", action="store_true", help="Preview emails without sending")
+    send_p.add_argument("--delay", type=int, default=90, help="Seconds between emails (default 90)")
+    send_p.add_argument("--limit", type=int, default=None, help="Max emails to send this run")
+
+    # show-dms
+    show_dms_p = outreach_sub.add_parser("show-dms", help="Print DM queue (copy-paste ready)")
+    show_dms_p.add_argument("--platform", default=None, choices=["instagram", "tiktok"], help="Filter by platform")
+
+    # show-emails
+    outreach_sub.add_parser("show-emails", help="Print full email outbox")
+
+    # mark-sent (for DMs you've manually sent)
+    mark_p = outreach_sub.add_parser("mark-sent", help="Mark a DM as sent after you've manually sent it")
+    mark_p.add_argument("handle", help="Instagram handle (with or without @)")
+
+    # status
+    outreach_sub.add_parser("status", help="Dashboard: research + draft + send progress")
+
+    # summary
+    outreach_sub.add_parser("summary", help="Research summary by category")
+    # ──────────────────────────────────────────────────────────────────────────
+
     args = parser.parse_args()
 
     if args.command == "generate":
@@ -253,6 +341,11 @@ def main():
         cmd_run()
     elif args.command == "daemon":
         cmd_daemon(args.brand, args.platform)
+    elif args.command == "outreach":
+        if not args.outreach_cmd:
+            outreach.print_help()
+        else:
+            cmd_outreach(args.outreach_cmd, args)
     else:
         parser.print_help()
 
