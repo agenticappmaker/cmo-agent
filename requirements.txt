@@ -1,0 +1,6 @@
+anthropic
+openai
+requests
+python-dotenv
+schedule
+Pillow

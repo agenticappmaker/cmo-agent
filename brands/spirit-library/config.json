@@ -1,0 +1,44 @@
+{
+  "brand_name": "Spirit Library",
+  "tagline": "Discover, save, and share exceptional cocktails.",
+  "tone": "sophisticated but approachable, knowledgeable without being pretentious, aspirational",
+  "target_audience": "cocktail enthusiasts aged 25-45, home bartenders, people who enjoy craft drinks and entertaining",
+  "content_pillars": [
+    "cocktail recipes and techniques",
+    "spirit education and recommendations",
+    "entertaining and hosting tips",
+    "seasonal and trending cocktails",
+    "app features and user stories"
+  ],
+  "hashtags_core": [
+    "#SpiritLibrary", "#CocktailApp", "#CraftCocktails", "#HomeBar",
+    "#MixologyApp", "#CocktailRecipes", "#DrinkUp", "#Bartending"
+  ],
+  "hashtags_pool": [
+    "#Whiskey", "#Gin", "#Tequila", "#Rum", "#Bourbon", "#Mezcal",
+    "#CocktailOfTheDay", "#DrinkPhotography", "#BarCart", "#Mixology",
+    "#HappyHour", "#CocktailCulture", "#SpiritForward", "#ClassicCocktails",
+    "#ModernMixology", "#DrinkRecipes", "#NegroniSbagliato", "#OldFashioned",
+    "#Negroni", "#Margarita", "#Daiquiri", "#Aperol", "#FancyDrinks"
+  ],
+  "post_frequency": {
+    "instagram": 2,
+    "facebook": 2,
+    "linkedin": 1,
+    "twitter": 2,
+    "tiktok": 1
+  },
+  "best_times": {
+    "instagram": ["09:00", "19:00"],
+    "facebook":  ["09:00", "19:00"],
+    "linkedin":  ["09:00"],
+    "twitter":   ["09:00", "19:00"],
+    "tiktok":    ["19:00"]
+  },
+  "instagram_account_id": "17841406411010119",
+  "facebook_page_id": "1024220647446383",
+  "linkedin_org_urn": "",
+  "tiktok_open_id": "",
+  "app_store_link": "https://apps.apple.com/app/spirit-library/id6746823938",
+  "website": "https://agenticappmaker.github.io/spiritlibrary/"
+}

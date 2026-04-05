@@ -1,0 +1,118 @@
+[
+  {
+    "name": "Instacart",
+    "handle": "instacart",
+    "instagram_handle": "instacart",
+    "website": "https://www.instacart.com",
+    "category": "grocery_delivery",
+    "outreach_type": "email",
+    "contact_email": "partnerships@instacart.com",
+    "notes": "Grocery delivery giant. DIRECT revenue alignment — Spirit Library users can buy cocktail ingredients via Instacart from within the app. Shopping cart integration is the core pitch. Instacart Ads / affiliate program opportunity."
+  },
+  {
+    "name": "DoorDash",
+    "handle": "doordash",
+    "instagram_handle": "doordash",
+    "website": "https://www.doordash.com",
+    "category": "food_delivery",
+    "outreach_type": "email",
+    "contact_email": "partnerships@doordash.com",
+    "notes": "DoorDash Grocery and DoorDash Alcohol delivery (via DashMart and partner liquor stores). Shopping cart integration from Spirit Library recipes to DoorDash. Affiliate or API integration pitch."
+  },
+  {
+    "name": "Uber Eats",
+    "handle": "ubereats",
+    "instagram_handle": "ubereats",
+    "website": "https://www.ubereats.com",
+    "category": "food_delivery",
+    "outreach_type": "email",
+    "contact_email": "restaurant-partnerships@uber.com",
+    "notes": "Uber Eats has alcohol delivery in many markets (via Drizly integration after acquisition). Shopping cart integration from Spirit Library to Uber Eats. Massive reach + alcohol-specific angle."
+  },
+  {
+    "name": "Drizly (Uber)",
+    "handle": "drizly",
+    "instagram_handle": "drizly",
+    "website": "https://www.drizly.com",
+    "category": "alcohol_delivery",
+    "outreach_type": "email",
+    "contact_email": "partners@drizly.com",
+    "notes": "Alcohol-only delivery platform (now part of Uber Eats). MOST direct fit — Spirit Library users browsing a cocktail recipe can hit 'Order ingredients' and buy the exact spirits via Drizly. Perfect API integration candidate."
+  },
+  {
+    "name": "ReserveBar",
+    "handle": "reservebar",
+    "instagram_handle": "reservebar",
+    "website": "https://www.reservebar.com",
+    "category": "alcohol_delivery",
+    "outreach_type": "email",
+    "contact_email": "info@reservebar.com",
+    "notes": "Premium spirits e-commerce and delivery. Upscale audience matches Spirit Library users. Shopping cart integration for premium spirits purchase. Affiliate program."
+  },
+  {
+    "name": "Minibar Delivery",
+    "handle": "minibardelivery",
+    "instagram_handle": "minibardelivery",
+    "website": "https://www.minibardelivery.com",
+    "category": "alcohol_delivery",
+    "outreach_type": "email",
+    "contact_email": "hello@minibardelivery.com",
+    "notes": "Alcohol delivery with 1-hour delivery option. Very direct fit — cocktail recipe → order spirits immediately. Shopping cart feature partnership."
+  },
+  {
+    "name": "Saucey",
+    "handle": "sauceyapp",
+    "instagram_handle": "sauceyapp",
+    "website": "https://www.saucey.com",
+    "category": "alcohol_delivery",
+    "outreach_type": "email",
+    "notes": "30-minute alcohol delivery. Mobile-first brand — perfect for Spirit Library in-app shopping cart integration. Partnership to power the Spirit Library shopping cart."
+  },
+  {
+    "name": "Total Wine & More",
+    "handle": "totalwine",
+    "instagram_handle": "totalwine",
+    "website": "https://www.totalwine.com",
+    "category": "alcohol_retail",
+    "outreach_type": "email",
+    "contact_email": "customerservice@totalwine.com",
+    "notes": "Largest independent alcohol retailer in the US. In-store pickup + delivery. Spirit Library shopping cart could link to Total Wine for ingredient purchase. B2B partnership for their cocktail recipe content."
+  },
+  {
+    "name": "BevMo!",
+    "handle": "bevmostores",
+    "instagram_handle": "bevmostores",
+    "website": "https://www.bevmo.com",
+    "category": "alcohol_retail",
+    "outreach_type": "email",
+    "notes": "West Coast alcohol retailer. Spirit Library shopping cart + in-store pickup for recipe ingredients."
+  },
+  {
+    "name": "Amazon Fresh",
+    "handle": "amazonfresh",
+    "instagram_handle": "amazonfresh",
+    "website": "https://www.amazon.com/fresh",
+    "category": "grocery_delivery",
+    "outreach_type": "email",
+    "notes": "Amazon's grocery delivery with alcohol in select markets. Spirit Library shopping cart integration via Amazon affiliate links."
+  },
+  {
+    "name": "Gopuff",
+    "handle": "gopuff",
+    "instagram_handle": "gopuff",
+    "website": "https://www.gopuff.com",
+    "category": "convenience_delivery",
+    "outreach_type": "email",
+    "contact_email": "partnerships@gopuff.com",
+    "notes": "Instant delivery including alcohol and mixers. Perfect for last-minute cocktail ingredient orders from Spirit Library recipes."
+  },
+  {
+    "name": "Thrive Market",
+    "handle": "thrivemarket",
+    "instagram_handle": "thrivemarket",
+    "website": "https://www.thrivemarket.com",
+    "category": "specialty_grocery",
+    "outreach_type": "email",
+    "notes": "Membership-based specialty grocery. Carries premium mixers, bitters, cocktail accessories. Spirit Library shopping cart for premium cocktail ingredients."
+  }
+]

@@ -1,0 +1,239 @@
+[
+  {
+    "name": "Cocktail Chemistry",
+    "handle": "cocktailchemistry",
+    "instagram_handle": "cocktailchemistry",
+    "tiktok_handle": "cocktailchemistry",
+    "youtube": "CocktailChemistry",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Science-based cocktail education, massive following, DIY cocktail builds. Strong fit for My Bar ingredient search feature."
+  },
+  {
+    "name": "How To Drink",
+    "handle": "howtodrink",
+    "instagram_handle": "howtodrink",
+    "youtube": "HowToDrink",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Greg Titian, classic cocktail education, history-focused. Recipes + history angle fits Spirit Library's catalog."
+  },
+  {
+    "name": "Jim and Tonics",
+    "handle": "jimandtonics",
+    "instagram_handle": "jimandtonics",
+    "tiktok_handle": "jimandtonics",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Popular casual cocktail creator. Recipe sharing and menu curation features are perfect pitch."
+  },
+  {
+    "name": "The Ginger Bartender",
+    "handle": "thegingerbartender",
+    "instagram_handle": "thegingerbartender",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "UK-based bartender with large following. Professional bar content aligns with share menus feature."
+  },
+  {
+    "name": "Andy Levine Drinks",
+    "handle": "andylevinecooks",
+    "instagram_handle": "andylevinecooks",
+    "tiktok_handle": "andylevinecooks",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Creative cocktail builds, strong visual content. Custom cocktail creation feature pitch."
+  },
+  {
+    "name": "Imbibe Magazine",
+    "handle": "imbibemagazine",
+    "instagram_handle": "imbibemagazine",
+    "website": "https://imbibemagazine.com",
+    "category": "cocktail_media",
+    "outreach_type": "email",
+    "notes": "Premier cocktail/spirits magazine. App feature coverage or partnership for content."
+  },
+  {
+    "name": "PUNCH Drink",
+    "handle": "punch_drink",
+    "instagram_handle": "punch_drink",
+    "website": "https://punchdrink.com",
+    "category": "cocktail_media",
+    "outreach_type": "email",
+    "notes": "Leading cocktail/spirits media. Editorial partnership or app review angle."
+  },
+  {
+    "name": "Difford's Guide",
+    "handle": "diffordsg",
+    "instagram_handle": "diffordsg",
+    "website": "https://www.diffordsguide.com",
+    "category": "cocktail_media",
+    "outreach_type": "email",
+    "notes": "World's largest cocktail database/guide. Cross-promotion or content partnership opportunity."
+  },
+  {
+    "name": "Liquor.com",
+    "handle": "liquorcom",
+    "instagram_handle": "liquorcom",
+    "website": "https://www.liquor.com",
+    "category": "cocktail_media",
+    "outreach_type": "email",
+    "notes": "Major spirits/cocktail digital media. App feature or recipe collaboration."
+  },
+  {
+    "name": "Tales of the Cocktail Foundation",
+    "handle": "talesofthecocktail",
+    "instagram_handle": "talesofthecocktail",
+    "website": "https://talesofthecocktail.org",
+    "category": "cocktail_org",
+    "outreach_type": "email",
+    "notes": "Annual New Orleans cocktail festival, industry hub. Event partnership or official app of TOTCF."
+  },
+  {
+    "name": "Wine Enthusiast",
+    "handle": "winemag",
+    "instagram_handle": "winemag",
+    "website": "https://www.winemag.com",
+    "category": "drinks_media",
+    "outreach_type": "email",
+    "notes": "Major drinks media with cocktail section. App review or content partnership."
+  },
+  {
+    "name": "Food & Wine",
+    "handle": "foodandwine",
+    "instagram_handle": "foodandwine",
+    "website": "https://www.foodandwine.com",
+    "category": "food_drink_media",
+    "outreach_type": "email",
+    "notes": "Major food media with strong cocktail content. App feature or partnership. Shopping cart angle (buy ingredients)."
+  },
+  {
+    "name": "The Spruce Eats",
+    "handle": "thespruceats",
+    "instagram_handle": "thespruceats",
+    "website": "https://www.thespruceeats.com",
+    "category": "food_drink_media",
+    "outreach_type": "email",
+    "notes": "Major recipe site with cocktail section. Ingredient search feature is directly relevant."
+  },
+  {
+    "name": "Bon Appétit",
+    "handle": "bonappetitmag",
+    "instagram_handle": "bonappetitmag",
+    "website": "https://www.bonappetit.com",
+    "category": "food_drink_media",
+    "outreach_type": "email",
+    "notes": "Premium food/drink media. Custom cocktail + share menus features align with their DIY content."
+  },
+  {
+    "name": "High Proof Preacher",
+    "handle": "highproofpreacher",
+    "instagram_handle": "highproofpreacher",
+    "tiktok_handle": "highproofpreacher",
+    "category": "spirits_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Bourbon/whiskey focused influencer. My Bar + flavor search features are a perfect fit."
+  },
+  {
+    "name": "Steve the Bartender",
+    "handle": "stevethebartender",
+    "instagram_handle": "stevethebartender",
+    "youtube": "StevetheBartender",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Professional bartender with tutorial-style content. Share menus and professional bar use case."
+  },
+  {
+    "name": "The Boozy Oyster",
+    "handle": "theboozyoyster",
+    "instagram_handle": "theboozyoyster",
+    "tiktok_handle": "theboozyoyster",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "tiktok",
+    "notes": "TikTok cocktail creator with strong visual content. Custom cocktail creation feature pitch."
+  },
+  {
+    "name": "Cocktail Molly",
+    "handle": "cocktailmolly",
+    "instagram_handle": "cocktailmolly",
+    "tiktok_handle": "cocktailmolly",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "tiktok",
+    "notes": "TikTok cocktail creator. Custom cocktails + ingredient search angle."
+  },
+  {
+    "name": "Kara Elder Eats",
+    "handle": "karaeldereats",
+    "instagram_handle": "karaeldereats",
+    "category": "food_drink_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Food/drink influencer. Occasion-based cocktail search + share menus features."
+  },
+  {
+    "name": "Nicolas Palazzi (PM Spirits)",
+    "handle": "pmspirits",
+    "instagram_handle": "pmspirits",
+    "website": "https://www.pmspirits.com",
+    "category": "spirits_industry",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Craft spirits importer and industry figure. Premium spirits discovery via My Bar feature."
+  },
+  {
+    "name": "Cocktail Lab",
+    "handle": "cocktaillab",
+    "instagram_handle": "cocktaillab",
+    "tiktok_handle": "cocktaillab",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Experimental cocktail content. Custom cocktail creation feature is the core pitch."
+  },
+  {
+    "name": "Behind the Bar",
+    "handle": "behindthebar",
+    "instagram_handle": "behindthebar",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Professional bartending content. Professional bar menu sharing feature."
+  },
+  {
+    "name": "The Cocktail Project",
+    "handle": "thecocktailproject",
+    "instagram_handle": "thecocktailproject",
+    "tiktok_handle": "thecocktailproject",
+    "category": "cocktail_influencer",
+    "outreach_type": "dm",
+    "platform": "tiktok",
+    "notes": "Recipe-focused cocktail content. Full app feature suite pitch."
+  },
+  {
+    "name": "Mixology Monday",
+    "handle": "mixologymonday",
+    "instagram_handle": "mixologymonday",
+    "category": "cocktail_community",
+    "outreach_type": "dm",
+    "platform": "instagram",
+    "notes": "Cocktail community/challenge account. Custom cocktail sharing + community features."
+  },
+  {
+    "name": "Spritz Society",
+    "handle": "spritzsociety",
+    "instagram_handle": "spritzsociety",
+    "website": "https://spritzsociety.com",
+    "category": "cocktail_brand",
+    "outreach_type": "email",
+    "notes": "RTD wine-based cocktail brand. Recipe partnership + ingredient search for spritzes."
+  }
+]

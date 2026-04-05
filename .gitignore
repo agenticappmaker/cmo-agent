@@ -1,0 +1,24 @@
+# Environment & secrets
+.env
+.env.*
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Generated content (images, queue — large/ephemeral)
+posts/images/
+posts/queue.json
+
+# Logs
+logs/
+
+# macOS
+.DS_Store
