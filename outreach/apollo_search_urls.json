@@ -1,0 +1,421 @@
+{
+  "generated": "2026-04-21T21:04:49.421376",
+  "total_urls": 20,
+  "searches": [
+    {
+      "id": 1,
+      "group": "bartenders",
+      "cities": [
+        "New York",
+        "Los Angeles"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personLocations[]=New%20York%2C%20US&personLocations[]=Los%20Angeles%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bartenders_new_york.csv"
+    },
+    {
+      "id": 2,
+      "group": "bartenders",
+      "cities": [
+        "Chicago",
+        "Miami"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personLocations[]=Chicago%2C%20US&personLocations[]=Miami%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bartenders_chicago.csv"
+    },
+    {
+      "id": 3,
+      "group": "bartenders",
+      "cities": [
+        "San Francisco",
+        "Austin"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personLocations[]=San%20Francisco%2C%20US&personLocations[]=Austin%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bartenders_san_francisco.csv"
+    },
+    {
+      "id": 4,
+      "group": "bartenders",
+      "cities": [
+        "Nashville",
+        "Seattle"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personLocations[]=Nashville%2C%20US&personLocations[]=Seattle%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bartenders_nashville.csv"
+    },
+    {
+      "id": 5,
+      "group": "bartenders",
+      "cities": [
+        "Portland",
+        "Denver"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personLocations[]=Portland%2C%20US&personLocations[]=Denver%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bartenders_portland.csv"
+    },
+    {
+      "id": 6,
+      "group": "fb_directors",
+      "cities": [
+        "New York",
+        "Los Angeles"
+      ],
+      "titles": [
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personLocations[]=New%20York%2C%20US&personLocations[]=Los%20Angeles%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_fb_directors_new_york.csv"
+    },
+    {
+      "id": 7,
+      "group": "fb_directors",
+      "cities": [
+        "Chicago",
+        "Miami"
+      ],
+      "titles": [
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personLocations[]=Chicago%2C%20US&personLocations[]=Miami%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_fb_directors_chicago.csv"
+    },
+    {
+      "id": 8,
+      "group": "fb_directors",
+      "cities": [
+        "San Francisco",
+        "Austin"
+      ],
+      "titles": [
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personLocations[]=San%20Francisco%2C%20US&personLocations[]=Austin%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_fb_directors_san_francisco.csv"
+    },
+    {
+      "id": 9,
+      "group": "fb_directors",
+      "cities": [
+        "Nashville",
+        "Seattle"
+      ],
+      "titles": [
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personLocations[]=Nashville%2C%20US&personLocations[]=Seattle%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_fb_directors_nashville.csv"
+    },
+    {
+      "id": 10,
+      "group": "fb_directors",
+      "cities": [
+        "Portland",
+        "Denver"
+      ],
+      "titles": [
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personLocations[]=Portland%2C%20US&personLocations[]=Denver%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_fb_directors_portland.csv"
+    },
+    {
+      "id": 11,
+      "group": "bar_owners",
+      "cities": [
+        "New York",
+        "Los Angeles"
+      ],
+      "titles": [
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=New%20York%2C%20US&personLocations[]=Los%20Angeles%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bar_owners_new_york.csv"
+    },
+    {
+      "id": 12,
+      "group": "bar_owners",
+      "cities": [
+        "Chicago",
+        "Miami"
+      ],
+      "titles": [
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Chicago%2C%20US&personLocations[]=Miami%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bar_owners_chicago.csv"
+    },
+    {
+      "id": 13,
+      "group": "bar_owners",
+      "cities": [
+        "San Francisco",
+        "Austin"
+      ],
+      "titles": [
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=San%20Francisco%2C%20US&personLocations[]=Austin%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bar_owners_san_francisco.csv"
+    },
+    {
+      "id": 14,
+      "group": "bar_owners",
+      "cities": [
+        "Nashville",
+        "Seattle"
+      ],
+      "titles": [
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Nashville%2C%20US&personLocations[]=Seattle%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bar_owners_nashville.csv"
+    },
+    {
+      "id": 15,
+      "group": "bar_owners",
+      "cities": [
+        "Portland",
+        "Denver"
+      ],
+      "titles": [
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Portland%2C%20US&personLocations[]=Denver%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_bar_owners_portland.csv"
+    },
+    {
+      "id": 16,
+      "group": "all_titles",
+      "cities": [
+        "New York"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender",
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage",
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=New%20York%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_all_new_york.csv"
+    },
+    {
+      "id": 17,
+      "group": "all_titles",
+      "cities": [
+        "Los Angeles"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender",
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage",
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Los%20Angeles%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_all_los_angeles.csv"
+    },
+    {
+      "id": 18,
+      "group": "all_titles",
+      "cities": [
+        "Chicago"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender",
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage",
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Chicago%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_all_chicago.csv"
+    },
+    {
+      "id": 19,
+      "group": "all_titles",
+      "cities": [
+        "Miami"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender",
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage",
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=Miami%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_all_miami.csv"
+    },
+    {
+      "id": 20,
+      "group": "all_titles",
+      "cities": [
+        "San Francisco"
+      ],
+      "titles": [
+        "Bartender",
+        "Head Bartender",
+        "Mixologist",
+        "Bar Manager",
+        "Lead Bartender",
+        "Senior Bartender",
+        "Food and Beverage Director",
+        "F&B Director",
+        "F&B Manager",
+        "Beverage Director",
+        "Beverage Manager",
+        "Director of Beverage",
+        "Bar Owner",
+        "Restaurant Owner",
+        "Proprietor",
+        "Owner",
+        "Co-Owner",
+        "Founder"
+      ],
+      "url": "https://app.apollo.io/people?personTitles[]=Bartender&personTitles[]=Head%20Bartender&personTitles[]=Mixologist&personTitles[]=Bar%20Manager&personTitles[]=Lead%20Bartender&personTitles[]=Senior%20Bartender&personTitles[]=Food%20and%20Beverage%20Director&personTitles[]=F%26B%20Director&personTitles[]=F%26B%20Manager&personTitles[]=Beverage%20Director&personTitles[]=Beverage%20Manager&personTitles[]=Director%20of%20Beverage&personTitles[]=Bar%20Owner&personTitles[]=Restaurant%20Owner&personTitles[]=Proprietor&personTitles[]=Owner&personTitles[]=Co-Owner&personTitles[]=Founder&personLocations[]=San%20Francisco%2C%20US&organizationIndustryTagIds[]=Wine%20%26%20Spirits&organizationIndustryTagIds[]=Food%20%26%20Beverages&organizationIndustryTagIds[]=Restaurants&organizationIndustryTagIds[]=Hospitality&qKeywords=cocktail%20OR%20bar%20OR%20mixology%20OR%20speakeasy%20OR%20spirits&organizationNumEmployeesRanges[]=1%2C500",
+      "suggested_filename": "apollo_all_san_francisco.csv"
+    }
+  ]
+}

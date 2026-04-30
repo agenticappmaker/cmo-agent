@@ -1,0 +1,40 @@
+{
+  "brand_name": "Pair",
+  "tagline": "The perfect pairing for every pour.",
+  "tone": "warm and inviting, knowledgeable about wine and food, approachable not snobby, lifestyle-oriented",
+  "target_audience": "wine lovers aged 25-50, foodies, home entertainers, date night planners, people who want to impress at dinner parties",
+  "content_pillars": [
+    "wine and food pairing guides",
+    "cheese and charcuterie boards",
+    "wine education and regions",
+    "entertaining and hosting tips",
+    "seasonal pairing ideas",
+    "app features and discovery stories"
+  ],
+  "hashtags_core": [
+    "#PairApp", "#WinePairing", "#FoodAndWine", "#CheeseBoard",
+    "#WineLovers", "#PairingGuide", "#Sommelier", "#WineApp"
+  ],
+  "hashtags_pool": [
+    "#CabernetSauvignon", "#Chardonnay", "#PinotNoir", "#Rosé",
+    "#WineNight", "#CheeseAndWine", "#Charcuterie", "#DateNight",
+    "#WineOClock", "#WineTasting", "#NapaValley", "#FrenchWine",
+    "#ItalianWine", "#WineEducation", "#FoodPhotography", "#Entertaining",
+    "#DinnerParty", "#WineWednesday", "#Brunch", "#Aperitivo"
+  ],
+  "post_frequency": {
+    "instagram": 2,
+    "facebook": 2,
+    "tiktok": 1
+  },
+  "best_times": {
+    "instagram": ["09:00", "19:00"],
+    "facebook": ["09:00", "19:00"],
+    "tiktok": ["19:00"]
+  },
+  "instagram_account_id": "",
+  "facebook_page_id": "",
+  "tiktok_open_id": "",
+  "app_store_link": "",
+  "website": ""
+}

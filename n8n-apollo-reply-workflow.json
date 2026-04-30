@@ -1,0 +1,174 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [0, 0],
+      "id": "54192b8b-c7ba-4bd5-8eea-2e322604faba",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UTGX7F9BoGlTwyCO",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "filter-subject",
+              "leftValue": "={{ $json.subject?.toLowerCase() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [220, 0],
+      "id": "filter-real-emails",
+      "name": "Filter Real Emails"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Categorize incoming email replies\nconst subject = ($input.item.json.subject || '').toLowerCase();\nconst body = ($input.item.json.text || $input.item.json.snippet || '').toLowerCase();\nconst from = $input.item.json.from?.text || $input.item.json.from || '';\nconst date = $input.item.json.date || new Date().toISOString();\n\n// Keywords that signal interest\nconst positiveSignals = ['interested', 'love to', 'send me', 'tell me more', 'sounds great', 'let\\'s chat', 'schedule', 'call', 'demo', 'link', 'app store', 'download', 'try it', 'check it out', 'yes', 'absolutely', 'definitely', 'would love', 'happy to', 'sure'];\n\n// Keywords that signal not interested\nconst negativeSignals = ['unsubscribe', 'not interested', 'no thanks', 'remove me', 'stop', 'don\\'t contact', 'opt out', 'pass on this', 'not a fit', 'not for us', 'no thank you'];\n\n// Keywords that signal a question\nconst questionSignals = ['how does', 'what is', 'can you', 'do you', 'pricing', 'cost', 'features', 'how many', 'tell me about', 'more info', 'details', 'explain', '?'];\n\nlet category = 'unknown';\nlet confidence = 'low';\nlet suggestedAction = '';\n\n// Check negative first (highest priority)\nfor (const signal of negativeSignals) {\n  if (body.includes(signal) || subject.includes(signal)) {\n    category = 'not_interested';\n    confidence = 'high';\n    suggestedAction = 'Remove from sequence. Do not follow up.';\n    break;\n  }\n}\n\n// Check positive\nif (category === 'unknown') {\n  for (const signal of positiveSignals) {\n    if (body.includes(signal) || subject.includes(signal)) {\n      category = 'interested';\n      confidence = 'medium';\n      suggestedAction = 'Reply with App Store link and offer a call. HIGH PRIORITY.';\n      break;\n    }\n  }\n}\n\n// Check questions\nif (category === 'unknown') {\n  for (const signal of questionSignals) {\n    if (body.includes(signal) || subject.includes(signal)) {\n      category = 'question';\n      confidence = 'medium';\n      suggestedAction = 'Reply answering their question + include App Store link.';\n      break;\n    }\n  }\n}\n\n// Default\nif (category === 'unknown') {\n  suggestedAction = 'Review manually — could not auto-categorize.';\n}\n\n// Determine which outreach list this might be from\nlet outreachType = 'unknown';\nconst subjectAndBody = subject + ' ' + body;\nif (subjectAndBody.includes('press') || subjectAndBody.includes('coverage') || subjectAndBody.includes('story') || subjectAndBody.includes('editorial') || subjectAndBody.includes('publication')) {\n  outreachType = 'press';\n} else if (subjectAndBody.includes('collab') || subjectAndBody.includes('creator') || subjectAndBody.includes('content') || subjectAndBody.includes('feature') || subjectAndBody.includes('audience')) {\n  outreachType = 'influencer';\n} else if (subjectAndBody.includes('bar') || subjectAndBody.includes('staff') || subjectAndBody.includes('training') || subjectAndBody.includes('menu') || subjectAndBody.includes('bartend')) {\n  outreachType = 'bar_partnership';\n}\n\nreturn [{\n  json: {\n    from: from,\n    subject: $input.item.json.subject,\n    snippet: ($input.item.json.snippet || '').substring(0, 300),\n    body_preview: body.substring(0, 500),\n    date: date,\n    category: category,\n    confidence: confidence,\n    outreach_type: outreachType,\n    suggested_action: suggestedAction,\n    message_id: $input.item.json.id || ''\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0],
+      "id": "categorize-reply",
+      "name": "Categorize Reply"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "is-interested",
+              "leftValue": "={{ $json.category }}",
+              "rightValue": "not_interested",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [660, 0],
+      "id": "filter-actionable",
+      "name": "Filter Out Unsubscribes"
+    },
+    {
+      "parameters": {
+        "sendTo": "claudesonnet111@gmail.com",
+        "subject": "=🔔 Apollo Reply: {{ $json.category.toUpperCase() }} — {{ $json.from }}",
+        "message": "=<h2>New Reply from Apollo Outreach</h2>\n<table style=\"border-collapse:collapse;width:100%;font-family:sans-serif\">\n<tr style=\"background:#f0f0f0\"><td style=\"padding:8px;font-weight:bold\">From</td><td style=\"padding:8px\">{{ $json.from }}</td></tr>\n<tr><td style=\"padding:8px;font-weight:bold\">Subject</td><td style=\"padding:8px\">{{ $json.subject }}</td></tr>\n<tr style=\"background:#f0f0f0\"><td style=\"padding:8px;font-weight:bold\">Date</td><td style=\"padding:8px\">{{ $json.date }}</td></tr>\n<tr><td style=\"padding:8px;font-weight:bold\">Category</td><td style=\"padding:8px;font-weight:bold;color:{{ $json.category === 'interested' ? '#22c55e' : $json.category === 'question' ? '#f59e0b' : '#6b7280' }}\">{{ $json.category.toUpperCase() }}</td></tr>\n<tr style=\"background:#f0f0f0\"><td style=\"padding:8px;font-weight:bold\">Outreach Type</td><td style=\"padding:8px\">{{ $json.outreach_type }}</td></tr>\n<tr><td style=\"padding:8px;font-weight:bold\">Confidence</td><td style=\"padding:8px\">{{ $json.confidence }}</td></tr>\n</table>\n\n<h3>Preview</h3>\n<blockquote style=\"border-left:3px solid #ccc;padding:8px 12px;color:#555\">{{ $json.body_preview }}</blockquote>\n\n<h3>Suggested Action</h3>\n<p style=\"font-size:16px;font-weight:bold;color:#2563eb\">{{ $json.suggested_action }}</p>\n\n<hr>\n<p style=\"color:#999;font-size:12px\">Sent by n8n Apollo Reply Watcher — Spirit Library outreach automation</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 0],
+      "id": "send-notification",
+      "name": "Email Notification",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "UTGX7F9BoGlTwyCO",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "filePath": "=/Users/claudecode/Documents/cmo-agent/outreach/apollo_replies.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [880, 220],
+      "id": "log-to-file",
+      "name": "Log Reply"
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter Real Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Real Emails": {
+      "main": [
+        [
+          {
+            "node": "Categorize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Categorize Reply": {
+      "main": [
+        [
+          {
+            "node": "Filter Out Unsubscribes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Out Unsubscribes": {
+      "main": [
+        [
+          {
+            "node": "Email Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

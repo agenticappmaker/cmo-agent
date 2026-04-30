@@ -22,3 +22,26 @@ logs/
 
 # macOS
 .DS_Store
+
+# Runtime operational state (added 2026-04-30 cleanup)
+outreach/state/
+outreach/sent_log.json
+outreach/exec_sent_log.json
+outreach/research_cache.json
+outreach/executive_cache.json
+outreach/dm_queue.json
+outreach/outbox.json
+outreach/perpetual/
+outreach/scraped_contacts/
+outreach/apollo_replies.json
+outreach/bartender_handles.json
+outreach/bartender_leads.json
+posts/*_history.json
+posts/*_used_cocktails.json
+posts/*_post_type_state.json
+posts/*_calendar.json
+posts/videos/
+Screenshots/
+screenshots/
+scraped_data/
+.DS_Store

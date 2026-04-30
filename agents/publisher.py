@@ -12,17 +12,23 @@ from pathlib import Path
 # ── Image hosting (imgbb) ─────────────────────────────────────────────────────
 
 def upload_image_to_imgbb(image_path: str) -> str:
-    """Upload a local image to catbox.moe and return the public URL.
-    catbox.moe is reliably accessible by Meta's API crawlers."""
+    """Upload image to Imgur and return the public URL."""
+    from PIL import Image as PILImage
+    import io
+
+    # Convert to JPEG for best compatibility
+    img = PILImage.open(image_path).convert("RGB")
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=95)
+    buf.seek(0)
+
     resp = requests.post(
-        "https://catbox.moe/user/api.php",
-        data={"reqtype": "fileupload"},
-        files={"fileToUpload": (Path(image_path).name, open(image_path, "rb"), "image/png")},
+        "https://api.imgur.com/3/image",
+        headers={"Authorization": "Client-ID 546c25a59c58ad7"},
+        files={"image": (Path(image_path).stem + ".jpg", buf, "image/jpeg")},
     )
     resp.raise_for_status()
-    url = resp.text.strip()
-    if not url.startswith("http"):
-        raise ValueError(f"catbox upload failed: {url}")
+    url = resp.json()["data"]["link"]
     print(f"✓ Image hosted at: {url}")
     return url
 

@@ -21,6 +21,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Axon event bridge (fail-safe)
+sys.path.insert(0, "/Users/claudecode/axon")
+try:
+    from axon.wrappers.axon_event_publisher import publish as _axon_publish
+except Exception:
+    def _axon_publish(*_a, **_kw):
+        return None
+
 
 def cmd_generate(brand: str, platform: str):
     """Generate a post, create the image, and add to queue."""
@@ -145,15 +153,27 @@ def cmd_post_now(brand: str, platform: str):
     from agents.publisher import upload_image_to_imgbb, publish_instagram, publish_tiktok
     from agents.content_generator import load_brand
 
+    _axon_publish("cmo_post_attempted", {
+        "brand": brand,
+        "platform": platform,
+        "started_at": datetime.utcnow().isoformat(),
+    }, source="cmo")
+
     print(f"\n🤖 Generating {platform} post for {brand}...")
     post = generate_post(brand, platform)
 
     print(f"\n📝 Post idea: {post['post_idea']}")
     print(f"   Caption preview: {post['caption'][:100]}...")
 
-    print(f"\n🎨 Generating image...")
     post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
-    image_path = generate_image(post["image_prompt"], brand, post_id)
+
+    # Use real screenshot for feature posts, generate image for recipe posts
+    if post.get("screenshot_path"):
+        print(f"\n📸 Using app screenshot: {post['screenshot_path']}")
+        image_path = post["screenshot_path"]
+    else:
+        print(f"\n🎨 Generating image...")
+        image_path = generate_image(post["image_prompt"], brand, post_id)
 
     print(f"\n📤 Publishing now...")
     config = load_brand(brand)["config"]
@@ -184,31 +204,75 @@ def cmd_post_now(brand: str, platform: str):
 
     print(f"\n✅ Posted! Caption: {post['caption'][:120]}...")
 
+    _axon_publish("cmo_post_succeeded", {
+        "brand": brand,
+        "platform": platform,
+        "post_idea": post.get("post_idea"),
+        "pillar": post.get("pillar"),
+        "caption_preview": (post.get("caption") or "")[:200],
+        "finished_at": datetime.utcnow().isoformat(),
+    }, source="cmo")
+
 
 def cmd_daemon(brand: str, platform: str):
     """
-    Run continuously — generate and publish posts at 9am and 7pm daily.
-    Each post spotlights a unique cocktail recipe.
+    Run continuously — generate and publish ONE post at 9am (recipe) and ONE at 7pm (feature).
+    Uses a daily cap and lock file to prevent double-posting.
     """
     import schedule
+    from pathlib import Path
+
+    LOCK_FILE = Path(__file__).parent / "posts" / ".post_lock"
+    DAILY_LOG = Path(__file__).parent / "posts" / "daily_post_log.json"
+
+    def _daily_count() -> int:
+        today = datetime.now().strftime("%Y-%m-%d")
+        if DAILY_LOG.exists():
+            log = json.load(open(DAILY_LOG))
+            return log.get(today, 0)
+        return 0
+
+    def _increment_daily():
+        today = datetime.now().strftime("%Y-%m-%d")
+        log = json.load(open(DAILY_LOG)) if DAILY_LOG.exists() else {}
+        log[today] = log.get(today, 0) + 1
+        # Keep only last 7 days
+        log = {k: v for k, v in sorted(log.items())[-7:]}
+        json.dump(log, open(DAILY_LOG, "w"), indent=2)
 
     def generate_and_publish():
-        print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M')}] Generating post...")
-        cmd_generate(brand, platform)
-        cmd_run()
+        """Generate exactly one post and publish it. Lock prevents concurrent runs."""
+        if LOCK_FILE.exists():
+            print(f"[{datetime.now().strftime('%H:%M')}] Lock file exists — skipping (another post in progress)")
+            return
 
-    def publish_job():
-        cmd_run()
+        if _daily_count() >= 2:
+            print(f"[{datetime.now().strftime('%H:%M')}] Daily limit reached (2 posts) — skipping")
+            return
 
-    # Generate + publish at 9am and 7pm
+        try:
+            # Acquire lock
+            LOCK_FILE.write_text(datetime.now().isoformat())
+            print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M')}] Generating post ({_daily_count() + 1}/2 today)...")
+
+            cmd_post_now(brand, platform)
+            _increment_daily()
+
+        except Exception as e:
+            print(f"  ✗ Post failed: {e}")
+        finally:
+            # Always release lock
+            if LOCK_FILE.exists():
+                LOCK_FILE.unlink()
+
+    # Post 1 at 9am (recipe), Post 2 at 7pm (feature)
     schedule.every().day.at("09:00").do(generate_and_publish)
     schedule.every().day.at("19:00").do(generate_and_publish)
-    # Check for due posts every 5 minutes (catches any that were queued ahead)
-    schedule.every(5).minutes.do(publish_job)
 
     print(f"\n🤖 CMO Agent daemon running for {brand} / {platform}")
-    print("   Posts daily at 09:00 and 19:00")
-    print("   Each post spotlights a unique cocktail recipe")
+    print("   Post 1: 09:00 — cocktail recipe")
+    print("   Post 2: 19:00 — app feature showcase")
+    print("   Max 2 posts per day, no repeats ever")
     print("   Press Ctrl+C to stop\n")
 
     while True:
@@ -257,13 +321,20 @@ def cmd_outreach(subcommand: str, args):
         from agents.outreach_emailer import outreach_status
         outreach_status()
 
+    elif subcommand == "follow-up":
+        from agents.outreach_followup import run_followups
+        run_followups(
+            dry_run=getattr(args, "dry_run", False),
+            days=getattr(args, "days", 14)
+        )
+
     elif subcommand == "summary":
         from agents.outreach_researcher import show_research_summary
         show_research_summary()
 
     else:
         print(f"Unknown outreach subcommand: {subcommand}")
-        print("Available: research, draft, send-emails, show-dms, show-emails, mark-sent, status, summary")
+        print("Available: research, draft, send-emails, show-dms, show-emails, mark-sent, follow-up, status, summary")
 
 
 def main():
@@ -322,6 +393,11 @@ def main():
 
     # status
     outreach_sub.add_parser("status", help="Dashboard: research + draft + send progress")
+
+    # follow-up
+    followup_p = outreach_sub.add_parser("follow-up", help="Send follow-ups to non-responders (14-day window)")
+    followup_p.add_argument("--dry-run", action="store_true", help="Preview without sending")
+    followup_p.add_argument("--days", type=int, default=14, help="Days since original send (default 14)")
 
     # summary
     outreach_sub.add_parser("summary", help="Research summary by category")
