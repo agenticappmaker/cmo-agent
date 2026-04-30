@@ -123,48 +123,29 @@ Respond as a JSON object ONLY (no markdown, no preamble):
   "researched_at": "{datetime.utcnow().isoformat()}"
 }}"""
 
-    # Attempt with web search tool
+    # Use haiku for research — fastest, lowest token cost, fits within rate limits
+    # These are all well-known brands/influencers; training knowledge is sufficient.
+    RESEARCH_MODEL = "claude-haiku-4-5-20251001"
+
+    response = client.messages.create(
+        model=RESEARCH_MODEL,
+        max_tokens=1200,
+        messages=[{"role": "user", "content": prompt + "\n\nUse your training knowledge about this brand/person."}]
+    )
+    result_text = response.content[0].text
     try:
-        response = client.messages.create(
-            model="claude-opus-4-6",
-            max_tokens=2000,
-            tools=[{"type": "web_search_20250305", "name": "web_search"}],
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        # Extract the final text block (Claude synthesizes after tool use)
-        result_text = ""
-        for block in response.content:
-            if hasattr(block, "text") and block.text.strip():
-                result_text = block.text
-
-        if not result_text:
-            raise ValueError("No text in response")
-
         profile = _extract_json(result_text)
-
-    except Exception as e:
-        # Fallback: research without web search (use Claude's knowledge)
-        print(f"      ⚠ Web search failed ({e}), falling back to Claude knowledge...")
-        response = client.messages.create(
-            model="claude-opus-4-6",
-            max_tokens=2000,
-            messages=[{"role": "user", "content": prompt + "\n\nNote: Use your existing knowledge about this brand/person — no web search available."}]
-        )
-        result_text = response.content[0].text
-        try:
-            profile = _extract_json(result_text)
-        except Exception:
-            profile = {
-                "name": name,
-                "handle": handle,
-                "category": category,
-                "what_they_do": notes,
-                "contact_email": target.get("contact_email"),
-                "outreach_type": outreach_type,
-                "researched_at": datetime.utcnow().isoformat(),
-                "raw_response": result_text[:500]
-            }
+    except Exception:
+        profile = {
+            "name": name,
+            "handle": handle,
+            "category": category,
+            "what_they_do": notes,
+            "contact_email": target.get("contact_email"),
+            "outreach_type": outreach_type,
+            "researched_at": datetime.utcnow().isoformat(),
+            "raw_response": result_text[:500]
+        }
 
     # Preserve any pre-known contact email from targets file
     if not profile.get("contact_email") and target.get("contact_email"):
@@ -216,9 +197,9 @@ def research_all_targets(force_refresh: bool = False, category_filter: str = Non
             save_cache(cache)
             print(f"      ✓ {profile.get('audience_size', '')} | Hook: {profile.get('best_feature_to_pitch', '')[:60]}")
             done += 1
-            # Polite delay to avoid rate limiting
+            # Small delay — haiku uses ~800-1k tokens per call, well within limits
             if i < len(all_targets):
-                time.sleep(3)
+                time.sleep(2)
         except Exception as e:
             print(f"      ✗ Error: {e}")
             cache[cache_key] = {

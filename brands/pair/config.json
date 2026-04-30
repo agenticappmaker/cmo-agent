@@ -1,0 +1,47 @@
+{
+  "brand_name": "Pair",
+  "tagline": "Build the perfect cheese, wine, chocolate & nut board — in under a minute.",
+  "tone": "warm, curatorial, aspirational-but-unpretentious, hosting-minded, celebratory",
+  "target_audience": "home hosts aged 25-55, wine lovers, cheese enthusiasts, date-night planners, dinner-party hosts, picnic planners, sober-curious hosts choosing non-alcoholic pairings",
+  "content_pillars": [
+    "board builder spotlight — showcase auto-curated boards by occasion",
+    "pairing 101 — why X goes with Y (cheese + wine chemistry, complementary flavors)",
+    "cheese of the week — deep dives into individual cheeses",
+    "wine of the week — deep dives into individual wines, producers, regions",
+    "holiday + occasion boards — seasonal curated themes (Valentine's, Thanksgiving, Summer Picnic, Friendsgiving)",
+    "chocolate + nut pairings — often-overlooked partners",
+    "host tips — shopping lists, quantity math, presentation tricks",
+    "app features and user boards"
+  ],
+  "hashtags_core": [
+    "#PairApp", "#CheeseBoard", "#WinePairing", "#CheeseAndWine", "#Charcuterie",
+    "#BoardBuilder", "#HostingTips", "#WineAndCheese"
+  ],
+  "hashtags_pool": [
+    "#WineLover", "#Sommelier", "#CheeseLover", "#Formaggio", "#Fromage",
+    "#DatenightAtHome", "#DinnerParty", "#Picnic", "#HolidayHosting",
+    "#CraftCheese", "#NaturalWine", "#OrangeWine", "#Rose", "#Pinot",
+    "#Chardonnay", "#Cabernet", "#SommelierLife", "#FoodStylist",
+    "#HomeEntertaining", "#GrazingBoard", "#CheesePlate"
+  ],
+  "post_frequency": {
+    "instagram": 2,
+    "facebook": 2,
+    "linkedin": 1,
+    "twitter": 2,
+    "tiktok": 1
+  },
+  "best_times": {
+    "instagram": ["09:00", "19:00"],
+    "facebook":  ["09:00", "19:00"],
+    "linkedin":  ["09:00"],
+    "twitter":   ["09:00", "19:00"],
+    "tiktok":    ["19:00"]
+  },
+  "instagram_account_id": "",
+  "facebook_page_id": "",
+  "linkedin_org_urn": "",
+  "tiktok_open_id": "",
+  "app_store_link": "",
+  "website": ""
+}

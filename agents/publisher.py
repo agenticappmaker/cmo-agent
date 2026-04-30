@@ -12,17 +12,43 @@ from pathlib import Path
 # ── Image hosting (imgbb) ─────────────────────────────────────────────────────
 
 def upload_image_to_imgbb(image_path: str) -> str:
-    """Upload a local image to catbox.moe and return the public URL.
-    catbox.moe is reliably accessible by Meta's API crawlers."""
+    """Upload image to Imgur and return the public URL.
+    Auto-pads images outside Instagram's 4:5 – 1.91:1 aspect ratio range.
+    """
+    from PIL import Image as PILImage
+    import io
+
+    img = PILImage.open(image_path).convert("RGB")
+
+    # Instagram requires aspect ratio between 4:5 (0.8) and 1.91:1
+    w, h = img.size
+    ratio = w / h
+    if ratio < 0.8:
+        # Too tall (e.g. phone screenshot) — pad sides to reach 4:5
+        new_w = int(h * 0.8)
+        padded = PILImage.new("RGB", (new_w, h), (10, 10, 15))  # dark bg
+        padded.paste(img, ((new_w - w) // 2, 0))
+        img = padded
+        print(f"  ⚠ Padded image from {w}x{h} to {new_w}x{h} (4:5 ratio)")
+    elif ratio > 1.91:
+        # Too wide — pad top/bottom to reach 1.91:1
+        new_h = int(w / 1.91)
+        padded = PILImage.new("RGB", (w, new_h), (10, 10, 15))
+        padded.paste(img, (0, (new_h - h) // 2))
+        img = padded
+        print(f"  ⚠ Padded image from {w}x{h} to {w}x{new_h} (1.91:1 ratio)")
+
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=95)
+    buf.seek(0)
+
     resp = requests.post(
-        "https://catbox.moe/user/api.php",
-        data={"reqtype": "fileupload"},
-        files={"fileToUpload": (Path(image_path).name, open(image_path, "rb"), "image/png")},
+        "https://api.imgur.com/3/image",
+        headers={"Authorization": "Client-ID 546c25a59c58ad7"},
+        files={"image": (Path(image_path).stem + ".jpg", buf, "image/jpeg")},
     )
     resp.raise_for_status()
-    url = resp.text.strip()
-    if not url.startswith("http"):
-        raise ValueError(f"catbox upload failed: {url}")
+    url = resp.json()["data"]["link"]
     print(f"✓ Image hosted at: {url}")
     return url
 
@@ -67,6 +93,70 @@ def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: s
         raise ValueError(f"Instagram publish error: {publish_resp.status_code} — {publish_resp.json()}")
     post_id = publish_resp.json()["id"]
     print(f"✓ Published to Instagram: {post_id}")
+    return post_id
+
+
+# ── Instagram Carousel (Meta Graph API) ──────────────────────────────────────
+
+def publish_instagram_carousel(caption: str, hashtags: str, image_urls: list, account_id: str) -> str:
+    """Publish a carousel (slideshow) post to Instagram. Returns post ID.
+    image_urls: list of public image URLs (2-10 images).
+    """
+    import time
+    access_token = os.environ.get("META_PAGE_ACCESS_TOKEN") or os.environ["META_ACCESS_TOKEN"]
+    full_caption = f"{caption}\n\n{hashtags}"
+
+    # Step 1: Create individual media containers for each image
+    children_ids = []
+    for i, url in enumerate(image_urls):
+        resp = requests.post(
+            f"https://graph.facebook.com/v19.0/{account_id}/media",
+            data={"image_url": url, "is_carousel_item": "true", "access_token": access_token},
+        )
+        if not resp.ok:
+            raise ValueError(f"Carousel item {i} error: {resp.status_code} — {resp.json()}")
+        children_ids.append(resp.json()["id"])
+        print(f"  Carousel item {i+1}/{len(image_urls)} created")
+
+    # Step 2: Create the carousel container
+    carousel_resp = requests.post(
+        f"https://graph.facebook.com/v19.0/{account_id}/media",
+        data={
+            "media_type": "CAROUSEL",
+            "children": ",".join(children_ids),
+            "caption": full_caption,
+            "access_token": access_token,
+        },
+    )
+    if not carousel_resp.ok:
+        raise ValueError(f"Carousel container error: {carousel_resp.status_code} — {carousel_resp.json()}")
+    carousel_id = carousel_resp.json()["id"]
+
+    # Step 3: Wait for processing
+    for attempt in range(12):
+        status_resp = requests.get(
+            f"https://graph.facebook.com/v19.0/{carousel_id}",
+            params={"fields": "status_code", "access_token": access_token},
+        )
+        status = status_resp.json().get("status_code", "")
+        print(f"  Carousel status: {status}")
+        if status == "FINISHED":
+            break
+        if status == "ERROR":
+            raise ValueError(f"Carousel processing failed: {status_resp.json()}")
+        time.sleep(5)
+    else:
+        raise ValueError("Carousel timed out")
+
+    # Step 4: Publish
+    publish_resp = requests.post(
+        f"https://graph.facebook.com/v19.0/{account_id}/media_publish",
+        data={"creation_id": carousel_id, "access_token": access_token},
+    )
+    if not publish_resp.ok:
+        raise ValueError(f"Carousel publish error: {publish_resp.status_code} — {publish_resp.json()}")
+    post_id = publish_resp.json()["id"]
+    print(f"✓ Published carousel to Instagram: {post_id} ({len(image_urls)} slides)")
     return post_id
 
 

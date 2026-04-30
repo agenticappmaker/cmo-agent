@@ -1,0 +1,167 @@
+[
+  {
+    "publication": "Imbibe Magazine",
+    "domain": "imbibemagazine.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "website contact form or social",
+    "pitch_angle": "Spirit Library transforms home bar exploration with AI-powered recipe discovery\u2014a must-review tool for readers who want to maximize their bottle collection and entertain smarter.",
+    "coverage_likelihood": "medium",
+    "beat": "Tools & Gear section / Digital Products editor",
+    "researched_at": "2026-04-09T21:03:11.777922"
+  },
+  {
+    "publication": "VinePair",
+    "domain": "vinepair.com",
+    "contact_email": "tips@vinepair.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library is a free iOS app that uses inventory-based discovery (add your bottles, get recipes) and allergy filtering to solve the bartender's core problem\u2014what can I actually make right now.",
+    "coverage_likelihood": "high",
+    "beat": "Apps & Technology / Tools & Products",
+    "researched_at": "2026-04-09T21:03:17.868618"
+  },
+  {
+    "publication": "The Infatuation",
+    "domain": "theinfatuation.com",
+    "contact_email": "tips@theinfatuation.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library solves a real problem for home bartenders and cocktail enthusiasts: discovering what drinks you can actually make with your current liquor cabinet, positioned as a tool that deepens drinking culture engagement.",
+    "coverage_likelihood": "medium",
+    "beat": "Drinks/Tools & Culture section - likely handled by drinks editor or freelance contributors covering cocktail culture and bar tools",
+    "researched_at": "2026-04-09T21:03:24.188823"
+  },
+  {
+    "publication": "Food52",
+    "domain": "food52.com",
+    "contact_email": "tips@food52.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library solves the 'what can I make?' problem for home bartenders with an intuitive My Bar feature and 1,700+ recipes, filling a gap in Food52's kitchen tech coverage.",
+    "coverage_likelihood": "medium",
+    "beat": "Provisions (tools/products) or Shop (app reviews)",
+    "researched_at": "2026-04-09T21:03:29.639935"
+  },
+  {
+    "publication": "Serious Eats",
+    "domain": "seriouseats.com",
+    "contact_email": "tips@seriouseats.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library's My Bar feature solves a core problem for home bartenders\u2014discovering cocktails from your actual bottle collection\u2014while the recipe database and allergen filtering align with Serious Eats' focus on technique-driven, accessible cocktail education.",
+    "coverage_likelihood": "medium",
+    "beat": "Drinks section / cocktail tools and apps coverage",
+    "researched_at": "2026-04-09T21:03:35.468677"
+  },
+  {
+    "publication": "Liquor.com",
+    "domain": "liquor.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "social/website",
+    "pitch_angle": "Position as a practical tool that democratizes bartending knowledge\u2014focus on the My Bar discovery feature and how it helps home drinkers maximize their liquor cabinet, which aligns with their audience of spirits enthusiasts and home cocktail makers.",
+    "coverage_likelihood": "medium",
+    "beat": "Tools & Apps section (if exists); otherwise Editorial/Features team via social media or website contact form",
+    "researched_at": "2026-04-09T21:03:42.169610"
+  },
+  {
+    "publication": "The Spirits Business",
+    "domain": "thespiritsbusiness.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "website contact form or social",
+    "pitch_angle": "Spirit Library democratizes home bartending by letting consumers discover cocktails based on their personal bottle inventory, addressing a growing consumer demand for tech-enabled spirits discovery tools.",
+    "coverage_likelihood": "medium",
+    "beat": "Apps/Technology or Consumer Tools section - likely a freelance contributor or technology-focused editor",
+    "researched_at": "2026-04-09T21:03:47.939063"
+  },
+  {
+    "publication": "Whisky Advocate",
+    "domain": "whiskyadvocate.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "website form or social",
+    "pitch_angle": "A whisky-focused cocktail app that helps enthusiasts discover recipes based on their personal bottle collection, with allergies filtering for inclusive mixing.",
+    "coverage_likelihood": "medium",
+    "beat": "Tools & Technology / Digital section (if exists); otherwise general editorial",
+    "researched_at": "2026-04-09T21:03:53.880410"
+  },
+  {
+    "publication": "Tasting Panel Magazine",
+    "domain": "tastingpanelmag.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "website contact form or social media",
+    "pitch_angle": "Spirit Library streamlines bartender workflow and enhances customer experience with an intuitive iOS tool that bridges the gap between inventory management and menu innovation for hospitality venues.",
+    "coverage_likelihood": "medium",
+    "beat": "Technology/Apps for Hospitality (no specific writer identified in public domain)",
+    "researched_at": "2026-04-09T21:03:59.475909"
+  },
+  {
+    "publication": "Eater",
+    "domain": "eater.com",
+    "contact_email": "tips@eater.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library is a free iOS app that turns home bars into discovery engines\u2014users photograph their bottles and instantly see 1,700+ cocktail recipes they can actually make, plus allergies filtering and shareable menus for entertaining.",
+    "coverage_likelihood": "medium",
+    "beat": "Eater Drinks/Food & Beverage Technology (varies by metro editor and national team)",
+    "researched_at": "2026-04-09T21:04:05.524238"
+  },
+  {
+    "publication": "Grub Street",
+    "domain": "grubstreet.com",
+    "contact_email": "tips@grubstreet.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library is a free iOS app that transforms NYC home bars into personalized cocktail discovery tools\u2014let users input their bottles and instantly unlock 1,700+ recipes tailored to what they actually have, plus allergies filtering for health-conscious mixologists.",
+    "coverage_likelihood": "medium",
+    "beat": "Drinks/Food & Drink section\u2014focus on consumer food tech and beverage innovation",
+    "researched_at": "2026-04-09T21:04:11.755889"
+  },
+  {
+    "publication": "The Manual",
+    "domain": "themanual.com",
+    "contact_email": "tips@themanual.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library is a free iOS cocktail app with 1,700+ recipes and a 'My Bar' feature that helps home bartenders discover drinks from their existing bottle collection\u2014perfect for your audience of men building their home bars.",
+    "coverage_likelihood": "high",
+    "beat": "Food & Drink / Home Bar section",
+    "researched_at": "2026-04-09T21:04:17.832148"
+  },
+  {
+    "publication": "Gear Patrol",
+    "domain": "gearpatrol.com",
+    "contact_email": "tips@gearpatrol.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library is the essential home bartending tool for men who want to master cocktails\u20141,700+ recipes, smart 'My Bar' inventory matching, and allergy filters make it the gear every home bar needs.",
+    "coverage_likelihood": "medium",
+    "beat": "Apps/Tools section or Gear Patrol Labs (product reviews)",
+    "researched_at": "2026-04-09T21:04:22.678936"
+  },
+  {
+    "publication": "Cool Material",
+    "domain": "coolmaterial.com",
+    "contact_email": null,
+    "submission_url": null,
+    "contact_method": "unknown",
+    "pitch_angle": "Spirit Library is a home bar essential\u20141,700+ cocktail recipes with a smart 'My Bar' feature that turns your bottle collection into a personalized recipe engine, plus allergy filtering for inclusive entertaining.",
+    "coverage_likelihood": "medium",
+    "beat": "Apps/Tools section (likely covers home bar tech and cocktail apps)",
+    "researched_at": "2026-04-09T21:04:28.356148"
+  },
+  {
+    "publication": "Thrillist",
+    "domain": "thrillist.com",
+    "contact_email": "tips@thrillist.com",
+    "submission_url": null,
+    "contact_method": "email",
+    "pitch_angle": "Spirit Library turns your home bar into a personalized cocktail playground\u2014an iOS app that discovers drinks based on what bottles you own, making craft cocktails accessible and customizable for any palate or dietary restriction.",
+    "coverage_likelihood": "high",
+    "beat": "Drink/Food Tech section; freelance writers covering cocktail culture and drinking apps",
+    "researched_at": "2026-04-09T21:04:34.317042"
+  }
+]

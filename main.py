@@ -139,8 +139,10 @@ def cmd_run():
 
 
 def cmd_post_now(brand: str, platform: str):
-    """Generate a post and publish it immediately (used by cron)."""
-    from agents.content_generator import generate_post
+    """Generate a post and publish it immediately (used by cron).
+    Series posts automatically become carousels on Instagram.
+    """
+    from agents.content_generator import generate_post, generate_carousel_content
     from agents.image_generator import generate_image
     from agents.publisher import upload_image_to_imgbb, publish_instagram, publish_tiktok
     from agents.content_generator import load_brand
@@ -151,9 +153,139 @@ def cmd_post_now(brand: str, platform: str):
     print(f"\n📝 Post idea: {post['post_idea']}")
     print(f"   Caption preview: {post['caption'][:100]}...")
 
-    print(f"\n🎨 Generating image...")
-    post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
-    image_path = generate_image(post["image_prompt"], brand, post_id)
+    config = load_brand(brand)["config"]
+
+    # Series posts → carousel on Instagram
+    if post.get("post_type") == "series" and platform in ("instagram", "facebook"):
+        print(f"\n🎠 Building carousel slides...")
+        try:
+            from agents.slide_generator import build_carousel
+            slides_data = generate_carousel_content(post)
+
+            # Generate a marketing-grade title-slide background from Claude's
+            # content-aware image prompt (new field added to the series schema).
+            title_bg_path = None
+            title_bg_prompt = post.get("title_slide_image_prompt")
+            if title_bg_prompt:
+                try:
+                    title_bg_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_titlebg"
+                    print(f"\n🖼  Generating title-slide background...")
+                    title_bg_path = generate_image(title_bg_prompt, brand, title_bg_id)
+                except Exception as e:
+                    print(f"  ⚠ Title bg generation failed ({e}); falling back to gradient")
+
+            slide_paths = build_carousel(
+                slides_data,
+                series_name=post.get("series_name"),
+                title_bg_image=title_bg_path,
+            )
+            print(f"  Generated {len(slide_paths)} slides")
+
+            # Upload all slides
+            slide_urls = []
+            for sp in slide_paths:
+                url = upload_image_to_imgbb(sp)
+                slide_urls.append(url)
+
+            # Publish as carousel
+            account_id = config.get("instagram_account_id", "")
+            page_id = config.get("facebook_page_id", "")
+
+            if account_id and len(slide_urls) >= 2:
+                from agents.publisher import publish_instagram_carousel
+                ig_pid = publish_instagram_carousel(post["caption"], post.get("hashtags", ""), slide_urls, account_id)
+                print(f"  ✓ Instagram carousel: {ig_pid}")
+
+            # Facebook still gets single image (carousels more complex on FB)
+            if page_id:
+                from agents.publisher import publish_facebook
+                fb_pid = publish_facebook(post["caption"], post.get("hashtags", ""), slide_urls[0], page_id)
+                print(f"  ✓ Facebook: {fb_pid}")
+
+            print(f"\n✅ Carousel posted! {len(slide_urls)} slides. Caption: {post['caption'][:100]}...")
+            return
+        except Exception as e:
+            print(f"  ⚠ Carousel failed ({e}), falling back to single image...")
+
+    # Infographic post → render locally, no AI image gen needed
+    if post.get("post_type") == "infographic":
+        print(f"\n📊 Rendering infographic...")
+        from agents.slide_generator import render_infographic
+        themes = ["classic", "warm", "cool"]
+        theme = themes[datetime.utcnow().day % len(themes)]
+        image_path = render_infographic(
+            title=post.get("infographic_title", post.get("post_idea", "Spirit Library")),
+            items=post.get("infographic_items", []),
+            subtitle=post.get("infographic_subtitle") or None,
+            theme=theme,
+        )
+        print(f"  ✓ Infographic saved: {image_path}")
+    else:
+        # Single image post (recipes, features, or carousel fallback)
+        print(f"\n🎨 Generating image...")
+        post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        image_path = generate_image(post["image_prompt"], brand, post_id)
+
+    print(f"\n📤 Publishing now...")
+
+    if platform in ("instagram", "facebook"):
+        from agents.publisher import publish_facebook
+        account_id = config.get("instagram_account_id", "")
+        page_id = config.get("facebook_page_id", "")
+        image_url = upload_image_to_imgbb(image_path)
+
+        if account_id:
+            ig_pid = publish_instagram(post["caption"], post.get("hashtags", ""), image_url, account_id)
+            print(f"  ✓ Instagram: {ig_pid}")
+        if page_id:
+            fb_pid = publish_facebook(post["caption"], post.get("hashtags", ""), image_url, page_id)
+            print(f"  ✓ Facebook: {fb_pid}")
+
+    elif platform == "linkedin":
+        from agents.publisher import publish_linkedin
+        org_urn = config.get("linkedin_org_urn", "")
+        pid = publish_linkedin(post["caption"], post.get("hashtags", ""), image_path, org_urn)
+        print(f"  ✓ LinkedIn: {pid}")
+
+    elif platform == "twitter":
+        from agents.publisher import publish_twitter
+        pid = publish_twitter(post["caption"], post.get("hashtags", ""), image_path)
+        print(f"  ✓ Twitter: {pid}")
+
+    print(f"\n✅ Posted! Caption: {post['caption'][:120]}...")
+
+
+def cmd_post_screenshot(brand: str, platform: str, image_path: str = None):
+    """Post a user-provided screenshot with an AI-generated caption."""
+    from agents.content_generator import generate_screenshot_caption
+    from agents.publisher import upload_image_to_imgbb, publish_instagram
+    from agents.content_generator import load_brand
+
+    screenshots_dir = Path(__file__).parent / "screenshots"
+
+    # If no image_path given, find the newest screenshot in the drop folder
+    if not image_path:
+        images = sorted(
+            [f for f in screenshots_dir.iterdir() if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")],
+            key=lambda f: f.stat().st_mtime,
+            reverse=True
+        )
+        if not images:
+            print("❌ No screenshots found in cmo-agent/screenshots/")
+            print("   Drop a screenshot there and re-run, or pass --image /path/to/image.png")
+            return
+        image_path = str(images[0])
+        print(f"📱 Using newest screenshot: {Path(image_path).name}")
+    else:
+        if not Path(image_path).exists():
+            print(f"❌ Image not found: {image_path}")
+            return
+
+    print(f"\n🤖 Generating caption from screenshot for {brand}...")
+    post = generate_screenshot_caption(brand, image_path, platform)
+
+    print(f"\n📝 Post idea: {post['post_idea']}")
+    print(f"   Caption preview: {post['caption'][:100]}...")
 
     print(f"\n📤 Publishing now...")
     config = load_brand(brand)["config"]
@@ -171,44 +303,76 @@ def cmd_post_now(brand: str, platform: str):
             fb_pid = publish_facebook(post["caption"], post["hashtags"], image_url, page_id)
             print(f"  ✓ Facebook: {fb_pid}")
 
-    elif platform == "linkedin":
-        from agents.publisher import publish_linkedin
-        org_urn = config.get("linkedin_org_urn", "")
-        pid = publish_linkedin(post["caption"], post["hashtags"], image_path, org_urn)
-        print(f"  ✓ LinkedIn: {pid}")
-
-    elif platform == "twitter":
-        from agents.publisher import publish_twitter
-        pid = publish_twitter(post["caption"], post["hashtags"], image_path)
-        print(f"  ✓ Twitter: {pid}")
-
     print(f"\n✅ Posted! Caption: {post['caption'][:120]}...")
+
+    # Move used screenshot to an "posted" subfolder so it's not reused
+    posted_dir = screenshots_dir / "posted"
+    posted_dir.mkdir(exist_ok=True)
+    src = Path(image_path)
+    dest = posted_dir / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{src.name}"
+    src.rename(dest)
+    print(f"   📁 Screenshot moved to screenshots/posted/")
 
 
 def cmd_daemon(brand: str, platform: str):
     """
-    Run continuously — generate and publish posts at 9am and 7pm daily.
-    Each post spotlights a unique cocktail recipe.
+    Run continuously — generate and publish ONE post at 9am (recipe) and ONE at 7pm (feature).
+    Uses a daily cap and lock file to prevent double-posting.
     """
     import schedule
+    from pathlib import Path
+
+    LOCK_FILE = Path(__file__).parent / "posts" / ".post_lock"
+    DAILY_LOG = Path(__file__).parent / "posts" / "daily_post_log.json"
+
+    def _daily_count() -> int:
+        today = datetime.now().strftime("%Y-%m-%d")
+        if DAILY_LOG.exists():
+            log = json.load(open(DAILY_LOG))
+            return log.get(today, 0)
+        return 0
+
+    def _increment_daily():
+        today = datetime.now().strftime("%Y-%m-%d")
+        log = json.load(open(DAILY_LOG)) if DAILY_LOG.exists() else {}
+        log[today] = log.get(today, 0) + 1
+        # Keep only last 7 days
+        log = {k: v for k, v in sorted(log.items())[-7:]}
+        json.dump(log, open(DAILY_LOG, "w"), indent=2)
 
     def generate_and_publish():
-        print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M')}] Generating post...")
-        cmd_generate(brand, platform)
-        cmd_run()
+        """Generate exactly one post and publish it. Lock prevents concurrent runs."""
+        if LOCK_FILE.exists():
+            print(f"[{datetime.now().strftime('%H:%M')}] Lock file exists — skipping (another post in progress)")
+            return
 
-    def publish_job():
-        cmd_run()
+        if _daily_count() >= 2:
+            print(f"[{datetime.now().strftime('%H:%M')}] Daily limit reached (2 posts) — skipping")
+            return
 
-    # Generate + publish at 9am and 7pm
+        try:
+            # Acquire lock
+            LOCK_FILE.write_text(datetime.now().isoformat())
+            print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M')}] Generating post ({_daily_count() + 1}/2 today)...")
+
+            cmd_post_now(brand, platform)
+            _increment_daily()
+
+        except Exception as e:
+            print(f"  ✗ Post failed: {e}")
+        finally:
+            # Always release lock
+            if LOCK_FILE.exists():
+                LOCK_FILE.unlink()
+
+    # Post 1 at 9am (recipe), Post 2 at 7pm (feature)
     schedule.every().day.at("09:00").do(generate_and_publish)
     schedule.every().day.at("19:00").do(generate_and_publish)
-    # Check for due posts every 5 minutes (catches any that were queued ahead)
-    schedule.every(5).minutes.do(publish_job)
 
     print(f"\n🤖 CMO Agent daemon running for {brand} / {platform}")
-    print("   Posts daily at 09:00 and 19:00")
-    print("   Each post spotlights a unique cocktail recipe")
+    print("   Post 1: 09:00 — cocktail recipe")
+    print("   Post 2: 19:00 — app feature showcase")
+    print("   Max 2 posts per day, no repeats ever")
     print("   Press Ctrl+C to stop\n")
 
     while True:
@@ -257,13 +421,20 @@ def cmd_outreach(subcommand: str, args):
         from agents.outreach_emailer import outreach_status
         outreach_status()
 
+    elif subcommand == "follow-up":
+        from agents.outreach_followup import run_followups
+        run_followups(
+            dry_run=getattr(args, "dry_run", False),
+            days=getattr(args, "days", 14)
+        )
+
     elif subcommand == "summary":
         from agents.outreach_researcher import show_research_summary
         show_research_summary()
 
     else:
         print(f"Unknown outreach subcommand: {subcommand}")
-        print("Available: research, draft, send-emails, show-dms, show-emails, mark-sent, status, summary")
+        print("Available: research, draft, send-emails, show-dms, show-emails, mark-sent, follow-up, status, summary")
 
 
 def main():
@@ -284,6 +455,11 @@ def main():
     postnow = subparsers.add_parser("post-now", help="Generate and publish immediately (for cron)")
     postnow.add_argument("brand", help="Brand slug (e.g. spirit-library)")
     postnow.add_argument("--platform", default="instagram", choices=["instagram", "facebook", "linkedin", "twitter", "tiktok"])
+
+    postss = subparsers.add_parser("post-screenshot", help="Post a screenshot with AI-generated caption")
+    postss.add_argument("brand", help="Brand slug (e.g. spirit-library)")
+    postss.add_argument("--platform", default="instagram", choices=["instagram", "facebook", "linkedin", "twitter", "tiktok"])
+    postss.add_argument("--image", default=None, help="Path to screenshot (default: newest in screenshots/)")
 
     daemon = subparsers.add_parser("daemon", help="Run continuously")
     daemon.add_argument("brand", help="Brand slug")
@@ -323,6 +499,11 @@ def main():
     # status
     outreach_sub.add_parser("status", help="Dashboard: research + draft + send progress")
 
+    # follow-up
+    followup_p = outreach_sub.add_parser("follow-up", help="Send follow-ups to non-responders (14-day window)")
+    followup_p.add_argument("--dry-run", action="store_true", help="Preview without sending")
+    followup_p.add_argument("--days", type=int, default=14, help="Days since original send (default 14)")
+
     # summary
     outreach_sub.add_parser("summary", help="Research summary by category")
     # ──────────────────────────────────────────────────────────────────────────
@@ -333,6 +514,8 @@ def main():
         cmd_generate(args.brand, args.platform)
     elif args.command == "post-now":
         cmd_post_now(args.brand, args.platform)
+    elif args.command == "post-screenshot":
+        cmd_post_screenshot(args.brand, args.platform, args.image)
     elif args.command == "plan":
         cmd_plan(args.brand, args.days)
     elif args.command == "queue":

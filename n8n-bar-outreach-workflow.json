@@ -1,0 +1,153 @@
+{
+  "name": "Bar Outreach — Spirit Library",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "command": "cd /Users/claudecode/cmo-agent && /Users/claudecode/spirit_venv/bin/python send_bar_emails.py 2>&1 | tail -20"
+      },
+      "id": "send-emails",
+      "name": "Send Bar Emails (rate limited)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [250, 0]
+    },
+    {
+      "parameters": {
+        "command": "cat /Users/claudecode/cmo-agent/outreach/state/bar_email_state.json 2>/dev/null | python3.12 -c \"import sys,json; s=json.load(sys.stdin); sent=s.get('sent',{}); cold=sum(1 for v in sent.values() if 'cold' in v); f1=sum(1 for v in sent.values() if 'followup_1' in v); f2=sum(1 for v in sent.values() if 'followup_2' in v); print(json.dumps({'total_contacts': len(sent), 'cold_sent': cold, 'followup1_sent': f1, 'followup2_sent': f2, 'remaining': 255-len(sent)}))\""
+      },
+      "id": "check-stats",
+      "name": "Campaign Stats",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [500, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-remaining",
+              "leftValue": "={{ JSON.parse($json.stdout).remaining }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "check-done",
+      "name": "All Sent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [750, 0]
+    },
+    {
+      "parameters": {
+        "sendTo": "claudesonnet111@gmail.com",
+        "subject": "🍸 Bar Outreach Complete!",
+        "message": "=All 255 bar contacts have received the full email sequence.\n\nStats:\n{{ JSON.parse($node['Campaign Stats'].json.stdout).cold_sent }} cold emails sent\n{{ JSON.parse($node['Campaign Stats'].json.stdout).followup1_sent }} follow-up #1 sent\n{{ JSON.parse($node['Campaign Stats'].json.stdout).followup2_sent }} follow-up #2 sent\n\nCheck replies in Gmail and log responses."
+      },
+      "id": "notify-done",
+      "name": "Email: Campaign Complete",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1000, -100],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "noop",
+      "name": "Continue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1000, 100]
+    }
+  ],
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Send Bar Emails (rate limited)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Bar Emails (rate limited)": {
+      "main": [
+        [
+          {
+            "node": "Campaign Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaign Stats": {
+      "main": [
+        [
+          {
+            "node": "All Sent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All Sent?": {
+      "main": [
+        [
+          {
+            "node": "Email: Campaign Complete",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Continue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": true
+}

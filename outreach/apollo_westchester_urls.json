@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Spirits/Beverage brands in Westchester",
+    "url": "https://app.apollo.io/people?q_organization_keyword_tags[]=wine%20%26%20spirits%2Cbeverages%2Cfood%20%26%20beverages&organization_locations[]=Westchester%20County%2C%20New%20York%2C%20United%20States&q_person_title[]=Marketing%2CPartnerships%2CBrand%20Manager%2CPR%2CCommunications%2CBusiness%20Development"
+  },
+  {
+    "name": "Food & Beverage companies Westchester - Marketing",
+    "url": "https://app.apollo.io/people?q_organization_industry_tag_ids[]=5567cd4773696439b10b0000&organization_locations[]=Westchester%20County%2C%20New%20York%2C%20United%20States&q_person_title[]=Marketing%20Director%2CVP%20Marketing%2CHead%20of%20Marketing%2CBrand%20Director%2CCMO"
+  },
+  {
+    "name": "Consumer brands Westchester - Partnerships",
+    "url": "https://app.apollo.io/people?organization_locations[]=Westchester%20County%2C%20New%20York%2C%20United%20States&q_person_title[]=Partnerships%2CBusiness%20Development%2CStrategic%20Alliances%2CBrand%20Partnerships&q_organization_num_employees_ranges[]=51%2C200"
+  },
+  {
+    "name": "Global brands HQ Westchester - Marketing/PR",
+    "url": "https://app.apollo.io/people?organization_locations[]=Westchester%20County%2C%20New%20York%2C%20United%20States&q_person_title[]=Marketing%2CPR%2CCommunications%2CPartnerships&q_organization_num_employees_ranges[]=201%2C10000"
+  },
+  {
+    "name": "Hospitality/Restaurant groups Westchester",
+    "url": "https://app.apollo.io/people?q_organization_keyword_tags[]=restaurants%2Chospitality%2Cbars%2Cnightlife&organization_locations[]=Westchester%20County%2C%20New%20York%2C%20United%20States&q_person_title[]=Owner%2CGeneral%20Manager%2CDirector%2CManager"
+  }
+]

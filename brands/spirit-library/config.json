@@ -4,10 +4,13 @@
   "tone": "sophisticated but approachable, knowledgeable without being pretentious, aspirational",
   "target_audience": "cocktail enthusiasts aged 25-45, home bartenders, people who enjoy craft drinks and entertaining",
   "content_pillars": [
-    "cocktail recipes and techniques",
-    "spirit education and recommendations",
-    "entertaining and hosting tips",
-    "seasonal and trending cocktails",
+    "technique explorer — bartending methods and skills",
+    "trending ingredients spotlight — what's hot in cocktail culture",
+    "spirit provenance and terroir — origin stories and regional traditions",
+    "bartender spotlight — expert tips and industry commentary",
+    "seasonal and limited release alerts — timely ingredient features",
+    "what can I make challenges — ingredient-based engagement",
+    "cocktail history deep dives — stories behind classics",
     "app features and user stories"
   ],
   "hashtags_core": [
@@ -39,6 +42,6 @@
   "facebook_page_id": "1024220647446383",
   "linkedin_org_urn": "",
   "tiktok_open_id": "",
-  "app_store_link": "https://apps.apple.com/app/spirit-library/id6746823938",
-  "website": "https://agenticappmaker.github.io/spiritlibrary/"
+  "app_store_link": "https://apps.apple.com/us/app/spirit-library/id6761500950",
+  "website": "https://spiritlibrary.app"
 }

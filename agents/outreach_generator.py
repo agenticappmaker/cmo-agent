@@ -7,6 +7,7 @@ import anthropic
 import json
 import os
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -15,7 +16,7 @@ CACHE_FILE = OUTREACH_DIR / "research_cache.json"
 OUTBOX_FILE = OUTREACH_DIR / "outbox.json"
 DM_QUEUE_FILE = OUTREACH_DIR / "dm_queue.json"
 
-SENDER_NAME = "Steven Samori"
+SENDER_NAME = "Steven Samori | Spirit Library"
 APP_NAME = "Spirit Library"
 APP_STORE_URL = "https://apps.apple.com/app/id6746823938"
 
@@ -118,7 +119,7 @@ Respond as JSON ONLY:
 }}"""
 
     response = client.messages.create(
-        model="claude-opus-4-6",
+        model="claude-sonnet-4-6",
         max_tokens=1200,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -162,7 +163,7 @@ Respond as JSON ONLY:
 }}"""
 
     response = client.messages.create(
-        model="claude-opus-4-6",
+        model="claude-sonnet-4-6",
         max_tokens=600,
         messages=[{"role": "user", "content": prompt}]
     )
@@ -253,6 +254,7 @@ def draft_all_pitches(force_refresh: bool = False, category_filter: str = None):
                 _save_json(OUTBOX_FILE, outbox)
 
             print(f"      ✓ Hook: {pitch.get('key_hook', '')[:70]}")
+            time.sleep(3)
 
         except Exception as e:
             print(f"      ✗ Error drafting for {target_key}: {e}")

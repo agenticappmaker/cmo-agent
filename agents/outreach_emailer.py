@@ -23,7 +23,7 @@ OUTREACH_DIR = Path(__file__).parent.parent / "outreach"
 OUTBOX_FILE = OUTREACH_DIR / "outbox.json"
 SENT_LOG_FILE = OUTREACH_DIR / "sent_log.json"
 
-FROM_NAME = "Steven Samori"
+FROM_NAME = "Steven Samori | Spirit Library"
 
 
 def _load_json(path: Path) -> list:

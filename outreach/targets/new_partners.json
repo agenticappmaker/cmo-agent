@@ -1,0 +1,452 @@
+[
+  {
+    "name": "Hendrick's Gin",
+    "category": "Premium Spirits Brand",
+    "email": null,
+    "contact_url": "https://www.hendricksgin.com/contact-us/",
+    "instagram": "@hendricksgin",
+    "value_prop": "1,500+ cocktail recipes featuring gin as a core spirit category; My Bar feature lets users discover Hendrick's-specific drinks based on what they have at home",
+    "pitch_angle": "Featured brand placement in gin cocktail recipes; co-branded 'Hendrick's Collection' recipe list; push notifications when new Hendrick's recipes are added"
+  },
+  {
+    "name": "Aviation American Gin",
+    "category": "Premium Spirits Brand",
+    "email": "aviation@diageo.com",
+    "contact_url": "https://www.aviationgin.com/contact-us",
+    "instagram": "@aviationgin",
+    "value_prop": "Aviation's playful brand identity aligns with Spirit Library's approachable cocktail discovery; exposure to 1,500+ recipe-browsing users",
+    "pitch_angle": "Sponsored recipe collections featuring Aviation Gin; in-app substitution guide highlighting Aviation as a recommended gin; co-marketing on social channels"
+  },
+  {
+    "name": "Monkey 47 Gin",
+    "category": "Premium Spirits Brand",
+    "email": "info@monkey47.com",
+    "contact_url": "https://us.monkey47.com/",
+    "instagram": "@monkey47",
+    "value_prop": "Monkey 47's complex 47-botanical profile creates dozens of unique cocktail possibilities; Spirit Library's substitution guide can educate users on premium gin differences",
+    "pitch_angle": "Premium gin spotlight section; educational content about botanical complexity; My Bar integration so users with Monkey 47 see tailored recipes"
+  },
+  {
+    "name": "St-Germain Elderflower Liqueur",
+    "category": "Premium Spirits Brand",
+    "email": null,
+    "contact_url": "https://www.stgermainliqueur.com/us/en/",
+    "instagram": "@stgermaindrinks",
+    "value_prop": "St-Germain appears in hundreds of modern cocktail recipes; Spirit Library drives discovery of elderflower cocktails for home bartenders",
+    "pitch_angle": "Branded 'St-Germain Essentials' recipe collection; substitution guide entry positioning St-Germain as a must-have modifier; seasonal recipe push notifications"
+  },
+  {
+    "name": "Chartreuse",
+    "category": "Premium Spirits Brand",
+    "email": null,
+    "contact_url": "https://www.chartreuse.fr/en/home/",
+    "instagram": "@chartreuse_diffusion",
+    "value_prop": "Chartreuse's cult following and scarcity make it a high-interest ingredient; Spirit Library helps users find both Green and Yellow Chartreuse cocktails",
+    "pitch_angle": "Curated Chartreuse cocktail collection; educational content on Green vs Yellow usage; substitution guide showing alternatives when Chartreuse is unavailable"
+  },
+  {
+    "name": "Campari",
+    "category": "Premium Spirits Brand",
+    "email": "corporate.communications@campari.com",
+    "contact_url": "https://www.camparigroup.com/en/page/contact-us",
+    "instagram": "@campariofficial",
+    "value_prop": "Campari is essential to Negronis, Americanos, and dozens of classic cocktails; Spirit Library users actively search for bitter-forward recipes",
+    "pitch_angle": "Campari-branded classic cocktail collection; Negroni Week integration; in-app education about Italian aperitivo culture"
+  },
+  {
+    "name": "Aperol",
+    "category": "Premium Spirits Brand",
+    "email": "corporate.communications@campari.com",
+    "contact_url": "https://www.aperol.com/en-us/contact-us/",
+    "instagram": "@aperolusa",
+    "value_prop": "Aperol Spritz is the most-searched summer cocktail; Spirit Library can drive discovery of Aperol beyond the Spritz",
+    "pitch_angle": "Aperol recipe collection beyond the Spritz; seasonal summer push campaign; My Bar integration highlighting Aperol cocktails"
+  },
+  {
+    "name": "Clase Azul Tequila",
+    "category": "Premium Spirits Brand",
+    "email": null,
+    "contact_url": "https://claseazul.com/contact-us",
+    "instagram": "@claseazultequila",
+    "value_prop": "Premium tequila category is booming; Spirit Library can showcase Clase Azul in elevated cocktail recipes that match the brand's luxury positioning",
+    "pitch_angle": "Ultra-premium tequila cocktail collection; brand storytelling integration; positioning as the aspirational tequila choice in recipes"
+  },
+  {
+    "name": "Casamigos Tequila",
+    "category": "Premium Spirits Brand",
+    "email": null,
+    "contact_url": "https://www.casamigos.com/en-us/contact",
+    "instagram": "@casamigos",
+    "value_prop": "Casamigos is one of the most recognized tequila brands; Spirit Library users searching for margarita and tequila cocktails represent a massive audience",
+    "pitch_angle": "Casamigos-branded cocktail collection; integration with My Bar for tequila-based recipe discovery; social media cross-promotion"
+  },
+  {
+    "name": "Fernet-Branca",
+    "category": "Premium Spirits Brand",
+    "email": "ufficiostampa@branca.it",
+    "contact_url": "https://us.fernetbranca.com/contact",
+    "instagram": "@fernetbranca",
+    "value_prop": "Fernet has a cult bartender following; Spirit Library can help mainstream consumers discover Fernet cocktails beyond the shot",
+    "pitch_angle": "Fernet cocktail education collection; bartender-approved recipes section; substitution guide for amaro/digestif category"
+  },
+  {
+    "name": "Fever-Tree",
+    "category": "Mixer/Ingredient Brand",
+    "email": "info@fever-tree.com",
+    "contact_url": "https://fever-tree.com/en_US/contact",
+    "instagram": "@fevertreemixers",
+    "value_prop": "Fever-Tree is the #1 premium mixer brand; Spirit Library recipes calling for tonic, ginger beer, or soda can recommend Fever-Tree specifically",
+    "pitch_angle": "Preferred mixer recommendation in recipes; co-branded 'Perfect Serve' guides; branded content about why mixer quality matters"
+  },
+  {
+    "name": "Q Mixers",
+    "category": "Mixer/Ingredient Brand",
+    "email": "Info@QMixers.com",
+    "contact_url": "https://qmixers.com/contact-us/",
+    "instagram": "@qmixers",
+    "value_prop": "Q Mixers targets the premium cocktail-at-home audience, which is exactly Spirit Library's user base",
+    "pitch_angle": "Mixer recommendation integration in recipes; 'Q It Up' branded recipe collection; cross-promotion to cocktail-savvy audience"
+  },
+  {
+    "name": "Jack Rudy Cocktail Co.",
+    "category": "Mixer/Ingredient Brand",
+    "email": "info@jackrudycocktailco.com",
+    "contact_url": "https://jackrudycocktailco.com/pages/contact",
+    "instagram": "@jackrudycocktailco",
+    "value_prop": "Jack Rudy's craft tonic and syrups are exactly what Spirit Library users want; the app can recommend their products as premium ingredient upgrades",
+    "pitch_angle": "Featured craft ingredient brand; product recommendations in cocktail recipes; My Bar integration so users with Jack Rudy products see tailored recipes"
+  },
+  {
+    "name": "Small Hand Foods",
+    "category": "Mixer/Ingredient Brand",
+    "email": null,
+    "contact_url": "https://smallhandfoods.com/contact/",
+    "instagram": "@smallhandfoods",
+    "value_prop": "Small Hand Foods' orgeat, grenadine, and gum syrup are essential craft cocktail ingredients; Spirit Library can drive awareness to home bartenders",
+    "pitch_angle": "Featured artisan syrup brand in recipes; educational content about quality syrups vs commercial versions; product links in ingredient lists"
+  },
+  {
+    "name": "RISHI Tea & Botanicals",
+    "category": "Mixer/Ingredient Brand",
+    "email": "customerservice@rishi-tea.com",
+    "contact_url": "https://www.rishi-tea.com/pages/press-partnerships",
+    "instagram": "@rishitea",
+    "value_prop": "Tea cocktails are a growing trend; RISHI's botanicals are perfect for infusions, syrups, and tea-based cocktails in Spirit Library",
+    "pitch_angle": "Tea cocktail recipe collection; botanical infusion guides; cross-category appeal bringing tea drinkers to cocktails"
+  },
+  {
+    "name": "Cocktail Kingdom",
+    "category": "Bar Tool Company",
+    "email": "press@cocktailkingdom.com",
+    "contact_url": "https://cocktailkingdom.com/pages/contact-us",
+    "instagram": "@cocktailkingdom",
+    "value_prop": "Cocktail Kingdom is the gold standard for professional barware; Spirit Library users are exactly their target customer for home bar upgrades",
+    "pitch_angle": "Tool recommendations in cocktail recipes (e.g., 'best made with a Cocktail Kingdom jigger'); affiliate partnership; co-branded 'Essential Home Bar' guide"
+  },
+  {
+    "name": "OXO Barware",
+    "category": "Bar Tool Company",
+    "email": null,
+    "contact_url": "https://www.oxo.com/shop/coffee-beverage/barware.html",
+    "instagram": "@oxo",
+    "value_prop": "OXO's accessible, well-designed barware is perfect for Spirit Library's home cocktail audience who want quality without professional pricing",
+    "pitch_angle": "Beginner-friendly tool recommendations in recipes; 'Start Your Home Bar' guide featuring OXO tools; affiliate product links"
+  },
+  {
+    "name": "Viski",
+    "category": "Bar Tool Company",
+    "email": null,
+    "contact_url": "https://viski.com/",
+    "instagram": "@viskiofficial",
+    "value_prop": "Viski's premium glassware and barware appeal to cocktail enthusiasts; Spirit Library can recommend specific glasses for each cocktail type",
+    "pitch_angle": "Glassware recommendations per cocktail recipe; co-branded content about proper cocktail presentation; affiliate links to Viski products"
+  },
+  {
+    "name": "W&P Design",
+    "category": "Bar Tool Company",
+    "email": "press@wandpdesign.com",
+    "contact_url": "https://wandp.com/pages/press",
+    "instagram": "@wandpdesign",
+    "value_prop": "W&P's innovative bar products (ice molds, cocktail kits) are trending; Spirit Library users are their core demographic",
+    "pitch_angle": "Product placement in recipes (e.g., ice mold recommendations); co-branded cocktail kit content; affiliate partnership"
+  },
+  {
+    "name": "Rabbit Barware",
+    "category": "Bar Tool Company",
+    "email": null,
+    "contact_url": "https://www.rabbitwine.com/pages/contact-us",
+    "instagram": "@rabbitwineandbar",
+    "value_prop": "Rabbit's 30+ year reputation in wine/bar tools gives them credibility; Spirit Library can introduce their cocktail tools to a recipe-driven audience",
+    "pitch_angle": "Accessible bar tool recommendations in beginner cocktail recipes; 'Essential Tools' guide co-branded with Rabbit; retail cross-promotion"
+  },
+  {
+    "name": "Shaker & Spoon",
+    "category": "Cocktail Subscription Box",
+    "email": "help@shakerandspoon.com",
+    "contact_url": "https://shakerandspoon.com/",
+    "instagram": "@shakerandspoon",
+    "value_prop": "Shaker & Spoon subscribers are cocktail-curious consumers who would love a 1,500+ recipe app; Spirit Library extends the subscription experience year-round",
+    "pitch_angle": "Recipe app included with subscription; co-branded monthly recipe collections matching their box themes; cross-promotion to each other's audiences"
+  },
+  {
+    "name": "SaloonBox",
+    "category": "Cocktail Subscription Box",
+    "email": "lindsay@saloonbox.com",
+    "contact_url": "https://saloonbox.com/pages/contact",
+    "instagram": "@saloonbox",
+    "value_prop": "SaloonBox subscribers want to learn cocktails at home, which is Spirit Library's exact use case; the app provides unlimited recipes beyond the monthly box",
+    "pitch_angle": "Partner app recommendation in subscription boxes; exclusive recipes tied to monthly box ingredients; co-marketing to cocktail enthusiast audience"
+  },
+  {
+    "name": "Cocktail Courier",
+    "category": "Cocktail Subscription Box",
+    "email": null,
+    "contact_url": "https://www.cocktailcourier.com/pages/contact-us",
+    "instagram": "@cocktailcourier",
+    "value_prop": "Cocktail Courier's brand partnership model aligns perfectly; Spirit Library can be the digital companion to their physical kits",
+    "pitch_angle": "Digital recipe companion for subscription kits; branded recipe collections for partner spirits; cross-promotion with ShakeStir ecosystem"
+  },
+  {
+    "name": "Bitters & Bottles",
+    "category": "Cocktail Subscription Box",
+    "email": "hello@bittersandbottles.com",
+    "contact_url": "https://www.bittersandbottles.com/",
+    "instagram": "@bittersandbottles",
+    "value_prop": "Bitters & Bottles' curated selection and subscription clubs serve the exact cocktail enthusiast Spirit Library targets",
+    "pitch_angle": "Recipe recommendations paired with their product selections; co-branded cocktail discovery experience; Bay Area cocktail culture content"
+  },
+  {
+    "name": "Crafty Cocktails (Thirstie/ShakeStir)",
+    "category": "Cocktail Subscription Box",
+    "email": null,
+    "contact_url": "https://www.cocktailcourier.com/pages/shakestir",
+    "instagram": "@thirstie",
+    "value_prop": "ShakeStir's technology platform for spirits e-commerce could integrate with Spirit Library's recipe-to-purchase pipeline",
+    "pitch_angle": "Buy-the-bottle integration directly from recipes; technology partnership for recipe-to-commerce; data sharing on trending cocktail ingredients"
+  },
+  {
+    "name": "Tipsy Bartender (Skyy John)",
+    "category": "Cocktail Influencer",
+    "email": "Contact@TipsyBartender.com",
+    "contact_url": "https://linktr.ee/TipsyBartender",
+    "instagram": "@tipsybartender",
+    "value_prop": "8M+ followers across platforms; the biggest cocktail creator whose audience perfectly overlaps with Spirit Library users",
+    "pitch_angle": "Sponsored app review/feature; exclusive Tipsy Bartender recipe collection in-app; affiliate partnership; social media campaign"
+  },
+  {
+    "name": "Bad Birdy",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/badbirdy/",
+    "instagram": "@badbirdy",
+    "value_prop": "192K followers; celebrated LA bartender and consultant with major brand partnerships (Jack Daniel's, Hennessy, Crown Royal)",
+    "pitch_angle": "Influencer partnership for app promotion; exclusive Bad Birdy recipe collection; Instagram/TikTok content featuring Spirit Library"
+  },
+  {
+    "name": "The Educated Barfly",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/educatedbarfly/",
+    "instagram": "@educatedbarfly",
+    "value_prop": "Deep-dive cocktail education content with loyal following; aligns with Spirit Library's educational substitution guide feature",
+    "pitch_angle": "Co-created educational content; recipe contributions to Spirit Library; video series featuring the app's substitution guide"
+  },
+  {
+    "name": "Cocktail Chemistry (Nick Fisher)",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/cocktailchemistry/",
+    "instagram": "@cocktailchemistry",
+    "value_prop": "Science-meets-cocktails content with massive YouTube/Instagram following; appeals to the curious home bartender Spirit Library serves",
+    "pitch_angle": "Sponsored app integration in videos; exclusive 'Chemistry' recipe collection; educational content collaboration"
+  },
+  {
+    "name": "Jordan Hughes (High Proof Preacher)",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/highproofpreacher/",
+    "instagram": "@highproofpreacher",
+    "value_prop": "Known for stunning cocktail photography and Cocktail Camera tutorials; visual content aligns with Spirit Library's premium feel",
+    "pitch_angle": "Photography collaboration for in-app recipe images; co-branded content; influencer review of the app"
+  },
+  {
+    "name": "The Modern Mixologist (Tony Abou-Ganim)",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/themodernmixologist/",
+    "instagram": "@themodernmixologist",
+    "value_prop": "Industry legend with decades of credibility; endorsement from Tony Abou-Ganim carries weight with serious cocktail enthusiasts",
+    "pitch_angle": "Curated 'Modern Classics' recipe collection; expert endorsement; educational content partnership"
+  },
+  {
+    "name": "Jeffrey Morgenthaler",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/jeffreymorgenthaler/",
+    "instagram": "@jeffreymorgenthaler",
+    "value_prop": "Award-winning bartender and author; his recipes and techniques are the gold standard; adds credibility to Spirit Library",
+    "pitch_angle": "Expert recipe contributions; 'Morgenthaler Approved' recipe badge; book/app cross-promotion"
+  },
+  {
+    "name": "Anders Erickson",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/anderserickson/",
+    "instagram": "@anderserickson",
+    "value_prop": "Popular cocktail creator known for accessible home bartending content that matches Spirit Library's approachable style",
+    "pitch_angle": "Sponsored content featuring Spirit Library; exclusive recipe contributions; TikTok/Instagram Reels showcasing app features"
+  },
+  {
+    "name": "Abelina Abel",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/abelinaabel/",
+    "instagram": "@abelinaabel",
+    "value_prop": "Female cocktail creator with engaged audience; represents diversity in the cocktail space Spirit Library champions",
+    "pitch_angle": "Influencer partnership for app promotion; curated recipe collection; social content featuring My Bar and substitution features"
+  },
+  {
+    "name": "Steve the Bartender (Steve Calabro)",
+    "category": "Cocktail Influencer",
+    "email": null,
+    "contact_url": "https://www.instagram.com/stevethebartender/",
+    "instagram": "@stevethebartender",
+    "value_prop": "Australian bartender with 500K+ YouTube subscribers and strong Instagram presence; educational cocktail content with global reach",
+    "pitch_angle": "Sponsored app review for international audience; recipe contributions; video content showcasing Spirit Library features"
+  },
+  {
+    "name": "Eater (Vox Media)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.eater.com/",
+    "instagram": "@eater",
+    "value_prop": "18M+ monthly visitors focused on food/drink culture; Eater's cocktail coverage reaches exactly Spirit Library's target audience",
+    "pitch_angle": "App review/feature pitch; sponsored content about cocktail app innovation; inclusion in cocktail-related roundups and gift guides"
+  },
+  {
+    "name": "Bon Appetit (Conde Nast)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.bonappetit.com/",
+    "instagram": "@bonappetitmag",
+    "value_prop": "Premium food/drink brand with massive video audience; BA's cocktail content drives significant engagement",
+    "pitch_angle": "Product feature in cocktail content; 'Best Cocktail Apps' roundup inclusion; collaboration with BA's video team"
+  },
+  {
+    "name": "Serious Eats",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.seriouseats.com/",
+    "instagram": "@seriouseats",
+    "value_prop": "Serious Eats' science-driven approach to food/drink matches Spirit Library's detailed recipe and substitution content",
+    "pitch_angle": "Technical feature about cocktail app development; recipe accuracy review; inclusion in cocktail tools roundup"
+  },
+  {
+    "name": "Food52",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://food52.com/pages/press",
+    "instagram": "@food52",
+    "value_prop": "Food52's community-driven model and commerce integration aligns with Spirit Library's approach; their audience loves discovering new tools",
+    "pitch_angle": "App feature in drinks section; gift guide inclusion; community-driven cocktail content collaboration"
+  },
+  {
+    "name": "The Kitchn (Apartment Therapy Media)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.thekitchn.com/about/contact",
+    "instagram": "@thekitchn",
+    "value_prop": "The Kitchn's home-focused content perfectly targets Spirit Library's home bartender audience",
+    "pitch_angle": "Home bar setup guide featuring the app; product review; inclusion in cocktail tools roundup"
+  },
+  {
+    "name": "Epicurious (Conde Nast)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.epicurious.com/",
+    "instagram": "@epicurious",
+    "value_prop": "33,000+ recipes and a massive recipe-search audience; Spirit Library offers a specialized cocktail experience Epicurious doesn't have",
+    "pitch_angle": "Complementary app feature; cocktail-specific app review; cross-referencing recipes"
+  },
+  {
+    "name": "Tasting Table (Static Media)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.tastingtable.com/about/",
+    "instagram": "@tastingtable",
+    "value_prop": "18M monthly visitors interested in food and drink trends; cocktail content is a core coverage area",
+    "pitch_angle": "App review/feature; trending cocktail content collaboration; inclusion in cocktail tools and resources roundups"
+  },
+  {
+    "name": "The Daily Meal (Static Media)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.thedailymeal.com/",
+    "instagram": "@thedailymeal",
+    "value_prop": "Broad food/drink audience interested in accessible content; Spirit Library's My Bar feature is a perfect story angle",
+    "pitch_angle": "Feature on the My Bar ingredient-matching concept; listicle inclusion; holiday cocktail content collaboration"
+  },
+  {
+    "name": "AllRecipes (Dotdash Meredith)",
+    "category": "Food/Drink Media",
+    "email": null,
+    "contact_url": "https://www.allrecipes.com/",
+    "instagram": "@allrecipes",
+    "value_prop": "The largest recipe site in the world; their cocktail section could benefit from recommending a dedicated cocktail app",
+    "pitch_angle": "Complementary app recommendation; cocktail section content partnership; cross-promotion to recipe-loving audience"
+  },
+  {
+    "name": "Saveur",
+    "category": "Food/Drink Media",
+    "email": "partnerships@saveur.com",
+    "contact_url": "https://www.saveur.com/contact/",
+    "instagram": "@saveurmag",
+    "value_prop": "Saveur's premium food/drink editorial voice and awards program reaches discerning food enthusiasts",
+    "pitch_angle": "Feature in cocktail/spirits coverage; SAVEUR Awards nomination pitch; partnership content about craft cocktails"
+  },
+  {
+    "name": "BarSmarts (Pernod Ricard)",
+    "category": "Bartending School/Program",
+    "email": "michael@barsmarts.com",
+    "contact_url": "https://www.barsmarts.com/",
+    "instagram": "@barsmarts",
+    "value_prop": "BarSmarts is the industry-leading bartending education program; Spirit Library can serve as a companion app for students",
+    "pitch_angle": "Student companion app recommendation; recipe library for curriculum; integration with bartending education materials"
+  },
+  {
+    "name": "Mixology Wine Institute",
+    "category": "Bartending School/Program",
+    "email": "mixologywine@gmail.com",
+    "contact_url": "http://www.pbsa.com/Schools/philadelphia/school_mission.html",
+    "instagram": null,
+    "value_prop": "Bartending students need recipe references; Spirit Library's 1,500+ recipes and substitution guide are ideal study tools",
+    "pitch_angle": "Student app recommendation; educational resource partnership; recipe reference tool for coursework"
+  },
+  {
+    "name": "European Bartender School",
+    "category": "Bartending School/Program",
+    "email": "iscia@barschool.net",
+    "contact_url": "https://www.barschool.net/contact",
+    "instagram": "@ebsbarschool",
+    "value_prop": "500K+ social media followers and global bartending student network; Spirit Library can be the go-to recipe app for EBS graduates worldwide",
+    "pitch_angle": "Graduate app recommendation; co-branded recipe collections; student discount partnership; brand partner integration"
+  },
+  {
+    "name": "ABC Bartending School",
+    "category": "Bartending School/Program",
+    "email": null,
+    "contact_url": "https://abcbartending.com/contact-us/",
+    "instagram": null,
+    "value_prop": "40+ year-old bartending school with nationwide locations; students need practical recipe tools for their careers",
+    "pitch_angle": "Student resource recommendation; recipe reference tool for coursework and job preparation; co-marketing at school locations"
+  },
+  {
+    "name": "National Bartenders School",
+    "category": "Bartending School/Program",
+    "email": "info@nationalbartenderschools.com",
+    "contact_url": "https://www.nationalbartenders.com/",
+    "instagram": null,
+    "value_prop": "40+ US locations means broad reach to bartending students; Spirit Library serves as a portable recipe reference",
+    "pitch_angle": "Student app recommendation across all locations; team training resource; recipe reference for coursework"
+  }
+]
