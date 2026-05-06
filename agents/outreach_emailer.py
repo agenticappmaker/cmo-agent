@@ -19,9 +19,12 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from pathlib import Path
 
+from agents.email_validate import validate_email
+
 OUTREACH_DIR = Path(__file__).parent.parent / "outreach"
 OUTBOX_FILE = OUTREACH_DIR / "outbox.json"
 SENT_LOG_FILE = OUTREACH_DIR / "sent_log.json"
+SKIPPED_FILE = OUTREACH_DIR / "skipped_undeliverable.json"
 
 FROM_NAME = "Steven Samori | Spirit Library"
 
@@ -77,10 +80,36 @@ def send_all_emails(dry_run: bool = False, delay_seconds: int = 90, limit: int =
     outbox = _load_json(OUTBOX_FILE)
     sent_log = _load_json(SENT_LOG_FILE)
 
-    to_send = [
+    candidates = [
         e for e in outbox
         if e.get("status") == "draft" and e.get("contact_email")
     ]
+
+    # Validate every candidate before sending. Abstract gets its 3-second budget
+    # per address; on the free tier (100/mo) Tier 1 (regex+DNS) carries it.
+    to_send = []
+    skipped = _load_json(SKIPPED_FILE) if SKIPPED_FILE.exists() else []
+    for e in candidates:
+        v = validate_email(e["contact_email"])
+        if v.ok:
+            to_send.append(e)
+            continue
+        skipped.append({
+            "target_key": e.get("target_key"),
+            "name": e.get("name"),
+            "contact_email": e.get("contact_email"),
+            "reason": v.reason,
+            "suggestion": v.suggestion,
+            "skipped_at": datetime.utcnow().isoformat(),
+        })
+        for entry_item in outbox:
+            if entry_item.get("target_key") == e.get("target_key"):
+                entry_item["status"] = "skipped_undeliverable"
+                entry_item["skip_reason"] = v.reason
+    if skipped:
+        _save_json(SKIPPED_FILE, skipped)
+        _save_json(OUTBOX_FILE, outbox)
+
     no_email = [
         e for e in outbox
         if e.get("status") == "draft" and not e.get("contact_email")
@@ -89,6 +118,7 @@ def send_all_emails(dry_run: bool = False, delay_seconds: int = 90, limit: int =
 
     print(f"\n📧 EMAIL OUTBOX SUMMARY")
     print(f"   Ready to send:      {len(to_send)}")
+    print(f"   Skipped (validator):{len(candidates) - len(to_send)}")
     print(f"   No email address:   {len(no_email)}")
     print(f"   Already sent:       {len(already_sent)}")
 

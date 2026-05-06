@@ -95,7 +95,8 @@ def parse_rss_titles(xml, max_items=5):
 
 
 def gather_cocktail_intelligence():
-    """Scrape RSS feeds and call Claude to summarize trends + suggest features."""
+    """Scrape RSS feeds + (if keyed) Brave/Exa search, then ask Claude to
+    summarize trends + suggest features."""
     print("  Fetching cocktail news feeds...")
     raw_items = []
     for source, url in RSS_FEEDS:
@@ -105,6 +106,18 @@ def gather_cocktail_intelligence():
             for title, desc in items:
                 if title:
                     raw_items.append(f"[{source}] {title}: {desc}")
+
+    # Supplement RSS with neural search when Brave/Exa keyed. Free-first:
+    # Brave 2000/mo budget covers daily runs.
+    try:
+        from agents.search import search as web_search, has_provider
+        if has_provider():
+            for q in ("cocktail trends 2026", "new spirit launches this week", "bartender innovation"):
+                for r in web_search(q, n=3, mode="auto"):
+                    if r.get("title"):
+                        raw_items.append(f"[{r['provider']}] {r['title']}: {r.get('snippet', '')[:200]}")
+    except ImportError:
+        pass
 
     if not raw_items:
         return {"cocktails": [], "features": []}
