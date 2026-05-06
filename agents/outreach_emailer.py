@@ -42,6 +42,69 @@ def _save_json(path: Path, data):
         json.dump(data, f, indent=2)
 
 
+def _send_skip_digest(skipped_this_run: list) -> None:
+    """One-line-per-skip digest to ops email so deliverability filtering is visible.
+    Best-effort; never raises. Resend if RESEND_API_KEY set, else Gmail SMTP."""
+    if not skipped_this_run:
+        return
+    ops_to = os.environ.get("OPS_EMAIL", "claudesonnet111@gmail.com").strip()
+    body_lines = [
+        f"Filtered {len(skipped_this_run)} undeliverable address(es) from outbox before send:",
+        "",
+    ]
+    for rec in skipped_this_run:
+        line = f"  · {rec['name']} <{rec['contact_email']}>  →  {rec['reason']}"
+        if rec.get("suggestion"):
+            line += f"  (suggested: {rec['suggestion']})"
+        body_lines.append(line)
+    body_lines += ["", "Full log: outreach/skipped_undeliverable.json"]
+    body = "\n".join(body_lines)
+    subject = f"[CMO outreach] {len(skipped_this_run)} address(es) filtered as undeliverable"
+
+    # Prefer Resend (matches RV / Joe stack); fall back to Gmail SMTP.
+    try:
+        resend_key = os.environ.get("RESEND_API_KEY", "").strip()
+        if resend_key:
+            import urllib.request
+            import urllib.error
+            req = urllib.request.Request(
+                "https://api.resend.com/emails",
+                method="POST",
+                headers={
+                    "Authorization": f"Bearer {resend_key}",
+                    "Content-Type": "application/json",
+                },
+                data=json.dumps({
+                    "from": "CMO Outreach <noreply@smorelabs.com>",
+                    "to": ops_to,
+                    "subject": subject,
+                    "text": body,
+                }).encode("utf-8"),
+            )
+            with urllib.request.urlopen(req, timeout=10):
+                pass
+            return
+    except (urllib.error.URLError, OSError, ValueError):
+        pass
+    # Gmail SMTP fallback
+    try:
+        gmail_user = os.environ.get("GMAIL_USER", "").strip()
+        gmail_password = os.environ.get("GMAIL_APP_PASSWORD", "").strip()
+        if not (gmail_user and gmail_password):
+            return
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = f"CMO Outreach <{gmail_user}>"
+        msg["To"] = ops_to
+        msg.attach(MIMEText(body, "plain", "utf-8"))
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(gmail_user, gmail_password)
+            server.sendmail(gmail_user, ops_to, msg.as_string())
+    except (smtplib.SMTPException, OSError):
+        # Best-effort. Skipping digest never blocks the actual outreach run.
+        pass
+
+
 def _send_one(to_email: str, subject: str, body: str) -> bool:
     """Send a single email via Gmail SMTP SSL."""
     gmail_user = os.environ.get("GMAIL_USER", "").strip()
@@ -89,26 +152,30 @@ def send_all_emails(dry_run: bool = False, delay_seconds: int = 90, limit: int =
     # per address; on the free tier (100/mo) Tier 1 (regex+DNS) carries it.
     to_send = []
     skipped = _load_json(SKIPPED_FILE) if SKIPPED_FILE.exists() else []
+    skipped_this_run = []
     for e in candidates:
         v = validate_email(e["contact_email"])
         if v.ok:
             to_send.append(e)
             continue
-        skipped.append({
+        rec = {
             "target_key": e.get("target_key"),
             "name": e.get("name"),
             "contact_email": e.get("contact_email"),
             "reason": v.reason,
             "suggestion": v.suggestion,
             "skipped_at": datetime.utcnow().isoformat(),
-        })
+        }
+        skipped.append(rec)
+        skipped_this_run.append(rec)
         for entry_item in outbox:
             if entry_item.get("target_key") == e.get("target_key"):
                 entry_item["status"] = "skipped_undeliverable"
                 entry_item["skip_reason"] = v.reason
-    if skipped:
+    if skipped_this_run:
         _save_json(SKIPPED_FILE, skipped)
         _save_json(OUTBOX_FILE, outbox)
+        _send_skip_digest(skipped_this_run)
 
     no_email = [
         e for e in outbox
