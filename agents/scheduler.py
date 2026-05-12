@@ -5,11 +5,12 @@ so posts never look automated.
 
 import json
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
 QUEUE_PATH = Path(__file__).parent.parent / "posts" / "queue.json"
+DAILY_POST_LIMIT = 2
 
 
 def load_queue() -> list:
@@ -67,14 +68,38 @@ def add_to_queue(post: dict, brand_slug: str, platform: str, image_path: str):
     return entry
 
 
-def get_due_posts() -> list:
-    """Return all posts that are due to be published."""
+def count_posts_today(brand: str) -> int:
+    """Count posts already generated/published for this brand today (local time)."""
+    path = Path(__file__).parent.parent / "posts" / f"{brand}_history.json"
+    if not path.exists():
+        return 0
+    with open(path) as f:
+        history = json.load(f)
+    today = datetime.now().date()
+    count = 0
+    for post in history:
+        ts = post.get("generated_at", "")
+        if not ts:
+            continue
+        try:
+            post_date = datetime.fromisoformat(ts).replace(tzinfo=timezone.utc).astimezone().date()
+            if post_date == today:
+                count += 1
+        except Exception:
+            pass
+    return count
+
+
+def get_due_posts(brand: str = None, platform: str = None) -> list:
+    """Return queued posts that are due to be published, optionally filtered by brand/platform."""
     queue = load_queue()
     now = datetime.now()
     return [
         p for p in queue
         if p["status"] == "queued"
         and datetime.fromisoformat(p["scheduled_at"]) <= now
+        and (brand is None or p["brand"] == brand)
+        and (platform is None or p["platform"] == platform)
     ]
 
 

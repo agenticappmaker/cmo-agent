@@ -141,11 +141,58 @@ def cmd_run():
 def cmd_post_now(brand: str, platform: str, topic: str = None):
     """Generate a post and publish it immediately (used by cron).
     Series posts automatically become carousels on Instagram.
+
+    Daily cap: if DAILY_POST_LIMIT posts already published today, the content is
+    generated and queued for tomorrow instead of firing immediately.
+    Queue drain: if a queued post is ready for this brand/platform, it is published
+    instead of generating fresh content (so ideas added via `generate` get used).
     """
     from agents.content_generator import generate_post, generate_carousel_content
     from agents.image_generator import generate_image
     from agents.publisher import upload_image_to_imgbb, publish_instagram, publish_tiktok
     from agents.content_generator import load_brand
+    from agents.scheduler import count_posts_today, DAILY_POST_LIMIT, get_due_posts, add_to_queue
+
+    # --- Daily cap: if already at limit, queue instead of posting ---
+    today_count = count_posts_today(brand)
+    if today_count >= DAILY_POST_LIMIT:
+        print(f"\n⚠ Daily post limit reached ({today_count}/{DAILY_POST_LIMIT} posts today for {brand}).")
+        print(f"  Generating content and queuing for tomorrow instead...")
+        post = generate_post(brand, platform, topic=topic)
+        print(f"\n📝 Post idea: {post['post_idea']}")
+        post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+        image_path = generate_image(post["image_prompt"], brand, post_id)
+        entry = add_to_queue(post, brand, platform, image_path)
+        print(f"  ✓ Queued for {entry['scheduled_at'][:16]}")
+        return
+
+    # --- Queue drain: publish a pre-queued post if one is ready ---
+    due = get_due_posts(brand=brand, platform=platform)
+    if due:
+        queued = due[0]
+        print(f"\n📬 Using queued post: {queued['post_idea']}")
+        config = load_brand(brand)["config"]
+        from agents.scheduler import mark_published, mark_failed
+        from agents.publisher import publish_facebook
+        try:
+            image_url = upload_image_to_imgbb(queued["image_path"])
+            account_id = config.get("instagram_account_id", "")
+            page_id = config.get("facebook_page_id", "")
+            pid = None
+            if account_id:
+                pid = publish_instagram(queued["caption"], queued.get("hashtags", ""), image_url, account_id)
+                print(f"  ✓ Instagram: {pid}")
+            if page_id:
+                fb_pid = publish_facebook(queued["caption"], queued.get("hashtags", ""), image_url, page_id)
+                print(f"  ✓ Facebook: {fb_pid}")
+            mark_published(queued["id"], pid or "")
+            print(f"\n✅ Posted! Caption: {queued['caption'][:120]}...")
+        except Exception as e:
+            mark_failed(queued["id"], str(e))
+            print(f"  ✗ Queued post failed ({e}), falling back to fresh generation...")
+            # fall through to normal generation below
+        else:
+            return
 
     print(f"\n🤖 Generating {platform} post for {brand}..." + (f" [topic: {topic}]" if topic else ""))
     post = generate_post(brand, platform, topic=topic)
