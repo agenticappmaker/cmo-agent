@@ -138,7 +138,7 @@ def cmd_run():
             mark_failed(post["id"], str(e))
 
 
-def cmd_post_now(brand: str, platform: str):
+def cmd_post_now(brand: str, platform: str, topic: str = None):
     """Generate a post and publish it immediately (used by cron).
     Series posts automatically become carousels on Instagram.
     """
@@ -147,8 +147,8 @@ def cmd_post_now(brand: str, platform: str):
     from agents.publisher import upload_image_to_imgbb, publish_instagram, publish_tiktok
     from agents.content_generator import load_brand
 
-    print(f"\n🤖 Generating {platform} post for {brand}...")
-    post = generate_post(brand, platform)
+    print(f"\n🤖 Generating {platform} post for {brand}..." + (f" [topic: {topic}]" if topic else ""))
+    post = generate_post(brand, platform, topic=topic)
 
     print(f"\n📝 Post idea: {post['post_idea']}")
     print(f"   Caption preview: {post['caption'][:100]}...")
@@ -455,6 +455,7 @@ def main():
     postnow = subparsers.add_parser("post-now", help="Generate and publish immediately (for cron)")
     postnow.add_argument("brand", help="Brand slug (e.g. spirit-library)")
     postnow.add_argument("--platform", default="instagram", choices=["instagram", "facebook", "linkedin", "twitter", "tiktok"])
+    postnow.add_argument("--topic", default=None, help="Optional theme override (e.g. 'frozen cocktails')")
 
     postss = subparsers.add_parser("post-screenshot", help="Post a screenshot with AI-generated caption")
     postss.add_argument("brand", help="Brand slug (e.g. spirit-library)")
@@ -513,7 +514,7 @@ def main():
     if args.command == "generate":
         cmd_generate(args.brand, args.platform)
     elif args.command == "post-now":
-        cmd_post_now(args.brand, args.platform)
+        cmd_post_now(args.brand, args.platform, topic=getattr(args, 'topic', None))
     elif args.command == "post-screenshot":
         cmd_post_screenshot(args.brand, args.platform, args.image)
     elif args.command == "plan":

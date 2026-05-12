@@ -236,10 +236,11 @@ APP_FEATURES_FOR_POSTS = [
 ]
 
 
-def generate_post(brand_slug: str, platform: str = "instagram", post_type: str = None) -> dict:
+def generate_post(brand_slug: str, platform: str = "instagram", post_type: str = None, topic: str = None) -> dict:
     """
     Autonomously generate a complete post for the given brand and platform.
     post_type: 'recipe' or 'feature'. If None, auto-alternates.
+    topic: optional free-text theme override injected into the generation prompt.
     Returns: { caption, hashtags, image_prompt, post_idea, pillar, post_type }
     """
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -298,6 +299,8 @@ COCKTAILS ALREADY POSTED — DO NOT USE ANY OF THESE:
 
 Recent post ideas (for context):
 {recent_ideas}
+
+{f"⚠️ MANDATORY TOPIC: {topic}. You MUST pick a cocktail that directly fits this theme. Do not deviate." if topic else ""}
 
 Rules:
 1. Pick a SPECIFIC, NAMED cocktail NOT in the used list above. Be creative — go beyond the obvious classics. Consider: Naked & Famous, Oaxacan Old Fashioned, Toronto, Bijou, Bees Knees, Corpse Reviver #2, Clover Club, Trinidad Sour, Saturn, Fog Cutter, Chartreuse Swizzle, Mezcal Negroni, etc.
