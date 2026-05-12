@@ -10,6 +10,18 @@ import random
 from datetime import datetime
 from pathlib import Path
 
+# Rotated into recipe/series image prompts so each post gets a distinct visual style.
+IMAGE_STYLE_ROTATION = [
+    "overhead flat lay on dark wet slate, moody dramatic top-down composition, cocktail centered",
+    "side-angle hero shot against a blurred moody bar backdrop, bokeh golden bar lights, editorial",
+    "action shot — bartender's hands mid-pour or garnishing, motion blur on the liquid, cinematic",
+    "bright natural window light on a marble kitchen counter, airy and aspirational, crisp shadows",
+    "vintage editorial style, warm amber tones, candlelit bar atmosphere, 35mm film look",
+    "low-angle dramatic shot looking up through the glass, ice and liquid refracting the light",
+    "lush garden or outdoor terrace setting, dappled natural light, botanical elements as props",
+    "dark moody speakeasy aesthetic, single spotlight, smoke wisps, rich jewel tones",
+]
+
 
 def load_brand(brand_slug: str) -> dict:
     base = Path(__file__).parent.parent / "brands" / brand_slug
@@ -282,6 +294,7 @@ def generate_post(brand_slug: str, platform: str = "instagram", post_type: str =
     CTA = "\n\nComment below your favorite recipes!\n\nSave and share entire menus with Spirit Library in the App Store!!!"
 
     if post_type == "recipe":
+        image_style = random.choice(IMAGE_STYLE_ROTATION)
         prompt = f"""You are the autonomous CMO agent for {config['brand_name']}.
 
 BRAND KNOWLEDGE:
@@ -315,7 +328,7 @@ Respond ONLY as JSON:
   "post_idea": "one sentence describing the post concept",
   "pillar": "cocktail recipes and techniques",
   "caption": "the full caption text (no hashtags, no CTA)",
-  "image_prompt": "detailed gpt-image-2 photorealistic prompt — cinematic lighting, the specific glass type and garnish for this exact cocktail, rich colors, no text or writing anywhere in the image",
+  "image_prompt": "detailed gpt-image-2 photorealistic prompt — VISUAL STYLE: {image_style} — include the specific glass type, garnish, and colors for this exact cocktail, no text or writing anywhere in the image",
   "reasoning": "why you chose this cocktail"
 }}"""
 

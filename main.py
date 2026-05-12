@@ -267,8 +267,26 @@ def cmd_post_now(brand: str, platform: str, topic: str = None):
             theme=theme,
         )
         print(f"  ✓ Infographic saved: {image_path}")
+    elif post.get("post_type") == "feature":
+        # Feature posts: prefer a real app screenshot over a generated image
+        import glob as _glob
+        screenshots_dir = Path(__file__).parent / "screenshots"
+        screenshots = [
+            f for f in screenshots_dir.glob("*")
+            if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".PNG")
+            and f.parent == screenshots_dir  # exclude posted/ subfolder
+        ] if screenshots_dir.exists() else []
+        if screenshots:
+            import random as _rand
+            chosen = _rand.choice(screenshots)
+            image_path = str(chosen)
+            print(f"\n📱 Using app screenshot: {chosen.name}")
+        else:
+            print(f"\n🎨 Generating image (no screenshots available)...")
+            post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+            image_path = generate_image(post["image_prompt"], brand, post_id)
     else:
-        # Single image post (recipes, features, or carousel fallback)
+        # Single image post (recipes, series fallback)
         print(f"\n🎨 Generating image...")
         post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
         image_path = generate_image(post["image_prompt"], brand, post_id)
