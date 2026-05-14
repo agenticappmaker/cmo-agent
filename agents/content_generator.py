@@ -593,20 +593,29 @@ YOUR TASK: Look at this app screenshot and write a compelling social media capti
 Recent post ideas (avoid repetition):
 {recent_ideas}
 
-Rules:
-1. Analyze the screenshot — what feature or screen is shown?
-2. Write a caption that highlights what's shown, makes it exciting, and makes users want to download the app
-3. Lead with a relatable hook or scenario
-4. Keep it conversational and specific — avoid generic "download our app" energy
-5. Do NOT include a CTA in the caption (it will be appended)
+STEP 1 — READ THE SCREEN LITERALLY FIRST (do this mentally before writing anything):
+- What screen/tab/page is shown? Read every visible label, heading, and UI element.
+- What specific data is displayed? (e.g. cocktail names, ingredient lists, filter tags, search results, bar inventory items, ratings — read the ACTUAL text on screen)
+- What user action appears to be in progress or completed?
+- Is there any visible text that names the feature explicitly?
+
+STEP 2 — CAPTION RULES:
+1. The caption MUST describe what is LITERALLY shown in the screenshot — not a generic feature description from brand knowledge
+2. If cocktail names or ingredients are visible, NAME THEM specifically
+3. If a filter, search, or result is shown, describe THAT specific filter/search/result
+4. Lead with a relatable hook tied to what's actually on screen
+5. Keep it conversational and specific — avoid generic "download our app" energy
+6. Do NOT include a CTA in the caption (it will be appended)
+
+CRITICAL: Your "reasoning" field must describe what you literally see on screen (specific text, UI elements, data shown). If your caption doesn't match the visible content of the screenshot, it is WRONG.
 
 Respond ONLY as JSON:
 {{
   "post_type": "screenshot",
-  "post_idea": "one sentence describing what's shown in the screenshot",
+  "post_idea": "one sentence describing what's specifically shown in the screenshot",
   "pillar": "app features and user stories",
-  "caption": "the full caption text (no hashtags, no CTA)",
-  "reasoning": "what you see in the screenshot and your hook strategy"
+  "caption": "the full caption text (no hashtags, no CTA) — must reflect what's literally on screen",
+  "reasoning": "describe: (1) what screen/feature is shown, (2) exact visible text/data you read, (3) hook strategy chosen based on that content"
 }}"""
 
     message = client.messages.create(
