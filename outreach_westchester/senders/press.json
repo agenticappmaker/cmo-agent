@@ -1,0 +1,160 @@
+{
+  "name": "press",
+  "version": 1,
+  "description": "Spirit Library press outreach — pitches journalists/editors at cocktail and food publications. NEVER auto-sends. Drafts only — Steven reviews each press pitch by hand because press is high-leverage and one bad pitch can blacklist us at a publication.",
+  "owner": "Steven Samori",
+  "created": "2026-05-21",
+
+  "identity": {
+    "email": "spiritlibraryapp@gmail.com",
+    "from_name": "Steven Samori | Spirit Library",
+    "signature": "— Steven Samori\nSpirit Library",
+    "persona_voice": "Direct, terse, no marketing fluff. Founder-to-journalist tone. Plain text only. No emoji, no marketing copy, no fake urgency. Like a colleague forwarding an interesting tip."
+  },
+
+  "audience": {
+    "source": {
+      "type": "obsidian_markdown",
+      "path": "/Users/claudecode/Documents/Smore Labs ecosystem/Spirit Library/Apollo - Press Contacts.md",
+      "parser": "cmo_agent.pitch_press.parse_press_md"
+    },
+    "filter": {
+      "min_recent_byline_days": 90,
+      "skip_if_pitched_within_days": 90,
+      "skip_publications": []
+    },
+    "enrichment": {
+      "verify_title": {
+        "method": "websearch",
+        "query_template": "\"{name}\" {publication} {year}",
+        "require_byline_within_days": 90
+      },
+      "find_email": {
+        "method": "domain_pattern_guess",
+        "pub_to_domain": {
+          "IMBIBE MAGAZINE": "imbibemagazine.com",
+          "PUNCH DRINK": "punchdrink.com",
+          "EATER": "eater.com",
+          "FOOD & WINE": "foodandwine.com",
+          "LIQUOR.COM": "liquor.com",
+          "VINEPAIR": "vinepair.com",
+          "TASTING TABLE": "tastingtable.com",
+          "THRILLIST": "thrillist.com",
+          "BON APPETIT": "bonappetit.com",
+          "SERIOUS EATS": "seriouseats.com",
+          "SAVEUR": "saveur.com",
+          "TECHCRUNCH": "techcrunch.com",
+          "PRODUCT HUNT": "producthunt.com"
+        },
+        "patterns": [
+          "{first}.{last}@{domain}",
+          "{first}{last}@{domain}",
+          "{f}{last}@{domain}",
+          "{first}@{domain}"
+        ],
+        "validate_via": "agents.email_validate.validate_email"
+      }
+    }
+  },
+
+  "pitch_pack": {
+    "subjects": [
+      "New cocktail app worth covering — 1,700 recipes, free on iOS",
+      "Spirit Library just launched — free cocktail app for serious home bartenders",
+      "App launch: 1,700+ cocktail recipes + smart ingredient filtering"
+    ],
+    "subject_strategy": "rotate_by_hash_of_recipient_name",
+    "opener_strategy": {
+      "type": "claude_haiku_personalized",
+      "instruction": "Open with a SPECIFIC reference to the recipient's recent beat or byline. Never generic 'love your work'. The personalization must quote a concrete article title, topic, or angle they covered in the last 90 days. If no recent byline found, do NOT pitch — flag as stale.",
+      "max_tokens": 80
+    },
+    "body_template": "{opener}\n\nI just launched Spirit Library — a free iOS app with 1,700+ cocktail recipes, smart ingredient filtering, and a \"My Bar\" feature that tells you what you can make with what you already have.\n\nIt's built for home bartenders who want a real reference, not a watered-down recipe aggregator.\n\nHappy to send a promo code for early access if you'd like to take a look. Would this be a fit for {publication}?\n\n— Steven Samori\nSpirit Library",
+    "proof_assets": {
+      "app_store": "https://apps.apple.com/us/app/spirit-library/id6761500950",
+      "website": "https://spiritlibrary.app",
+      "press_kit": null,
+      "promo_code_offer": "1 promo code for early access"
+    },
+    "category_variants": {
+      "tech_press": {
+        "subject_override": "Spirit Library — iOS launch, 1,700 recipes, food + tech beat fit?",
+        "extra_proof": "Built on Expo/React Native + Supabase, 5★ on App Store, 0 ads, 0 subscription"
+      },
+      "trade_press": {
+        "subject_override": "Spirit Library — new staff-training tool for cocktail programs",
+        "extra_proof": "Bar staff use My Bar to look up cocktails by their actual stock — see live signups from W50B-listed bars"
+      }
+    }
+  },
+
+  "cadence": {
+    "cold_to_followup_days": 3,
+    "max_followups": 2,
+    "followup_intervals_days": [3, 5],
+    "followup_templates": [
+      "Hi {first_name},\n\nJust following up on Spirit Library — wanted to make sure this didn't get buried.\n\nThe app is free, has no ads, and the My Bar feature alone is something I haven't seen done well anywhere else. Happy to do a quick call or just send over the link.\n\n— Steven",
+      "Hi {first_name},\n\nLast note — if the timing isn't right or this isn't your beat, totally understand. Just let me know and I'll stop following up.\n\nEither way, the app is live at https://apps.apple.com/us/app/spirit-library/id6761500950. Would love your honest take if you ever give it a spin.\n\n— Steven"
+    ]
+  },
+
+  "rate_limits": {
+    "daily_max": 5,
+    "hourly_max": 2,
+    "seconds_between_sends": 90,
+    "comment": "Press is low-volume / high-quality. Don't blast. Burst sends from spiritlibraryapp@gmail.com look bot-like to journalist filters."
+  },
+
+  "opt_out": {
+    "method": "reply_based",
+    "honor_window_hours": 24,
+    "footer": "If this isn't your beat or the timing's off, reply STOP and I'll take you off my list.",
+    "suppression_list": "state/optout.txt"
+  },
+
+  "personalization": {
+    "first_line_generator": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_per_email_usd": 0.0001,
+      "monthly_budget_at_5_per_day_usd": 0.015,
+      "free_fallback": "category-aware static opener from pitch_pack.category_variants",
+      "decision_log": "Free-first rule: Haiku cost trivial vs. press conversion ROI. Free fallback exists."
+    },
+    "scrape_at_queue_time": true,
+    "cache_personalization": true
+  },
+
+  "approval": {
+    "auto_send": false,
+    "review_required": true,
+    "review_destination": "Gmail Drafts (spiritlibraryapp@gmail.com)",
+    "review_destination_alt": "outreach/press_drafts.json",
+    "reason": "Press are high-leverage individuals; one bad pitch can blacklist us at a publication. Always Steven-review. NEVER add to the auto-send queue."
+  },
+
+  "reply_classification": {
+    "delegates_to": "outreach_westchester/process_replies.py",
+    "delegates_drafter_to": "outreach_westchester/cmo_drafter.py (inbox=spirit context)",
+    "delegates_closer_to": "outreach_westchester/reply_closer.py"
+  },
+
+  "metrics": {
+    "track_per_subject": true,
+    "track_per_category": true,
+    "track_per_publication": true,
+    "logging_file": "logs/press_sends.csv",
+    "expected_baseline_reply_rate": 0.03,
+    "alert_below_reply_rate": 0.01
+  },
+
+  "integration": {
+    "queue_writer": "cmo-agent/pitch_press.py (writes outreach/press_drafts.json)",
+    "draft_review_path": "outreach/press_drafts.json",
+    "morning_sequence_hook": "morning_pitch_sequence.sh",
+    "pm_digest_surfaced_in": [
+      "Documents/cmo-agent/daily_debrief.py",
+      "Documents/cmo-agent/pm_report.py",
+      "cmo-agent/marketing_pipeline_digest.py"
+    ]
+  }
+}

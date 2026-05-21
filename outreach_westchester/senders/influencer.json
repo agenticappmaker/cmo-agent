@@ -1,0 +1,174 @@
+{
+  "name": "influencer",
+  "version": 1,
+  "description": "Spirit Library cocktail/lifestyle influencer outreach — emails AND Instagram DMs to creators with ≥10k followers. NEVER auto-sends. Both email and DM are queued for Steven to review and dispatch. Tier-based (micro/mid/macro) determines whether paid collab is on the table.",
+  "owner": "Steven Samori",
+  "created": "2026-05-21",
+
+  "identity": {
+    "email": "spiritlibraryapp@gmail.com",
+    "from_name": "Steven Samori | Spirit Library",
+    "signature": "— Steven Samori\nSpirit Library",
+    "ig_handle_for_dms": "@spiritlibraryapp",
+    "persona_voice": "Warm, specific, founder-from-an-actual-real-app. Plain text. No marketing copy. References the creator's recent content like a fan who actually watched."
+  },
+
+  "audience": {
+    "source": {
+      "type": "obsidian_markdown",
+      "path": "/Users/claudecode/Documents/Smore Labs ecosystem/Spirit Library/Apollo - Influencers.md",
+      "parser": "cmo_agent.pitch_influencers.parse_influencer_md"
+    },
+    "filter": {
+      "min_followers_primary_platform": 10000,
+      "skip_if_inactive_days": 30,
+      "skip_if_drafted_within_days": 90,
+      "platform_whitelist": ["instagram", "tiktok", "youtube"],
+      "category_whitelist": ["cocktails", "mixology", "spirits", "home_bartending", "lifestyle_drinks"]
+    },
+    "tiering": {
+      "micro": {"min_followers": 10000, "max_followers": 50000, "paid_collab_unlocked": false, "offer": "credit_plus_promo_code"},
+      "mid":   {"min_followers": 50000, "max_followers": 200000, "paid_collab_unlocked": false, "offer": "credit_plus_promo_code_plus_co_recipe"},
+      "macro": {"min_followers": 200000, "max_followers": 99999999, "paid_collab_unlocked": true, "offer": "paid_collab_rates_on_table"}
+    },
+    "enrichment": {
+      "verify_active": {
+        "method": "webfetch",
+        "url_template": "https://www.instagram.com/{ig_handle}/",
+        "require_post_within_days": 30
+      },
+      "find_business_email": {
+        "methods": [
+          {"source": "instagram_public_bio", "tool": "instaloader_anon"},
+          {"source": "youtube_about_page", "url_template": "https://www.youtube.com/@{handle}/about"},
+          {"source": "personal_website_contact_page", "method": "webfetch"},
+          {"source": "brave_websearch", "query_template": "\"{name}\" cocktail email contact"}
+        ],
+        "validate_via": "agents.email_validate.validate_email"
+      }
+    }
+  },
+
+  "pitch_pack": {
+    "subjects": [
+      "Collab idea — Spirit Library app",
+      "Your audience would love this (free cocktail app)",
+      "Quick collab pitch — Spirit Library"
+    ],
+    "subject_strategy": "rotate_by_hash_of_recipient_name",
+    "opener_strategy": {
+      "type": "claude_haiku_personalized",
+      "instruction": "Open with a SPECIFIC reference to the creator's recent content — quote a specific recipe, technique, or tutorial they posted in the last 30 days. Never generic 'love your work'. The personalization must map their content angle to a Spirit Library feature (My Bar / substitution / flavor search / Cocktail of the Day / allergen).",
+      "max_tokens": 80,
+      "free_fallback_template": "Love your content — your {recent_topic} tutorials line up with Spirit Library's {matching_feature} feature."
+    },
+    "body_templates_by_tier": {
+      "micro": "Hi {first_name},\n\n{opener}\n\nI built Spirit Library, a free cocktail app with 1,700+ recipes. I'm looking for a handful of creators to be among the first to feature it — happy to credit you in the app or co-create a signature recipe together if that's interesting.\n\nNo strings, just think your audience would genuinely love it. Want a link?\n\n— Steven Samori\nSpirit Library",
+      "mid": "Hi {first_name},\n\n{opener}\n\nI built Spirit Library, a free iOS cocktail app — 1,700+ recipes, smart ingredient filtering, and a 'My Bar' feature that tells you what you can make with what you have. We're looking to partner with creators whose audience would actually use it.\n\nProposing: app credit + promo code for your followers + a co-created signature recipe we feature in the app with attribution. If that's not the right shape, happy to hear what is.\n\nWant to chat for 15 min on Zoom?\n\n— Steven Samori\nSpirit Library",
+      "macro": "Hi {first_name},\n\n{opener}\n\nI built Spirit Library — a free iOS cocktail app with 1,700+ recipes, 5★ on the App Store, and growing. We've got budget set aside for paid creator partnerships and you're at the top of the list.\n\nHappy to discuss collab rates and what format works best — sponsored post, embedded recipe, app feature partnership, IG takeover. Whichever fits your typical deal shape.\n\n15-min Zoom this week?\n\n— Steven Samori\nSpirit Library"
+    },
+    "dm_template": "Hey {first_name} — built a free cocktail app (Spirit Library, 1,700+ recipes). {one_sentence_specific_hook}. Down to chat? Or DM me your email and I'll send the full pitch.",
+    "proof_assets": {
+      "app_store": "https://apps.apple.com/us/app/spirit-library/id6761500950",
+      "website": "https://spiritlibrary.app",
+      "ig_handle": "@spiritlibraryapp",
+      "promo_code_offer": "promo code for creator's audience"
+    }
+  },
+
+  "channels": {
+    "primary": "email_then_dm",
+    "email": {
+      "enabled": true,
+      "destination": "Gmail Drafts (spiritlibraryapp@gmail.com)",
+      "alt_destination": "outreach/influencer_drafts.json",
+      "approval_required": true
+    },
+    "instagram_dm": {
+      "enabled": true,
+      "destination": "outreach/dm_queue.json",
+      "method": "manual_send_by_steven",
+      "approval_required": true,
+      "rate_limit_dms_per_day": 10,
+      "rate_limit_reason": "IG flags >10 DMs/day from new-ish accounts as bot behavior. @spiritlibraryapp is still building reputation."
+    }
+  },
+
+  "cadence": {
+    "cold_to_followup_days": 4,
+    "max_followups": 1,
+    "followup_intervals_days": [4],
+    "followup_template": "Hey {first_name} — following up on Spirit Library. It's free, no ads, and the My Bar feature (tells you what cocktails you can make with what you have) tends to get people hooked. Happy to send a promo code or just the App Store link. Let me know!\n\n— Steven",
+    "comment": "Creators are inundated; one follow-up max. Then drop."
+  },
+
+  "rate_limits": {
+    "daily_max_email": 5,
+    "daily_max_dm": 10,
+    "hourly_max": 3,
+    "seconds_between_sends": 120,
+    "comment": "Outreach to creators is a relationship, not a campaign. Quality over volume."
+  },
+
+  "opt_out": {
+    "method": "reply_based",
+    "honor_window_hours": 24,
+    "footer": "If you're not into pitches, reply STOP and I'll take you off my list.",
+    "suppression_list": "state/optout.txt"
+  },
+
+  "personalization": {
+    "first_line_generator": {
+      "model": "claude-haiku-4-5-20251001",
+      "cost_per_email_usd": 0.0001,
+      "monthly_budget_at_5_per_day_usd": 0.015,
+      "free_fallback": "tier-aware static opener (uses 'recent_topic' + 'matching_feature' filled from manual triage)",
+      "decision_log": "Free-first: Haiku cost is dwarfed by influencer conversion value (1 macro collab = $1k+ ROI). Free fallback exists."
+    },
+    "recent_post_scrape": {
+      "method": "instaloader_anon_or_webfetch",
+      "max_posts_to_review": 5,
+      "match_features_to_post_content": true
+    },
+    "scrape_at_queue_time": true,
+    "cache_personalization": true
+  },
+
+  "approval": {
+    "auto_send": false,
+    "review_required": true,
+    "review_destination_email": "Gmail Drafts (spiritlibraryapp@gmail.com)",
+    "review_destination_dm": "outreach/dm_queue.json",
+    "reason": "Creators are public-facing; one tone-deaf pitch becomes a callout post. Always Steven-review."
+  },
+
+  "reply_classification": {
+    "delegates_to": "outreach_westchester/process_replies.py",
+    "delegates_drafter_to": "outreach_westchester/cmo_drafter.py (inbox=spirit context)",
+    "delegates_closer_to": "outreach_westchester/reply_closer.py",
+    "hot_reply_artifact_for_macro": "promo_code_batch + draft_ig_carousel_template",
+    "hot_reply_artifact_for_mid": "promo_code + co_recipe_proposal_doc",
+    "hot_reply_artifact_for_micro": "promo_code + app_credit_link"
+  },
+
+  "metrics": {
+    "track_per_subject": true,
+    "track_per_tier": true,
+    "track_per_platform": true,
+    "logging_file": "logs/influencer_sends.csv",
+    "expected_baseline_reply_rate": 0.05,
+    "alert_below_reply_rate": 0.02,
+    "comment": "Creator reply rate is structurally higher than press because the pitch offers them direct value (promo code, app credit, co-recipe)."
+  },
+
+  "integration": {
+    "queue_writer": "cmo-agent/pitch_influencers.py (writes outreach/influencer_drafts.json + outreach/dm_queue.json)",
+    "draft_review_paths": ["outreach/influencer_drafts.json", "outreach/dm_queue.json"],
+    "morning_sequence_hook": "morning_pitch_sequence.sh",
+    "pm_digest_surfaced_in": [
+      "Documents/cmo-agent/daily_debrief.py",
+      "Documents/cmo-agent/pm_report.py",
+      "cmo-agent/marketing_pipeline_digest.py"
+    ]
+  }
+}
