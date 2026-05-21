@@ -1,0 +1,558 @@
+{
+  "generated_at": "2026-05-21T19:37:47.126793+00:00",
+  "sender": "claudesonnet111",
+  "count": 19,
+  "queue": [
+    {
+      "email": "frl.painting@gmail.com",
+      "name": "FRL Painting Contractors",
+      "website": "https://frlpaintingcontractors.com/",
+      "category": "painter",
+      "town": "Mount Kisco",
+      "grade_letter": "B",
+      "grade_score": "79.3",
+      "ai_leverage_summary": "FRL Painting Contractors has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "mgc.aircomfort@gmail.com",
+      "name": "MGC Heating and Air Conditioning LLC",
+      "website": "https://sites.google.com/view/mgcair/home",
+      "category": "hvac",
+      "town": "White Plains",
+      "grade_letter": "B",
+      "grade_score": "78.8",
+      "ai_leverage_summary": "MGC Heating and Air Conditioning LLC has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "ken.brady@daikincomfort.com",
+      "name": "Daikin Comfort Technologies Northeast",
+      "website": "https://daikinnortheast.com/",
+      "category": "hvac",
+      "town": "Suffern",
+      "grade_letter": "B",
+      "grade_score": "77.8",
+      "ai_leverage_summary": "Daikin Comfort Technologies Northeast has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "jkaneconstruction@gmail.com",
+      "name": "Kane Construction",
+      "website": "http://www.jkaneconstruction.com/",
+      "category": "contractor",
+      "town": "Greenwich",
+      "grade_letter": "B",
+      "grade_score": "76.8",
+      "ai_leverage_summary": "Kane Construction has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "corey@truebuilt.construction",
+      "name": "True Built Construction",
+      "website": "https://truebuilt.construction/",
+      "category": "contractor",
+      "town": "Suffern",
+      "grade_letter": "B",
+      "grade_score": "76.8",
+      "ai_leverage_summary": "True Built Construction has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "contact@iorioconstruction.com",
+      "name": "Iorio Construction Inc",
+      "website": "http://www.iorioconstruction.com/",
+      "category": "contractor",
+      "town": "Suffern",
+      "grade_letter": "B",
+      "grade_score": "76.8",
+      "ai_leverage_summary": "Iorio Construction Inc has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "homeheatinghvac@gmail.com",
+      "name": "Home Heating & Air Conditioning, LLC",
+      "website": "http://www.homehvac.net/",
+      "category": "hvac",
+      "town": "New Haven",
+      "grade_letter": "B",
+      "grade_score": "76.3",
+      "ai_leverage_summary": "Home Heating & Air Conditioning, LLC has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "timtemco@verizon.net",
+      "name": "Temco Heating & Air Conditoning Inc",
+      "website": "http://www.temcoheatingandairconditioning.com/",
+      "category": "hvac",
+      "town": "Ridgewood NJ",
+      "grade_letter": "B",
+      "grade_score": "76.3",
+      "ai_leverage_summary": "Temco Heating & Air Conditoning Inc has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "jaysheatingair@gmail.com",
+      "name": "Jay's Heating and Air",
+      "website": "https://www.jaysheatingair.com/",
+      "category": "hvac",
+      "town": "Yonkers",
+      "grade_letter": "B",
+      "grade_score": "76.2",
+      "ai_leverage_summary": "Jay's Heating and Air has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "john@alexheatingac.com",
+      "name": "Alex Heating & Air Conditioning Corp.",
+      "website": "http://alexheatingac.com/",
+      "category": "hvac",
+      "town": "New Rochelle",
+      "grade_letter": "B",
+      "grade_score": "75.8",
+      "ai_leverage_summary": "Alex Heating & Air Conditioning Corp. has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_chat",
+          "title": "24/7 AI chat trained on your services",
+          "one_liner": "Visitors at 9pm get instant answers about pricing/area/scheduling \u2014 bot books the qualified ones for you."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "contact@rmcbuilders.business",
+      "name": "RMC Builders \u2013 Roofing, Decks & Renovations Kingston NY",
+      "website": "https://www.rmcbuilders.business/",
+      "category": "contractor",
+      "town": "Kingston NY",
+      "grade_letter": "B",
+      "grade_score": "75.8",
+      "ai_leverage_summary": "RMC Builders \u2013 Roofing, Decks & Renovations Kingston NY has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "contact@markleymechanical.com",
+      "name": "Markley Mechanical",
+      "website": "http://www.markleymechanical.com/contact",
+      "category": "hvac",
+      "town": "Peekskill",
+      "grade_letter": "B",
+      "grade_score": "75.3",
+      "ai_leverage_summary": "Markley Mechanical has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Spring + fall tune-up auto-reminders",
+          "one_liner": "Auto-text past customers 30 days before peak season \u2014 rebooks 40%+ for tune-ups."
+        },
+        {
+          "category": "customer_exp",
+          "title": "Filter-change subscription SMS",
+          "one_liner": "Recurring 'time to swap your filter' text with one-click reorder \u2014 passive monthly revenue."
+        }
+      ]
+    },
+    {
+      "email": "info@perfectroofingteam.comct",
+      "name": "Perfect Roofing Team LLC - Roofing Contractor NJ",
+      "website": "http://www.perfectroofingteam.com/",
+      "category": "roofer",
+      "town": "Hackensack",
+      "grade_letter": "B",
+      "grade_score": "75.3",
+      "ai_leverage_summary": "Perfect Roofing Team LLC - Roofing Contractor NJ has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "hankandsonsauto@verizon.net",
+      "name": "Hank & Sons' Auto Service",
+      "website": "https://hankandsonsauto.com/",
+      "category": "car_repair",
+      "town": "",
+      "grade_letter": "B",
+      "grade_score": "75.3",
+      "ai_leverage_summary": "Hank & Sons' Auto Service has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Mileage-based service reminders",
+          "one_liner": "Customer's car at 28k miles? Auto-text 'time for 30k service' \u2014 books while top-of-mind."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI diagnostic chat ('weird noise?')",
+          "one_liner": "Customer describes symptom, AI gives 3 likely causes + 'come in for a real check' \u2014 books appts."
+        }
+      ]
+    },
+    {
+      "email": "info@rhrenovationnyc.com",
+      "name": "RH RENOVATION LLC",
+      "website": "https://rhrenovationnyc.com/",
+      "category": "roofer",
+      "town": "Bronxville",
+      "grade_letter": "B",
+      "grade_score": "75.2",
+      "ai_leverage_summary": "RH RENOVATION LLC has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "remodel@duarteshomeimprovement.com",
+      "name": "Duarte's Home Improvement",
+      "website": "https://duarteshomeimprovement.com/",
+      "category": "flooring",
+      "town": "Peekskill",
+      "grade_letter": "B",
+      "grade_score": "75.2",
+      "ai_leverage_summary": "Duarte's Home Improvement has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_chat",
+          "title": "24/7 AI chat trained on your services",
+          "one_liner": "Visitors at 9pm get instant answers about pricing/area/scheduling \u2014 bot books the qualified ones for you."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "vkandsonsinc@gmail.com",
+      "name": "VK & Sons Painting, Power Washing, Carpentry & Sheet rocking Contractors",
+      "website": "https://www.victorkautzandsons.com/",
+      "category": "painter",
+      "town": "Suffern",
+      "grade_letter": "B",
+      "grade_score": "75.2",
+      "ai_leverage_summary": "VK & Sons Painting, Power Washing, Carpentry & Sheet rocking Contractors has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "chris@gcschneiderconstruction.com",
+      "name": "G.C. Schneider Construction",
+      "website": "http://www.gcschneiderconstruction.com/",
+      "category": "contractor",
+      "town": "Ridgewood NJ",
+      "grade_letter": "B",
+      "grade_score": "75.2",
+      "ai_leverage_summary": "G.C. Schneider Construction has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|static_site_builder|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "static_site_builder",
+          "title": "Wix-to-modern rebuild",
+          "one_liner": "Rebuild on Next.js so you edit by talking to AI, not clicking around in Wix. Faster, ranks better, and AI tools plug in natively."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Client project portal with photo updates",
+          "one_liner": "Auto-builds a private page per project \u2014 daily photos, change orders, payment status."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI-drafted change orders",
+          "one_liner": "Voice-memo 'add a window', AI drafts the change order with cost \u2014 sign on phone."
+        }
+      ]
+    },
+    {
+      "email": "tatorsdodge@msn.com",
+      "name": "Tator's Garage",
+      "website": "http://www.tatorsdodge.com/",
+      "category": "car_repair",
+      "town": "",
+      "grade_letter": "B",
+      "grade_score": "75.2",
+      "ai_leverage_summary": "Tator's Garage has no online booking \u2014 every after-hours call goes to voicemail.",
+      "gaps": "no_booking|no_chat|no_contact_form",
+      "pitch_options": [
+        {
+          "category": "website",
+          "gap": "no_contact_form",
+          "title": "Smart contact form with auto-follow-up",
+          "one_liner": "Form captures the lead AND auto-emails a personal-feeling response in under a minute \u2014 feels concierge, runs on its own."
+        },
+        {
+          "category": "trade_tool",
+          "title": "Mileage-based service reminders",
+          "one_liner": "Customer's car at 28k miles? Auto-text 'time for 30k service' \u2014 books while top-of-mind."
+        },
+        {
+          "category": "customer_exp",
+          "title": "AI diagnostic chat ('weird noise?')",
+          "one_liner": "Customer describes symptom, AI gives 3 likely causes + 'come in for a real check' \u2014 books appts."
+        }
+      ]
+    }
+  ]
+}
