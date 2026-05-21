@@ -1,0 +1,122 @@
+{
+  "name": "spiritlibraryapp",
+  "version": 1,
+  "description": "Spirit Library QR-coaster partnership outreach to hospitality leads. Sends from spiritlibraryapp@gmail.com. Hospitality-only category filter. Lightweight quality sort (real website + business email first). Auto-sends.",
+  "owner": "Steven Samori",
+  "created": "2026-05-21",
+
+  "identity": {
+    "email": "spiritlibraryapp@gmail.com",
+    "from_name": "Steven | Spirit Library",
+    "smtp_user_env": "SPIRIT_GMAIL_USER",
+    "smtp_pass_env": "SPIRIT_GMAIL_APP_PASSWORD",
+    "signature": "— Steven\nSpirit Library",
+    "persona_voice": "Warm, hospitality-fluent. Pitch is a free gift (coasters) + a tool that helps their bartenders. Never pushy."
+  },
+
+  "audience": {
+    "source": {
+      "type": "csv",
+      "path": "targets/master_leads.csv"
+    },
+    "filter": {
+      "require_email": true,
+      "categories_in": ["restaurant", "bar", "pub", "nightclub", "brewery", "winery", "biergarten", "pizzeria", "diner", "hotel", "cafe"],
+      "email_local_regex": "^[a-z0-9][a-z0-9._%+\\-]{2,}$",
+      "skip_emails_in_files": [
+        "../outreach/targets/bars_nationwide.json:contact_email",
+        "state/optout.txt",
+        "state/bad_domains.txt"
+      ]
+    },
+    "sort": [
+      {"field": "_has_website", "desc": true},
+      {"field": "_is_business_email", "desc": true},
+      {"field": "category", "desc": false},
+      {"field": "name", "desc": false}
+    ],
+    "lightweight_quality": {
+      "_has_website": "row.get('website', '').startswith('http')",
+      "_is_business_email": "not row.get('email', '').lower().endswith(('@gmail.com', '@yahoo.com', '@hotmail.com', '@aol.com', '@outlook.com'))"
+    }
+  },
+
+  "pitch_pack": {
+    "subjects": [
+      "QR coasters for {name} — free tool",
+      "Free QR coasters for {name}'s bar",
+      "{name} — quick partnership idea (zero cost)"
+    ],
+    "subject_strategy": "rotate_by_category_then_hash",
+    "body_template": "Your email was found by an agent — this one's typed and sent by one too.\n\nI run Spirit Library — a free cocktail-recipe app with 1,700+ recipes, a My Bar filter, and the ability for bars to upload their own house menu so their cocktails show first.\n\nQuick offer for {name}:\n\n  • Free branded QR coasters (we print + ship) — guests scan, see your house menu inside Spirit Library plus 1,700 backup recipes\n  • Free bartender training reference — new hires look up techniques + recipes by ingredient stock\n  • Soft AI tools we can layer on later — reservations bot, 24/7 guest FAQ, automated review replies\n\nNo cost, no contract, no clawback. Two attached PNGs show the coaster design.\n\nIf this is interesting, reply with a shipping address and how many coasters fit your bar (most spots want 100–200).\n\n— Steven\nSpirit Library\n\nReply STOP to be removed from this list.",
+    "personalization": {
+      "type": "template_var",
+      "vars": {"name": "row.name", "category": "row.category", "town": "row.town"},
+      "fallback_opener": null
+    },
+    "proof_assets": {
+      "default": [
+        "https://spiritlibrary.app",
+        "https://apps.apple.com/us/app/spirit-library/id6761500950"
+      ],
+      "attached_images": [
+        "~/spirit-merch/output/ai-coasters/spirit-coaster-side-B.png",
+        "~/spirit-merch/output/ai-coasters/spirit-coaster-4in-square.png"
+      ]
+    }
+  },
+
+  "demo_gate": {
+    "enabled": false,
+    "comment": "SL pitch already includes shipped product (App Store link + spiritlibrary.app). No per-lead demo build."
+  },
+
+  "cadence": {
+    "stages": ["cold", "followup", "breakup"],
+    "intervals_days": {"cold_to_followup": 10, "followup_to_breakup": 7},
+    "max_stages": 3,
+    "auto_pause_on_reply": true,
+    "auto_pause_on_optout": true
+  },
+
+  "rate_limits": {
+    "daily_max": 40,
+    "hourly_max": 5,
+    "seconds_between_sends": 900
+  },
+
+  "opt_out": {
+    "method": "reply_based",
+    "footer": "Reply STOP to be removed from this list.",
+    "suppression_list": "state/optout.txt"
+  },
+
+  "bounce_hygiene": {
+    "replenish_on_bounce": true,
+    "domain_blacklist_after_n_bounces": 3,
+    "blacklist_file": "state/bad_domains.txt"
+  },
+
+  "state": {
+    "file": "state/spiritlibrary_email_state.json",
+    "comment": "SHARED with legacy send_spiritlibrary.py. Same file = one pacing envelope, no double-sends."
+  },
+
+  "approval": {
+    "auto_send": true,
+    "review_required": false
+  },
+
+  "reply_classification": {
+    "delegates_to": "outreach_westchester/process_replies.py",
+    "delegates_drafter_to": "outreach_westchester/cmo_drafter.py",
+    "delegates_closer_to": "outreach_westchester/reply_closer.py"
+  },
+
+  "metrics": {
+    "track_per_subject": true,
+    "track_per_category": true,
+    "logging_file": "logs/spiritlibrary_emails.csv",
+    "csv_columns": ["timestamp_utc", "email", "stage", "status", "subject_variant"]
+  }
+}

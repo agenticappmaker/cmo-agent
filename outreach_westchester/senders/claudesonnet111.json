@@ -1,0 +1,122 @@
+{
+  "name": "claudesonnet111",
+  "version": 1,
+  "description": "AI consulting outreach to Westchester/Tri-state SMBs. Sources axon-graded leads with per-lead ai_leverage_summary as the personalized opener. Auto-sends. Best leads (highest grade) ship first each day.",
+  "owner": "Steven Samori",
+  "created": "2026-05-21",
+
+  "identity": {
+    "email": "claudesonnet111@gmail.com",
+    "from_name": "Steven",
+    "smtp_user_env": "GMAIL_USER",
+    "smtp_pass_env": "GMAIL_APP_PASSWORD",
+    "signature": "— Steven\nSmore Labs · Westchester County, NY",
+    "persona_voice": "Direct, founder-to-owner. Lead with a specific operational gap the recipient has. No marketing fluff."
+  },
+
+  "audience": {
+    "source": {
+      "type": "csv",
+      "path": "/Users/claudecode/axon/state/heuristic_grades.csv",
+      "comment": "Axon heuristic grader output. Provides grade_letter, grade_score, ai_leverage_summary, pitch_options, gaps, geo_tier, fetch_status."
+    },
+    "filter": {
+      "require_email": true,
+      "min_grade_letter": "B",
+      "grade_rank": {"A": 5, "B": 4, "C": 3, "D": 2, "F": 1},
+      "skip_categories": [],
+      "skip_geo_tiers": [],
+      "require_fetch_status_ok": false
+    },
+    "sort": [
+      {"field": "_rank", "desc": true},
+      {"field": "grade_score", "desc": true}
+    ]
+  },
+
+  "pitch_pack": {
+    "subjects": [
+      "Where does AI fit into your business model?",
+      "Quick question about {name}'s after-hours calls",
+      "Saw {name}'s site — one AI tool that would pay for itself"
+    ],
+    "subject_strategy": "rotate_by_grade_letter_then_hash",
+    "body_template": "Your email was found by an agent. This one was typed and sent by one too. You'd be surprised what else AI can do for a {trade} shop in {town}.\n\n{ai_lead}\n\nWe build small, paid-once tools that fix that — typically one of:\n\n  • {pitch_1_title} — {pitch_1_oneliner}\n  • {pitch_2_title} — {pitch_2_oneliner}\n  • {pitch_3_title} — {pitch_3_oneliner}\n\n{demo_block}If any of those land, reply with which one and I'll send a one-pager and a price.\n\n— Steven\nSmore Labs · Westchester County, NY\n\nReply STOP to be removed from this list.",
+    "demo_block_when_present": "I built a quick proof of concept for {name} — take a look: {demo_url}\n\n",
+    "personalization": {
+      "type": "axon_summary",
+      "summary_field": "ai_leverage_summary",
+      "pitch_options_field": "pitch_options",
+      "fallback_opener": "Most {trade} shops in {town} are losing after-hours leads to voicemail and one-off Wix sites. There's a one-time, AI-leveraged fix for each of those."
+    },
+    "proof_assets": {
+      "default": [
+        "https://supreme-seams.com (built for a Pleasantville auto-upholstery shop)",
+        "https://rv-there-yet-weld.vercel.app (1,530-model RV configurator)",
+        "https://4seasons-organic.vercel.app (Westchester organic cleaners)"
+      ]
+    }
+  },
+
+  "demo_gate": {
+    "enabled": true,
+    "agent": "case-study-cloner",
+    "criteria": {
+      "min_grade_letter": "B",
+      "require_website": true,
+      "require_fetch_status_ok": true,
+      "max_per_day": null,
+      "categories_allowed": ["electrician", "contractor", "plumber", "hvac", "landscaper", "roofer", "painter", "auto_repair", "salon", "dentist", "lawyer", "accountant", "real_estate", "general_contractor"]
+    },
+    "fallback_when_skipped": "use_proof_assets.default"
+  },
+
+  "cadence": {
+    "stages": ["cold", "followup", "breakup"],
+    "intervals_days": {"cold_to_followup": 4, "followup_to_breakup": 7},
+    "max_stages": 3,
+    "auto_pause_on_reply": true,
+    "auto_pause_on_optout": true
+  },
+
+  "rate_limits": {
+    "daily_max": 40,
+    "hourly_max": 5,
+    "seconds_between_sends": 900
+  },
+
+  "opt_out": {
+    "method": "reply_based",
+    "footer": "Reply STOP to be removed from this list.",
+    "suppression_list": "state/optout.txt"
+  },
+
+  "bounce_hygiene": {
+    "replenish_on_bounce": true,
+    "domain_blacklist_after_n_bounces": 3,
+    "blacklist_file": "state/bad_domains.txt"
+  },
+
+  "state": {
+    "file": "state/email_state.json",
+    "comment": "SHARED with legacy send_emails.py + axon auto_sender. Same file = one pacing envelope, no double-sends across the three senders."
+  },
+
+  "approval": {
+    "auto_send": true,
+    "review_required": false
+  },
+
+  "reply_classification": {
+    "delegates_to": "outreach_westchester/process_replies.py",
+    "delegates_drafter_to": "outreach_westchester/cmo_drafter.py",
+    "delegates_closer_to": "outreach_westchester/reply_closer.py"
+  },
+
+  "metrics": {
+    "track_per_subject": true,
+    "track_per_grade": true,
+    "logging_file": "logs/westchester_emails.csv",
+    "csv_columns": ["timestamp_utc", "email", "stage", "status", "grade", "subject_variant", "demo_url"]
+  }
+}
