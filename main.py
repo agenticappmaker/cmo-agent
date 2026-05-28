@@ -138,12 +138,13 @@ def cmd_run():
             mark_failed(post["id"], str(e))
 
 
-def cmd_post_now(brand: str, platform: str, topic: str = None):
+def cmd_post_now(brand: str, platform: str, topic: str = None, force: bool = False, post_type: str = None):
     """Generate a post and publish it immediately (used by cron).
     Series posts automatically become carousels on Instagram.
 
     Daily cap: if DAILY_POST_LIMIT posts already published today, the content is
-    generated and queued for tomorrow instead of firing immediately.
+    generated and queued for tomorrow instead of firing immediately. Pass force=True
+    to bypass the cap (used for one-shot demo posts).
     Queue drain: if a queued post is ready for this brand/platform, it is published
     instead of generating fresh content (so ideas added via `generate` get used).
     """
@@ -155,7 +156,7 @@ def cmd_post_now(brand: str, platform: str, topic: str = None):
 
     # --- Daily cap: if already at limit, queue instead of posting ---
     today_count = count_posts_today(brand)
-    if today_count >= DAILY_POST_LIMIT:
+    if today_count >= DAILY_POST_LIMIT and not force:
         print(f"\n⚠ Daily post limit reached ({today_count}/{DAILY_POST_LIMIT} posts today for {brand}).")
         print(f"  Generating content and queuing for tomorrow instead...")
         post = generate_post(brand, platform, topic=topic)
@@ -194,65 +195,77 @@ def cmd_post_now(brand: str, platform: str, topic: str = None):
         else:
             return
 
-    print(f"\n🤖 Generating {platform} post for {brand}..." + (f" [topic: {topic}]" if topic else ""))
-    post = generate_post(brand, platform, topic=topic)
+    print(f"\n🤖 Generating {platform} post for {brand}..." + (f" [topic: {topic}]" if topic else "") + (f" [type: {post_type}]" if post_type else ""))
+    post = generate_post(brand, platform, post_type=post_type, topic=topic)
 
     print(f"\n📝 Post idea: {post['post_idea']}")
     print(f"   Caption preview: {post['caption'][:100]}...")
 
     config = load_brand(brand)["config"]
 
-    # Series posts → carousel on Instagram
+    # Series posts → carousel on Instagram (NEVER duplicates a standalone single image).
+    # Prior behavior posted both a carousel AND a single-image post on the same subject
+    # when FB failed mid-carousel — Steven's 2026-05-27 directive: merge them. The
+    # standalone image becomes the carousel's title-slide background; only the carousel
+    # publishes. FB failure after IG carousel success does NOT trigger a fallback.
     if post.get("post_type") == "series" and platform in ("instagram", "facebook"):
         print(f"\n🎠 Building carousel slides...")
+        from agents.slide_generator import build_carousel
+        slides_data = generate_carousel_content(post)
+
+        # Title-slide background = the post's main image_prompt (what would have
+        # been the standalone single image). Fall back to title_slide_image_prompt
+        # only if image_prompt is missing.
+        title_bg_path = None
+        title_bg_prompt = post.get("image_prompt") or post.get("title_slide_image_prompt")
+        if title_bg_prompt:
+            try:
+                title_bg_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_titlebg"
+                print(f"\n🖼  Generating title-slide background (from post image_prompt)...")
+                title_bg_path = generate_image(title_bg_prompt, brand, title_bg_id)
+            except Exception as e:
+                print(f"  ⚠ Title bg generation failed ({e}); falling back to gradient")
+
         try:
-            from agents.slide_generator import build_carousel
-            slides_data = generate_carousel_content(post)
-
-            # Generate a marketing-grade title-slide background from Claude's
-            # content-aware image prompt (new field added to the series schema).
-            title_bg_path = None
-            title_bg_prompt = post.get("title_slide_image_prompt")
-            if title_bg_prompt:
-                try:
-                    title_bg_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_titlebg"
-                    print(f"\n🖼  Generating title-slide background...")
-                    title_bg_path = generate_image(title_bg_prompt, brand, title_bg_id)
-                except Exception as e:
-                    print(f"  ⚠ Title bg generation failed ({e}); falling back to gradient")
-
             slide_paths = build_carousel(
                 slides_data,
                 series_name=post.get("series_name"),
                 title_bg_image=title_bg_path,
             )
             print(f"  Generated {len(slide_paths)} slides")
+        except Exception as e:
+            print(f"  ✗ Slide build failed ({e}) — aborting series post, NOT falling back to single image (would duplicate subject).")
+            return
 
-            # Upload all slides
-            slide_urls = []
-            for sp in slide_paths:
-                url = upload_image_to_imgbb(sp)
-                slide_urls.append(url)
+        # Upload all slides
+        slide_urls = []
+        for sp in slide_paths:
+            slide_urls.append(upload_image_to_imgbb(sp))
 
-            # Publish as carousel
-            account_id = config.get("instagram_account_id", "")
-            page_id = config.get("facebook_page_id", "")
+        account_id = config.get("instagram_account_id", "")
+        page_id = config.get("facebook_page_id", "")
 
-            if account_id and len(slide_urls) >= 2:
+        ig_pid = None
+        if account_id and len(slide_urls) >= 2:
+            try:
                 from agents.publisher import publish_instagram_carousel
                 ig_pid = publish_instagram_carousel(post["caption"], post.get("hashtags", ""), slide_urls, account_id)
                 print(f"  ✓ Instagram carousel: {ig_pid}")
+            except Exception as e:
+                print(f"  ✗ Instagram carousel failed ({e})")
 
-            # Facebook still gets single image (carousels more complex on FB)
-            if page_id:
+        # Facebook tries a single image of the title slide. Failure is logged but
+        # does NOT trigger any fallback that would duplicate the subject.
+        if page_id and slide_urls:
+            try:
                 from agents.publisher import publish_facebook
                 fb_pid = publish_facebook(post["caption"], post.get("hashtags", ""), slide_urls[0], page_id)
                 print(f"  ✓ Facebook: {fb_pid}")
+            except Exception as e:
+                print(f"  ⚠ Facebook failed ({e}) — NOT falling back; carousel already posted to IG.")
 
-            print(f"\n✅ Carousel posted! {len(slide_urls)} slides. Caption: {post['caption'][:100]}...")
-            return
-        except Exception as e:
-            print(f"  ⚠ Carousel failed ({e}), falling back to single image...")
+        print(f"\n✅ Carousel posted! {len(slide_urls)} slides. Caption: {post['caption'][:100]}...")
+        return
 
     # Infographic post → render locally, no AI image gen needed
     if post.get("post_type") == "infographic":
@@ -521,6 +534,8 @@ def main():
     postnow.add_argument("brand", help="Brand slug (e.g. spirit-library)")
     postnow.add_argument("--platform", default="instagram", choices=["instagram", "facebook", "linkedin", "twitter", "tiktok"])
     postnow.add_argument("--topic", default=None, help="Optional theme override (e.g. 'frozen cocktails')")
+    postnow.add_argument("--post-type", default=None, choices=["recipe", "feature", "infographic", "series"], help="Force a specific post type instead of the rotation")
+    postnow.add_argument("--force", action="store_true", help="Bypass the daily post cap (for demo/one-shot posts)")
 
     postss = subparsers.add_parser("post-screenshot", help="Post a screenshot with AI-generated caption")
     postss.add_argument("brand", help="Brand slug (e.g. spirit-library)")
@@ -579,7 +594,13 @@ def main():
     if args.command == "generate":
         cmd_generate(args.brand, args.platform)
     elif args.command == "post-now":
-        cmd_post_now(args.brand, args.platform, topic=getattr(args, 'topic', None))
+        cmd_post_now(
+            args.brand,
+            args.platform,
+            topic=getattr(args, 'topic', None),
+            force=getattr(args, 'force', False),
+            post_type=getattr(args, 'post_type', None),
+        )
     elif args.command == "post-screenshot":
         cmd_post_screenshot(args.brand, args.platform, args.image)
     elif args.command == "plan":
