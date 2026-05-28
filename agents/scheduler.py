@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 QUEUE_PATH = Path(__file__).parent.parent / "posts" / "queue.json"
-DAILY_POST_LIMIT = 2
+DAILY_POST_LIMIT = 1
 
 
 def load_queue() -> list:
