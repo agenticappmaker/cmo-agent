@@ -203,69 +203,65 @@ def cmd_post_now(brand: str, platform: str, topic: str = None, force: bool = Fal
 
     config = load_brand(brand)["config"]
 
-    # Series posts → carousel on Instagram (NEVER duplicates a standalone single image).
-    # Prior behavior posted both a carousel AND a single-image post on the same subject
-    # when FB failed mid-carousel — Steven's 2026-05-27 directive: merge them. The
-    # standalone image becomes the carousel's title-slide background; only the carousel
-    # publishes. FB failure after IG carousel success does NOT trigger a fallback.
+    # Series posts → carousel on Instagram
     if post.get("post_type") == "series" and platform in ("instagram", "facebook"):
         print(f"\n🎠 Building carousel slides...")
-        from agents.slide_generator import build_carousel
-        slides_data = generate_carousel_content(post)
-
-        # Title-slide background = the post's main image_prompt (what would have
-        # been the standalone single image). Fall back to title_slide_image_prompt
-        # only if image_prompt is missing.
-        title_bg_path = None
-        title_bg_prompt = post.get("image_prompt") or post.get("title_slide_image_prompt")
-        if title_bg_prompt:
-            try:
-                title_bg_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_titlebg"
-                print(f"\n🖼  Generating title-slide background (from post image_prompt)...")
-                title_bg_path = generate_image(title_bg_prompt, brand, title_bg_id)
-            except Exception as e:
-                print(f"  ⚠ Title bg generation failed ({e}); falling back to gradient")
-
         try:
+            from agents.slide_generator import build_carousel
+            slides_data = generate_carousel_content(post)
+
+            # Title-slide background = the post's main image_prompt (the image that
+            # would have been the standalone single post). Steven 2026-05-27: stop
+            # double-posting on the same subject; make the one carousel better by
+            # absorbing the single-image into its title slide.
+            title_bg_path = None
+            title_bg_prompt = post.get("image_prompt") or post.get("title_slide_image_prompt")
+            if title_bg_prompt:
+                try:
+                    title_bg_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_titlebg"
+                    print(f"\n🖼  Generating title-slide background...")
+                    title_bg_path = generate_image(title_bg_prompt, brand, title_bg_id)
+                except Exception as e:
+                    print(f"  ⚠ Title bg generation failed ({e}); falling back to gradient")
+
             slide_paths = build_carousel(
                 slides_data,
                 series_name=post.get("series_name"),
                 title_bg_image=title_bg_path,
             )
             print(f"  Generated {len(slide_paths)} slides")
-        except Exception as e:
-            print(f"  ✗ Slide build failed ({e}) — aborting series post, NOT falling back to single image (would duplicate subject).")
-            return
 
-        # Upload all slides
-        slide_urls = []
-        for sp in slide_paths:
-            slide_urls.append(upload_image_to_imgbb(sp))
+            # Upload all slides
+            slide_urls = []
+            for sp in slide_paths:
+                url = upload_image_to_imgbb(sp)
+                slide_urls.append(url)
 
-        account_id = config.get("instagram_account_id", "")
-        page_id = config.get("facebook_page_id", "")
+            # Publish as carousel
+            account_id = config.get("instagram_account_id", "")
+            page_id = config.get("facebook_page_id", "")
 
-        ig_pid = None
-        if account_id and len(slide_urls) >= 2:
-            try:
+            if account_id and len(slide_urls) >= 2:
                 from agents.publisher import publish_instagram_carousel
                 ig_pid = publish_instagram_carousel(post["caption"], post.get("hashtags", ""), slide_urls, account_id)
                 print(f"  ✓ Instagram carousel: {ig_pid}")
-            except Exception as e:
-                print(f"  ✗ Instagram carousel failed ({e})")
 
-        # Facebook tries a single image of the title slide. Failure is logged but
-        # does NOT trigger any fallback that would duplicate the subject.
-        if page_id and slide_urls:
-            try:
-                from agents.publisher import publish_facebook
-                fb_pid = publish_facebook(post["caption"], post.get("hashtags", ""), slide_urls[0], page_id)
-                print(f"  ✓ Facebook: {fb_pid}")
-            except Exception as e:
-                print(f"  ⚠ Facebook failed ({e}) — NOT falling back; carousel already posted to IG.")
+            # Facebook still gets single image (carousels more complex on FB).
+            # Wrapped so FB failure cannot escape and trigger the outer fallback —
+            # the IG carousel is already published and a single-image fallback
+            # would duplicate the subject on IG.
+            if page_id:
+                try:
+                    from agents.publisher import publish_facebook
+                    fb_pid = publish_facebook(post["caption"], post.get("hashtags", ""), slide_urls[0], page_id)
+                    print(f"  ✓ Facebook: {fb_pid}")
+                except Exception as e:
+                    print(f"  ⚠ Facebook failed ({e}) — NOT falling back; carousel already posted to IG.")
 
-        print(f"\n✅ Carousel posted! {len(slide_urls)} slides. Caption: {post['caption'][:100]}...")
-        return
+            print(f"\n✅ Carousel posted! {len(slide_urls)} slides. Caption: {post['caption'][:100]}...")
+            return
+        except Exception as e:
+            print(f"  ⚠ Carousel failed ({e}), falling back to single image...")
 
     # Infographic post → render locally, no AI image gen needed
     if post.get("post_type") == "infographic":
