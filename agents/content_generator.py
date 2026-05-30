@@ -148,6 +148,64 @@ INFOGRAPHIC_TEMPLATES = [
 ]
 
 
+# CTA rotation — different sign-off every post so the feed doesn't read like a bot.
+# Picked at random with a sticky last-used guard so we never repeat back-to-back.
+CTA_POOL = [
+    "\n\nWhat's your go-to right now? 👇\nSpirit Library — free on the App Store.",
+    "\n\nDrop your favorite below 🍸\nFind 1,700+ recipes in Spirit Library.",
+    "\n\nSave this for your next pour. Find it (and 1,700 more) in Spirit Library — App Store.",
+    "\n\nMake it tonight ↓ recipe + 1,700 more in Spirit Library.",
+    "\n\nBuild a menu in 30 seconds. Spirit Library, free on iOS.",
+    "\n\nTap the link in bio. Spirit Library — your cocktail library, in your pocket.",
+]
+
+
+def _pick_cta(brand_slug: str) -> str:
+    """Pick a CTA that wasn't used last time. Tracks last-used in posts/_cta_state.json."""
+    path = Path(__file__).parent.parent / "posts" / f"{brand_slug}_cta_state.json"
+    last = -1
+    if path.exists():
+        try:
+            last = json.load(open(path)).get("last_idx", -1)
+        except Exception:
+            last = -1
+    candidates = [i for i in range(len(CTA_POOL)) if i != last]
+    idx = random.choice(candidates)
+    with open(path, "w") as f:
+        json.dump({"last_idx": idx, "updated_at": datetime.utcnow().isoformat()}, f)
+    return CTA_POOL[idx]
+
+
+def _pick_hashtags(config: dict, post_type: str, post_data: dict = None) -> str:
+    """5 niche tags > 15 generic ones. 2 from core + 3 from pool, lightly
+    biased toward the post's actual subject if we can detect it."""
+    core = config.get("hashtags_core", [])
+    pool = config.get("hashtags_pool", [])
+    # Always include #SpiritLibrary if present
+    locked = [t for t in core if t.lower() == "#spiritlibrary"]
+    remaining_core = [t for t in core if t.lower() != "#spiritlibrary"]
+    chosen = list(locked)
+    chosen += random.sample(remaining_core, min(1, len(remaining_core)))
+    # Subject-bias: if we know a cocktail/spirit/feature name, prefer pool tags
+    # whose lowercase form intersects with words in the subject.
+    bias_text = ""
+    if post_data:
+        bias_text = " ".join([
+            str(post_data.get("cocktail_name", "")),
+            str(post_data.get("series_name", "")),
+            str(post_data.get("feature_name", "")),
+            str(post_data.get("post_idea", "")),
+        ]).lower()
+    pool_scored = []
+    for tag in pool:
+        word = tag.lstrip("#").lower()
+        score = 1 if word in bias_text else 0
+        pool_scored.append((score, random.random(), tag))
+    pool_scored.sort(reverse=True)
+    chosen += [t for _, _, t in pool_scored[:3]]
+    return " ".join(chosen)
+
+
 def _get_next_post_type(brand_slug: str) -> str:
     """
     Rotation cycle: 6 unique post slots covering the full CMO mix.
@@ -277,12 +335,6 @@ def generate_post(brand_slug: str, platform: str = "instagram", post_type: str =
             for p in history[-20:]
         ])
 
-    # Pick random hashtags from pool + all core
-    pool = config.get("hashtags_pool", [])
-    core = config.get("hashtags_core", [])
-    selected_pool = random.sample(pool, min(7, len(pool)))
-    all_tags = core + selected_pool
-
     platform_guidance = {
         "instagram": "Instagram: caption 150-280 chars, engaging, 1-2 emojis ok. Hashtags appended separately.",
         "facebook":  "Facebook: conversational, 100-230 chars. Friendly tone, 1 emoji max.",
@@ -291,7 +343,7 @@ def generate_post(brand_slug: str, platform: str = "instagram", post_type: str =
         "tiktok":    "TikTok: 100-140 chars, energetic hook.",
     }.get(platform, "")
 
-    CTA = "\n\nComment below your favorite recipes!\n\nSave and share entire menus with Spirit Library in the App Store!!!"
+    CTA = _pick_cta(brand_slug)
 
     if post_type == "recipe":
         image_style = random.choice(IMAGE_STYLE_ROTATION)
@@ -496,7 +548,7 @@ Respond ONLY as JSON:
 
     post_data = json.loads(content)
     post_data["caption"] = post_data["caption"].rstrip() + CTA
-    post_data["hashtags"] = " ".join(all_tags)
+    post_data["hashtags"] = _pick_hashtags(config, post_type, post_data)
     post_data["platform"] = platform
     post_data["brand"] = brand_slug
     post_data["post_type"] = post_type
@@ -566,17 +618,12 @@ def generate_screenshot_caption(brand_slug: str, image_path: str, platform: str 
     ext = Path(image_path).suffix.lower()
     media_type = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "webp": "image/webp"}.get(ext.lstrip("."), "image/png")
 
-    pool = config.get("hashtags_pool", [])
-    core = config.get("hashtags_core", [])
-    selected_pool = random.sample(pool, min(7, len(pool)))
-    all_tags = core + selected_pool
-
     platform_guidance = {
         "instagram": "Instagram: caption 150-280 chars, engaging, 1-2 emojis ok. Hashtags appended separately.",
         "facebook":  "Facebook: conversational, 100-230 chars. Friendly tone, 1 emoji max.",
     }.get(platform, "")
 
-    CTA = "\n\nComment below your favorite recipes!\n\nSave and share entire menus with Spirit Library in the App Store!!!"
+    CTA = _pick_cta(brand_slug)
 
     prompt = f"""You are the autonomous CMO agent for {config['brand_name']}.
 
@@ -636,7 +683,7 @@ Respond ONLY as JSON:
 
     post_data = json.loads(content)
     post_data["caption"] = post_data["caption"].rstrip() + CTA
-    post_data["hashtags"] = " ".join(all_tags)
+    post_data["hashtags"] = _pick_hashtags(config, "screenshot", post_data)
     post_data["platform"] = platform
     post_data["brand"] = brand_slug
     post_data["post_type"] = "screenshot"

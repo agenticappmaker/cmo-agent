@@ -277,19 +277,38 @@ def cmd_post_now(brand: str, platform: str, topic: str = None, force: bool = Fal
         )
         print(f"  ✓ Infographic saved: {image_path}")
     elif post.get("post_type") == "feature":
-        # Feature posts: prefer a real app screenshot over a generated image
-        import glob as _glob
+        # Feature posts: prefer a real app screenshot over a generated image.
+        # When a screenshot is chosen, REWRITE the caption from the screenshot
+        # itself via Claude vision — the pre-written caption was for a randomly
+        # chosen FEATURE that almost never matches the random screenshot picked.
+        # This was the root cause of captions not matching images (2026-05-29).
         screenshots_dir = Path(__file__).parent / "screenshots"
         screenshots = [
-            f for f in screenshots_dir.glob("*")
-            if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".PNG")
-            and f.parent == screenshots_dir  # exclude posted/ subfolder
+            f for f in screenshots_dir.iterdir()
+            if f.is_file() and f.suffix.lower() in (".png", ".jpg", ".jpeg")
         ] if screenshots_dir.exists() else []
         if screenshots:
-            import random as _rand
-            chosen = _rand.choice(screenshots)
+            # Pick the OLDEST unposted screenshot (FIFO rotation, no random reuse)
+            chosen = min(screenshots, key=lambda f: f.stat().st_mtime)
             image_path = str(chosen)
             print(f"\n📱 Using app screenshot: {chosen.name}")
+            print(f"  🔎 Rewriting caption from what's actually on screen...")
+            from agents.content_generator import generate_screenshot_caption
+            ss_post = generate_screenshot_caption(brand, image_path, platform)
+            # Replace the LLM-written feature caption with the vision-grounded one
+            post["caption"] = ss_post["caption"]
+            post["hashtags"] = ss_post["hashtags"]
+            post["post_idea"] = ss_post.get("post_idea", post.get("post_idea", ""))
+            post["reasoning"] = ss_post.get("reasoning", "")
+            # Mark this screenshot as posted by moving it into screenshots/posted/
+            posted_dir = screenshots_dir / "posted"
+            posted_dir.mkdir(exist_ok=True)
+            try:
+                dest = posted_dir / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{chosen.name}"
+                chosen.rename(dest)
+                print(f"  📁 Moved to screenshots/posted/{dest.name}")
+            except Exception as _mv_err:
+                print(f"  ⚠ Could not move screenshot: {_mv_err}")
         else:
             print(f"\n🎨 Generating image (no screenshots available)...")
             post_id = f"{brand}_{platform}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"

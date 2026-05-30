@@ -100,7 +100,10 @@ def _draw_rounded_rect(draw, xy, radius, fill):
 
 
 def _prep_title_bg(bg_image_path: str) -> Image.Image:
-    """Load user-supplied bg image, cover-crop to slide dims, blur, and darken."""
+    """Load user-supplied bg image, cover-crop to slide dims.
+    Keeps the image SHARP and BRIGHT so it actually stops the scroll —
+    text legibility comes from a bottom gradient ribbon, not a global blur.
+    """
     src = Image.open(bg_image_path).convert("RGB")
     # Cover-crop
     src_ratio = src.width / src.height
@@ -116,11 +119,29 @@ def _prep_title_bg(bg_image_path: str) -> Image.Image:
         top = (src.height - new_h) // 2
         src = src.crop((0, top, new_w, top + new_h))
     src = src.resize((SLIDE_W, SLIDE_H), Image.LANCZOS)
-    # Blur so text stays readable
-    src = src.filter(ImageFilter.GaussianBlur(18))
-    # Darkening overlay
+    # Very light blur so subtle texture stays but text on the ribbon is crisp
+    src = src.filter(ImageFilter.GaussianBlur(3))
+    # Slight global darken so colors still pop but feed thumbnail isn't blown out
     overlay = Image.new("RGB", (SLIDE_W, SLIDE_H), (0, 0, 0))
-    return Image.blend(src, overlay, 0.55)
+    return Image.blend(src, overlay, 0.18)
+
+
+def _apply_bottom_ribbon(img: Image.Image, height_frac: float = 0.42) -> Image.Image:
+    """Paint a dark gradient ribbon over the bottom N% of the image so title
+    text reads crisply while the top of the image stays bright and visible.
+    Transparent at the top of the ribbon, near-opaque at the bottom.
+    """
+    ribbon_h = int(SLIDE_H * height_frac)
+    ribbon = Image.new("RGBA", (SLIDE_W, ribbon_h), (0, 0, 0, 0))
+    rp = ribbon.load()
+    for y in range(ribbon_h):
+        t = y / max(ribbon_h - 1, 1)
+        alpha = int(20 + t * 215)  # 20 → 235 (transparent top, near-solid bottom)
+        for x in range(SLIDE_W):
+            rp[x, y] = (5, 5, 8, alpha)
+    base = img.convert("RGBA")
+    base.alpha_composite(ribbon, (0, SLIDE_H - ribbon_h))
+    return base.convert("RGB")
 
 
 # ── Slide builders ────────────────────────────────────────────────────────────
@@ -128,39 +149,87 @@ def _prep_title_bg(bg_image_path: str) -> Image.Image:
 def generate_title_slide(title, subtitle, bg_image_path=None, series_name=None):
     """
     Slide 1: hero marketing grab.
-    - If bg_image_path given, use blurred+darkened generated image as background.
-    - Otherwise falls back to a warm gradient.
+    - If bg_image_path given: image stays sharp and bright (top 60% is the hero).
+      Title + subtitle live on a bottom gradient ribbon so they read crisply
+      without burying the image.
+    - Otherwise falls back to a warm gradient (old layout).
     """
-    if bg_image_path and os.path.exists(bg_image_path):
+    has_bg = bool(bg_image_path and os.path.exists(bg_image_path))
+
+    if has_bg:
         img = _prep_title_bg(bg_image_path)
+        img = _apply_bottom_ribbon(img, height_frac=0.46)
     else:
         img = _gradient_bg("warm")
 
     draw = ImageDraw.Draw(img)
 
-    # Series badge at top
-    if series_name:
-        badge_font = _get_font(28, bold=True)
-        badge_text = series_name.upper()
-        bbox = draw.textbbox((0, 0), badge_text, font=badge_font)
-        bw = bbox[2] - bbox[0] + 50
-        bx = (SLIDE_W - bw) // 2
-        _draw_rounded_rect(draw, (bx, 260, bx + bw, 312), 16, (0, 0, 0))
-        _draw_rounded_rect(draw, (bx + 2, 262, bx + bw - 2, 310), 14, (40, 30, 10))
-        draw.text((bx + 25, 269), badge_text, font=badge_font, fill=GOLD_BRIGHT)
+    if has_bg:
+        # Series badge floats over the image at the top — small, pill-shaped
+        if series_name:
+            badge_font = _get_font(26, bold=True)
+            badge_text = series_name.upper()
+            bbox = draw.textbbox((0, 0), badge_text, font=badge_font)
+            bw = bbox[2] - bbox[0] + 44
+            bx = (SLIDE_W - bw) // 2
+            _draw_rounded_rect(draw, (bx, 60, bx + bw, 110), 16, (0, 0, 0))
+            draw.text((bx + 22, 68), badge_text, font=badge_font, fill=GOLD_BRIGHT)
 
-    # Accent bar above title
-    draw.rectangle([80, 420, 360, 428], fill=GOLD_BRIGHT)
+        # Title anchored to the ribbon (bottom 46% of slide). Compute layout
+        # bottom-up so multi-line titles still sit cleanly above the subtitle.
+        title_font = _get_font(96, bold=True)
+        sub_font = _get_font(38)
 
-    # Big bright-gold title
-    title_font = _get_font(92, bold=True)
-    y = 460
-    y = _draw_text_block(draw, title, 80, y, SLIDE_W - 160, title_font, GOLD_BRIGHT)
+        # Wrap title to estimate height
+        title_lines = textwrap.wrap(title, width=int((SLIDE_W - 160) / (title_font.size * 0.55))) or [title]
+        sub_lines = textwrap.wrap(subtitle, width=int((SLIDE_W - 160) / (sub_font.size * 0.55))) or [subtitle]
 
-    # Subtitle — cream for readability over photo bg
-    y += 30
-    sub_font = _get_font(40)
-    _draw_text_block(draw, subtitle, 80, y, SLIDE_W - 160, sub_font, CREAM)
+        line_h_t = int(title_font.size * 1.15)
+        line_h_s = int(sub_font.size * 1.3)
+        title_h = line_h_t * len(title_lines)
+        sub_h = line_h_s * len(sub_lines)
+        gap = 26
+        accent_h = 8
+
+        # Bottom anchor — 90px from bottom
+        bottom_pad = 90
+        sub_y_start = SLIDE_H - bottom_pad - sub_h
+        title_y_start = sub_y_start - gap - title_h
+        accent_y = title_y_start - 26
+
+        # Gold accent bar above the title
+        draw.rectangle([80, accent_y, 360, accent_y + accent_h], fill=GOLD_BRIGHT)
+
+        # Title — bright gold
+        y = title_y_start
+        for line in title_lines:
+            draw.text((80, y), line, font=title_font, fill=GOLD_BRIGHT)
+            y += line_h_t
+
+        # Subtitle — cream
+        y = sub_y_start
+        for line in sub_lines:
+            draw.text((80, y), line, font=sub_font, fill=CREAM)
+            y += line_h_s
+    else:
+        # Fallback gradient layout — keep prior look
+        if series_name:
+            badge_font = _get_font(28, bold=True)
+            badge_text = series_name.upper()
+            bbox = draw.textbbox((0, 0), badge_text, font=badge_font)
+            bw = bbox[2] - bbox[0] + 50
+            bx = (SLIDE_W - bw) // 2
+            _draw_rounded_rect(draw, (bx, 260, bx + bw, 312), 16, (0, 0, 0))
+            _draw_rounded_rect(draw, (bx + 2, 262, bx + bw - 2, 310), 14, (40, 30, 10))
+            draw.text((bx + 25, 269), badge_text, font=badge_font, fill=GOLD_BRIGHT)
+
+        draw.rectangle([80, 420, 360, 428], fill=GOLD_BRIGHT)
+        title_font = _get_font(92, bold=True)
+        y = 460
+        y = _draw_text_block(draw, title, 80, y, SLIDE_W - 160, title_font, GOLD_BRIGHT)
+        y += 30
+        sub_font = _get_font(40)
+        _draw_text_block(draw, subtitle, 80, y, SLIDE_W - 160, sub_font, CREAM)
 
     return img
 

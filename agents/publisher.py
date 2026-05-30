@@ -13,7 +13,9 @@ from pathlib import Path
 
 def upload_image_to_imgbb(image_path: str) -> str:
     """Upload image to Imgur and return the public URL.
-    Auto-pads images outside Instagram's 4:5 – 1.91:1 aspect ratio range.
+    Auto-CROPS images outside Instagram's 4:5 – 1.91:1 aspect ratio range.
+    Cropping > padding because dark padding bars on a phone screenshot look
+    like a paid ad and tank organic reach (changed 2026-05-29).
     """
     from PIL import Image as PILImage
     import io
@@ -24,19 +26,23 @@ def upload_image_to_imgbb(image_path: str) -> str:
     w, h = img.size
     ratio = w / h
     if ratio < 0.8:
-        # Too tall (e.g. phone screenshot) — pad sides to reach 4:5
-        new_w = int(h * 0.8)
-        padded = PILImage.new("RGB", (new_w, h), (10, 10, 15))  # dark bg
-        padded.paste(img, ((new_w - w) // 2, 0))
-        img = padded
-        print(f"  ⚠ Padded image from {w}x{h} to {new_w}x{h} (4:5 ratio)")
+        # Too tall (e.g. phone screenshot) — crop top + bottom to reach 4:5.
+        # For phone screenshots the status bar lives in the top ~6%; skip that,
+        # then take a 4:5 window so the meaningful UI fills the frame edge to edge.
+        new_h = int(w / 0.8)
+        status_skip = int(h * 0.06) if h > 2000 else 0  # only large phone shots
+        top = min(status_skip, max(0, h - new_h))
+        # If after skipping the status bar we'd overflow, center the crop instead
+        if top + new_h > h:
+            top = max(0, (h - new_h) // 2)
+        img = img.crop((0, top, w, top + new_h))
+        print(f"  ✂ Cropped image from {w}x{h} to {w}x{new_h} (4:5 ratio, top={top})")
     elif ratio > 1.91:
-        # Too wide — pad top/bottom to reach 1.91:1
-        new_h = int(w / 1.91)
-        padded = PILImage.new("RGB", (w, new_h), (10, 10, 15))
-        padded.paste(img, (0, (new_h - h) // 2))
-        img = padded
-        print(f"  ⚠ Padded image from {w}x{h} to {w}x{new_h} (1.91:1 ratio)")
+        # Too wide — crop sides to reach 1.91:1
+        new_w = int(h * 1.91)
+        left = (w - new_w) // 2
+        img = img.crop((left, 0, left + new_w, h))
+        print(f"  ✂ Cropped image from {w}x{h} to {new_w}x{h} (1.91:1 ratio)")
 
     buf = io.BytesIO()
     img.save(buf, format="JPEG", quality=95)
@@ -55,10 +61,35 @@ def upload_image_to_imgbb(image_path: str) -> str:
 
 # ── Instagram (Meta Graph API) ────────────────────────────────────────────────
 
+def _post_first_comment(media_id: str, message: str, access_token: str):
+    """Drop a comment (typically the hashtags) on a freshly published IG post.
+    Keeps the caption clean and pushes hashtags to the first comment — current
+    IG reach best practice. Returns the comment ID, or None on failure (never
+    raises — the post itself already succeeded)."""
+    if not message.strip():
+        return None
+    try:
+        resp = requests.post(
+            f"https://graph.facebook.com/v19.0/{media_id}/comments",
+            data={"message": message, "access_token": access_token},
+            timeout=20,
+        )
+        if resp.ok:
+            cid = resp.json().get("id", "")
+            print(f"  ✓ First comment posted: {cid}")
+            return cid
+        print(f"  ⚠ First comment failed: {resp.status_code} — {resp.text[:200]}")
+    except Exception as e:
+        print(f"  ⚠ First comment exception: {e}")
+    return None
+
+
 def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: str) -> str:
-    """Publish an image post to Instagram. Returns post ID."""
+    """Publish an image post to Instagram. Returns post ID.
+    Hashtags are posted as the FIRST COMMENT (not appended to caption) —
+    current IG algorithm best practice for organic reach."""
     access_token = os.environ.get("META_PAGE_ACCESS_TOKEN") or os.environ["META_ACCESS_TOKEN"]
-    full_caption = f"{caption}\n\n{hashtags}"
+    full_caption = caption  # hashtags go in first comment, not caption
 
     container_resp = requests.post(
         f"https://graph.facebook.com/v19.0/{account_id}/media",
@@ -93,6 +124,7 @@ def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: s
         raise ValueError(f"Instagram publish error: {publish_resp.status_code} — {publish_resp.json()}")
     post_id = publish_resp.json()["id"]
     print(f"✓ Published to Instagram: {post_id}")
+    _post_first_comment(post_id, hashtags, access_token)
     return post_id
 
 
@@ -101,10 +133,10 @@ def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: s
 def publish_instagram_carousel(caption: str, hashtags: str, image_urls: list, account_id: str) -> str:
     """Publish a carousel (slideshow) post to Instagram. Returns post ID.
     image_urls: list of public image URLs (2-10 images).
-    """
+    Hashtags go in the first comment (IG reach best practice)."""
     import time
     access_token = os.environ.get("META_PAGE_ACCESS_TOKEN") or os.environ["META_ACCESS_TOKEN"]
-    full_caption = f"{caption}\n\n{hashtags}"
+    full_caption = caption
 
     # Step 1: Create individual media containers for each image
     children_ids = []
@@ -157,6 +189,7 @@ def publish_instagram_carousel(caption: str, hashtags: str, image_urls: list, ac
         raise ValueError(f"Carousel publish error: {publish_resp.status_code} — {publish_resp.json()}")
     post_id = publish_resp.json()["id"]
     print(f"✓ Published carousel to Instagram: {post_id} ({len(image_urls)} slides)")
+    _post_first_comment(post_id, hashtags, access_token)
     return post_id
 
 
