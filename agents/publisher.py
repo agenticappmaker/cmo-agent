@@ -86,10 +86,19 @@ def _post_first_comment(media_id: str, message: str, access_token: str):
 
 def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: str) -> str:
     """Publish an image post to Instagram. Returns post ID.
-    Hashtags are posted as the FIRST COMMENT (not appended to caption) —
-    current IG algorithm best practice for organic reach."""
+    Hashtag placement:
+      - If env CMO_IG_HASHTAGS_AS_COMMENT=1, hashtags go in the first comment
+        (requires instagram_manage_comments permission on the token).
+      - Otherwise (default), hashtags are appended to the caption behind a
+        buffer of dots so the actual copy reads cleanly above the fold.
+    """
     access_token = os.environ.get("META_PAGE_ACCESS_TOKEN") or os.environ["META_ACCESS_TOKEN"]
-    full_caption = caption  # hashtags go in first comment, not caption
+    use_first_comment = os.environ.get("CMO_IG_HASHTAGS_AS_COMMENT") == "1"
+    if use_first_comment or not hashtags:
+        full_caption = caption
+    else:
+        buffer = "\n.\n.\n.\n.\n.\n"
+        full_caption = f"{caption}{buffer}{hashtags}"
 
     container_resp = requests.post(
         f"https://graph.facebook.com/v19.0/{account_id}/media",
@@ -124,7 +133,8 @@ def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: s
         raise ValueError(f"Instagram publish error: {publish_resp.status_code} — {publish_resp.json()}")
     post_id = publish_resp.json()["id"]
     print(f"✓ Published to Instagram: {post_id}")
-    _post_first_comment(post_id, hashtags, access_token)
+    if use_first_comment and hashtags:
+        _post_first_comment(post_id, hashtags, access_token)
     return post_id
 
 
@@ -133,10 +143,15 @@ def publish_instagram(caption: str, hashtags: str, image_url: str, account_id: s
 def publish_instagram_carousel(caption: str, hashtags: str, image_urls: list, account_id: str) -> str:
     """Publish a carousel (slideshow) post to Instagram. Returns post ID.
     image_urls: list of public image URLs (2-10 images).
-    Hashtags go in the first comment (IG reach best practice)."""
+    Hashtag placement follows the same env flag as publish_instagram."""
     import time
     access_token = os.environ.get("META_PAGE_ACCESS_TOKEN") or os.environ["META_ACCESS_TOKEN"]
-    full_caption = caption
+    use_first_comment = os.environ.get("CMO_IG_HASHTAGS_AS_COMMENT") == "1"
+    if use_first_comment or not hashtags:
+        full_caption = caption
+    else:
+        buffer = "\n.\n.\n.\n.\n.\n"
+        full_caption = f"{caption}{buffer}{hashtags}"
 
     # Step 1: Create individual media containers for each image
     children_ids = []
@@ -189,7 +204,8 @@ def publish_instagram_carousel(caption: str, hashtags: str, image_urls: list, ac
         raise ValueError(f"Carousel publish error: {publish_resp.status_code} — {publish_resp.json()}")
     post_id = publish_resp.json()["id"]
     print(f"✓ Published carousel to Instagram: {post_id} ({len(image_urls)} slides)")
-    _post_first_comment(post_id, hashtags, access_token)
+    if use_first_comment and hashtags:
+        _post_first_comment(post_id, hashtags, access_token)
     return post_id
 
 

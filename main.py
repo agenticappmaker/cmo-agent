@@ -301,11 +301,13 @@ def cmd_post_now(brand: str, platform: str, topic: str = None, force: bool = Fal
             post["post_idea"] = ss_post.get("post_idea", post.get("post_idea", ""))
             post["reasoning"] = ss_post.get("reasoning", "")
             # Mark this screenshot as posted by moving it into screenshots/posted/
+            # AFTER the move, update image_path so the upload step finds the file.
             posted_dir = screenshots_dir / "posted"
             posted_dir.mkdir(exist_ok=True)
             try:
                 dest = posted_dir / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{chosen.name}"
                 chosen.rename(dest)
+                image_path = str(dest)
                 print(f"  📁 Moved to screenshots/posted/{dest.name}")
             except Exception as _mv_err:
                 print(f"  ⚠ Could not move screenshot: {_mv_err}")
