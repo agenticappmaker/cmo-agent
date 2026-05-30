@@ -308,13 +308,13 @@ def _render_cold(profile: dict, lead: dict, demo_url: str | None) -> str:
 
 
 def _render_followup(profile: dict, lead: dict) -> str:
-    name = lead.get("name", "")
+    name = lead.get("name", "your business")
     return (
-        f"Hi — following up on the note I sent last week about {name}.\n\n"
-        "If the timing's right, reply with which of the three ideas resonated most "
-        "and I'll send a one-pager + price. If it's not — totally fine, no follow-up after this one.\n\n"
-        f"{profile['identity']['signature']}\n\n"
-        f"{profile['opt_out']['footer']}"
+        f"Hi {name} team,\n\n"
+        "Following up in case my first note got buried. No hard sell — just a quick reminder that "
+        f"I build AI tools + websites and would happily spend 10 min showing you what a simple one would look like for {name}.\n\n"
+        "If timing's bad, reply 'not now' and I'll leave you alone.\n\n"
+        f"{profile['identity']['signature']}"
     )
 
 
@@ -322,8 +322,7 @@ def _render_breakup(profile: dict, lead: dict) -> str:
     return (
         "Last note from me on this. If any of these ideas land in the future, you know where to find me — "
         f"otherwise I'll stop here and won't email again.\n\n"
-        f"{profile['identity']['signature']}\n\n"
-        f"{profile['opt_out']['footer']}"
+        f"{profile['identity']['signature']}"
     )
 
 

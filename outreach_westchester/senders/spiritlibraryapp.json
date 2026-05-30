@@ -1,17 +1,18 @@
 {
   "name": "spiritlibraryapp",
-  "version": 1,
-  "description": "Spirit Library QR-coaster partnership outreach to hospitality leads. Sends from spiritlibraryapp@gmail.com. Hospitality-only category filter. Lightweight quality sort (real website + business email first). Auto-sends.",
+  "version": 2,
+  "description": "Spirit Library QR-coaster partnership outreach to hospitality leads. Sends from spiritlibraryapp@gmail.com. Hospitality-only category filter. Conversational founder-to-bar-owner pattern: Steven introduces himself + Spirit Library + soft 10-min ask. Auto-sends. 2 stages (cold + followup), no breakup. Reverted 2026-05-29 to pre-2026-05-21 pattern after reply rate drop. PNG coaster attachments dropped from cold (were spam-coding the message).",
   "owner": "Steven Samori",
   "created": "2026-05-21",
+  "updated": "2026-05-29",
 
   "identity": {
     "email": "spiritlibraryapp@gmail.com",
-    "from_name": "Steven | Spirit Library",
+    "from_name": "Steven Samori",
     "smtp_user_env": "SPIRIT_GMAIL_USER",
     "smtp_pass_env": "SPIRIT_GMAIL_APP_PASSWORD",
-    "signature": "— Steven\nSpirit Library",
-    "persona_voice": "Warm, hospitality-fluent. Pitch is a free gift (coasters) + a tool that helps their bartenders. Never pushy."
+    "signature": "Best,\nSteven Samori\nSmore Labs",
+    "persona_voice": "Founder-to-bar-owner. Warm, curious, hospitality-fluent. Lead with the product + soft offer. Never a product menu."
   },
 
   "audience": {
@@ -43,12 +44,10 @@
 
   "pitch_pack": {
     "subjects": [
-      "QR coasters for {name} — free tool",
-      "Free QR coasters for {name}'s bar",
-      "{name} — quick partnership idea (zero cost)"
+      "QR coasters for your bar — free tool"
     ],
-    "subject_strategy": "rotate_by_category_then_hash",
-    "body_template": "Your email was found by an agent — this one's typed and sent by one too.\n\nI run Spirit Library — a free cocktail-recipe app with 1,700+ recipes, a My Bar filter, and the ability for bars to upload their own house menu so their cocktails show first.\n\nQuick offer for {name}:\n\n  • Free branded QR coasters (we print + ship) — guests scan, see your house menu inside Spirit Library plus 1,700 backup recipes\n  • Free bartender training reference — new hires look up techniques + recipes by ingredient stock\n  • Soft AI tools we can layer on later — reservations bot, 24/7 guest FAQ, automated review replies\n\nNo cost, no contract, no clawback. Two attached PNGs show the coaster design.\n\nIf this is interesting, reply with a shipping address and how many coasters fit your bar (most spots want 100–200).\n\n— Steven\nSpirit Library\n\nReply STOP to be removed from this list.",
+    "subject_strategy": "single",
+    "body_template": "Hi {name} team,\n\nYour email was found by an agent — this one's typed and sent by one too.\n\nI'm Steven, maker of Spirit Library (https://spiritlibrary.app), a cocktail app with 1,700+ recipes that's live on the App Store (https://apps.apple.com/us/app/spirit-library/id6761500950). Some bars and restaurants are starting to use it as a customer-facing tool via QR-code coasters:\n\n  • Guests scan → instant access to a curated cocktail library, way wider than any printed menu\n  • You upload your own menu → your specs appear first, with pairings and tasting notes\n  • Behind the bar → new-hire training, quick recipe lookup, technique references\n\nFree to try. I can set up your QR + branded menu for {name} in a day.\n\nIf you're also curious where AI could fit elsewhere in {name} (reservations bot, 24/7 guest FAQ, automated review replies), I do that work too — happy to show you what's possible on a 10-min call.\n\nAlso currently building for clients: Supreme Seams (https://supreme-seams.com), a 1,530-model RV configurator (https://rv-there-yet-weld.vercel.app), and a 648K-product EU-safe ingredient checker (https://eu-approved.vercel.app).\n\nBest,\nSteven Samori\nSmore Labs\n\n—\nThis is a one-time intro from Steven Samori. Not interested? Reply 'unsubscribe' and I'll remove you immediately.\nSmore Labs · Westchester County, NY",
     "personalization": {
       "type": "template_var",
       "vars": {"name": "row.name", "category": "row.category", "town": "row.town"},
@@ -59,10 +58,7 @@
         "https://spiritlibrary.app",
         "https://apps.apple.com/us/app/spirit-library/id6761500950"
       ],
-      "attached_images": [
-        "~/spirit-merch/output/ai-coasters/spirit-coaster-side-B.png",
-        "~/spirit-merch/output/ai-coasters/spirit-coaster-4in-square.png"
-      ]
+      "attached_images": []
     }
   },
 
@@ -72,11 +68,12 @@
   },
 
   "cadence": {
-    "stages": ["cold", "followup", "breakup"],
-    "intervals_days": {"cold_to_followup": 10, "followup_to_breakup": 7},
-    "max_stages": 3,
+    "stages": ["cold", "followup"],
+    "intervals_days": {"cold_to_followup": 10},
+    "max_stages": 2,
     "auto_pause_on_reply": true,
-    "auto_pause_on_optout": true
+    "auto_pause_on_optout": true,
+    "comment": "Reverted 2026-05-29: dropped 'breakup' stage to match pre-2026-05-21 pattern."
   },
 
   "rate_limits": {
@@ -87,8 +84,9 @@
 
   "opt_out": {
     "method": "reply_based",
-    "footer": "Reply STOP to be removed from this list.",
-    "suppression_list": "state/optout.txt"
+    "footer": "",
+    "suppression_list": "state/optout.txt",
+    "comment": "Footer is in the body_template (soft CAN-SPAM). The old 'Reply STOP to be removed from this list' inline-body language was bulk-SMS coded — dropped."
   },
 
   "bounce_hygiene": {

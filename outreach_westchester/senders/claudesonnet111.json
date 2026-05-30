@@ -1,24 +1,25 @@
 {
   "name": "claudesonnet111",
-  "version": 1,
-  "description": "AI consulting outreach to Westchester/Tri-state SMBs. Sources axon-graded leads with per-lead ai_leverage_summary as the personalized opener. Auto-sends. Best leads (highest grade) ship first each day.",
+  "version": 2,
+  "description": "AI consulting outreach to Westchester/Tri-state SMBs. Sources axon-graded leads (used for sort + filter only). Conversational founder-to-owner pattern: Steven introduces himself + shows shipped work + asks for a 10-min call. Auto-sends. 2 stages (cold + followup), no breakup. Reverted 2026-05-29 to pre-2026-05-21 pattern after reply rate drop.",
   "owner": "Steven Samori",
   "created": "2026-05-21",
+  "updated": "2026-05-29",
 
   "identity": {
     "email": "claudesonnet111@gmail.com",
-    "from_name": "Steven",
+    "from_name": "Steven Samori",
     "smtp_user_env": "GMAIL_USER",
     "smtp_pass_env": "GMAIL_APP_PASSWORD",
-    "signature": "— Steven\nSmore Labs · Westchester County, NY",
-    "persona_voice": "Direct, founder-to-owner. Lead with a specific operational gap the recipient has. No marketing fluff."
+    "signature": "Best,\nSteven Samori\nSmore Labs",
+    "persona_voice": "Founder-to-owner. Warm, curious, low-stakes. Lead with who you are + what you've shipped. Soft 10-min ask, never a product menu."
   },
 
   "audience": {
     "source": {
       "type": "csv",
       "path": "/Users/claudecode/axon/state/heuristic_grades.csv",
-      "comment": "Axon heuristic grader output. Provides grade_letter, grade_score, ai_leverage_summary, pitch_options, gaps, geo_tier, fetch_status."
+      "comment": "Axon heuristic grader output. Used for sort + filter ONLY — the ai_leverage_summary / pitch_options fields are NOT injected into the email body anymore (that was the audit-feel pattern that killed replies)."
     },
     "filter": {
       "require_email": true,
@@ -36,24 +37,24 @@
 
   "pitch_pack": {
     "subjects": [
-      "Where does AI fit into your business model?",
-      "Quick question about {name}'s after-hours calls",
-      "Saw {name}'s site — one AI tool that would pay for itself"
+      "Where does ai fit into your business model?"
     ],
-    "subject_strategy": "rotate_by_grade_letter_then_hash",
-    "body_template": "Your email was found by an agent. This one was typed and sent by one too. You'd be surprised what else AI can do for a {trade} shop in {town}.\n\n{ai_lead}\n\nWe build small, paid-once tools that fix that — typically one of:\n\n  • {pitch_1_title} — {pitch_1_oneliner}\n  • {pitch_2_title} — {pitch_2_oneliner}\n  • {pitch_3_title} — {pitch_3_oneliner}\n\n{demo_block}If any of those land, reply with which one and I'll send a one-pager and a price.\n\n— Steven\nSmore Labs · Westchester County, NY\n\nReply STOP to be removed from this list.",
+    "subject_strategy": "single",
+    "body_template": "Hi {name} team,\n\nYour email was found by an agent, this email was typed by an agent and sent by an agent. You'd be surprised to find what else AI is capable of.\n\nI'm Steven, and I build small AI agents and websites for small businesses in Westchester. The same tech that found and wrote this can also answer basic questions on your site 24/7, capture leads at 2am when you're asleep, and send you a clean summary every morning — exactly the kind of follow-up most {trade} shops lose outside business hours. Takes a few days. Costs way less than one lost job pays.\n\nProof I ship — Spirit Library, live on the App Store with 1,700+ recipes and autonomous agents running it 24/7. Site: https://spiritlibrary.app. Direct App Store download: https://apps.apple.com/us/app/spirit-library/id6761500950.\n\nI'm also currently building for clients: Supreme Seams (Pleasantville auto upholstery — https://supreme-seams.com), a 1,530-model RV configurator (https://rv-there-yet-weld.vercel.app), and a 648K-product EU-safe ingredient checker (https://eu-approved.vercel.app).\n\n{demo_block}Open to a 10-min call? I'll show you a mock of what I'd build for {name}.\n\nBest,\nSteven Samori\nSmore Labs\n\n—\nThis is a one-time intro from Steven Samori. Not interested? Reply 'unsubscribe' and I'll remove you immediately.\nSmore Labs · Westchester County, NY",
     "demo_block_when_present": "I built a quick proof of concept for {name} — take a look: {demo_url}\n\n",
     "personalization": {
-      "type": "axon_summary",
-      "summary_field": "ai_leverage_summary",
-      "pitch_options_field": "pitch_options",
-      "fallback_opener": "Most {trade} shops in {town} are losing after-hours leads to voicemail and one-off Wix sites. There's a one-time, AI-leveraged fix for each of those."
+      "type": "template_var",
+      "vars": {"name": "row.name", "trade": "row.trade", "town": "row.town"},
+      "fallback_opener": null,
+      "comment": "Switched from axon_summary back to template_var on 2026-05-29. The axon_summary opener was reading as an AI audit of the recipient's business, which felt presumptuous and killed replies."
     },
     "proof_assets": {
       "default": [
-        "https://supreme-seams.com (built for a Pleasantville auto-upholstery shop)",
-        "https://rv-there-yet-weld.vercel.app (1,530-model RV configurator)",
-        "https://4seasons-organic.vercel.app (Westchester organic cleaners)"
+        "https://spiritlibrary.app",
+        "https://apps.apple.com/us/app/spirit-library/id6761500950",
+        "https://supreme-seams.com",
+        "https://rv-there-yet-weld.vercel.app",
+        "https://eu-approved.vercel.app"
       ]
     }
   },
@@ -72,11 +73,12 @@
   },
 
   "cadence": {
-    "stages": ["cold", "followup", "breakup"],
-    "intervals_days": {"cold_to_followup": 4, "followup_to_breakup": 7},
-    "max_stages": 3,
+    "stages": ["cold", "followup"],
+    "intervals_days": {"cold_to_followup": 4},
+    "max_stages": 2,
     "auto_pause_on_reply": true,
-    "auto_pause_on_optout": true
+    "auto_pause_on_optout": true,
+    "comment": "Reverted 2026-05-29: dropped 'breakup' stage. The 'Last note from me on this' email broadcasts that this is automated cadence outreach and pushes recipients away. Old pattern was cold + ONE soft followup."
   },
 
   "rate_limits": {
@@ -87,8 +89,9 @@
 
   "opt_out": {
     "method": "reply_based",
-    "footer": "Reply STOP to be removed from this list.",
-    "suppression_list": "state/optout.txt"
+    "footer": "",
+    "suppression_list": "state/optout.txt",
+    "comment": "Footer is empty because the body_template already includes the soft CAN-SPAM footer ('Reply unsubscribe...'). The old 'Reply STOP to be removed from this list' language was bulk-SMS coded — dropped."
   },
 
   "bounce_hygiene": {
