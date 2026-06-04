@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 Scan BOTH outreach Gmail inboxes for replies and triage them.
 
