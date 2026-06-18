@@ -27,8 +27,8 @@
       "skip_geo_tiers": []
     },
     "sort": [
-      {"field": "lane_priority", "desc": true},
-      {"field": "scraped_at", "desc": true}
+      {"field": "lane_priority", "desc": false},
+      {"field": "scraped_at", "desc": false}
     ]
   },
 
@@ -98,9 +98,9 @@
   },
 
   "approval": {
-    "auto_send": false,
-    "review_required": true,
-    "comment": "Gated until Steven approves the first canary batch. Flip to true once drafts look right."
+    "auto_send": true,
+    "review_required": false,
+    "comment": "Authorized 2026-06-17 evening — Steven reviewed the first 5 drafts (Amy Coleman/MS, Gloria Chen/Adobe, Nathalie Scardino/SFDC, Kelly Jones/Cisco, Jacqui Canney/SNOW) and gave go-ahead for current + future auto-send. Cadence stays at 3/day, 1/hour."
   },
 
   "integration": {

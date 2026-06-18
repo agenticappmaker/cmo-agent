@@ -256,13 +256,20 @@ def pick_stage(sent_for_lead: dict, profile: dict) -> str | None:
 
 def render_subject(profile: dict, lead: dict, stage: str) -> tuple[str, int]:
     subjects = profile["pitch_pack"]["subjects"]
+    # Expose every lead field as a template var, plus a 'name' fallback for
+    # legacy profiles. Missing keys default to empty so a typo doesn't crash
+    # the whole batch (matters now that hr_advisory uses {company}, etc.).
+    class _SafeDict(dict):
+        def __missing__(self, key): return ""
+    fmt_vars = _SafeDict(lead)
+    fmt_vars.setdefault("name", lead.get("name", "your business"))
     if stage == "followup":
-        return (f"Re: {subjects[0].format(name=lead.get('name','your business'))}", 0)
+        return (f"Re: {subjects[0].format_map(fmt_vars)}", 0)
     if stage == "breakup":
         return ("Last note", 0)
     # cold — rotate by hash of email
     idx = abs(hash(lead["_email"])) % len(subjects)
-    return (subjects[idx].format(name=lead.get("name", "your business")), idx)
+    return (subjects[idx].format_map(fmt_vars), idx)
 
 
 def render_body(profile: dict, lead: dict, stage: str, demo_url: str | None) -> str:
@@ -287,6 +294,13 @@ def _render_cold(profile: dict, lead: dict, demo_url: str | None) -> str:
         "pitch_2_title": "", "pitch_2_oneliner": "",
         "pitch_3_title": "", "pitch_3_oneliner": "",
     }
+    # Honor profile.personalization.vars — declared mapping of template
+    # variable → lead field. Lets new profiles (hr_advisory uses
+    # {first_name}/{company}) work without baking each var into ctx here.
+    if p.get("type") == "template_var":
+        for tmpl_var, source in (p.get("vars") or {}).items():
+            if isinstance(source, str) and source.startswith("row."):
+                ctx[tmpl_var] = lead.get(source[len("row."):], "")
     if p["type"] == "axon_summary":
         summary = (lead.get(p["summary_field"]) or "").strip()
         ctx["ai_lead"] = summary or p.get("fallback_opener", "").format(**ctx)
@@ -299,12 +313,11 @@ def _render_cold(profile: dict, lead: dict, demo_url: str | None) -> str:
             ctx[f"pitch_{i}_oneliner"] = pitch.get("one_liner", "")
     if demo_url:
         ctx["demo_block"] = profile["pitch_pack"]["demo_block_when_present"].format(name=ctx["name"], demo_url=demo_url)
-    try:
-        return tmpl.format(**ctx)
-    except KeyError as e:
-        # if a template asks for a key we didn't supply, render with blanks
-        ctx[str(e).strip("'")] = ""
-        return tmpl.format(**ctx)
+    # Use format_map + a defaulting dict so any missing var renders blank
+    # instead of crashing the whole batch.
+    class _SafeDict(dict):
+        def __missing__(self, key): return ""
+    return tmpl.format_map(_SafeDict(ctx))
 
 
 def _render_followup(profile: dict, lead: dict) -> str:
