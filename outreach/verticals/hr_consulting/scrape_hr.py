@@ -42,7 +42,11 @@ UNVERIFIED_CSV = THIS / "leads_unverified.csv"  # written by the no-verify path
 
 CLIENT = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 MODEL = "claude-haiku-4-5-20251001"
-VERIFY_MODEL = "claude-sonnet-4-6"  # web_search tool needs Sonnet+
+
+# Wire in the project-wide search wrapper so verification uses the
+# free-first cascade (Brave free 2000/mo → Exa → Anthropic web_search).
+sys.path.insert(0, str(Path.home() / "cmo-agent" / "agents"))
+from search import search as web_search, has_provider  # noqa: E402
 
 
 def _prompt(seed: dict) -> str:
@@ -118,40 +122,57 @@ def enrich_seed(seed: dict) -> dict | None:
 
 
 def verify_row(row: dict) -> tuple[bool, str]:
-    """Use Claude Sonnet's web_search tool to verify name+title+company is real
-    and current. Returns (is_verified, reason)."""
-    q = f"{row['first_name']} {row['last_name']} {row['title']} {row['company']}"
+    """Verify name+title+company via web search, then ask Haiku to evaluate
+    the snippets. Free when BRAVE_SEARCH_API_KEY is set (free 2000/mo);
+    falls through to Exa or Anthropic web_search if Brave isn't keyed.
+    Returns (is_verified, reason)."""
+    full = f"{row['first_name']} {row['last_name']}"
+    q = f'"{full}" "{row["company"]}" {row["title"]}'
+    try:
+        results = web_search(q, n=5, mode="auto")
+    except Exception as e:
+        return False, f"search failed: {e}"
+
+    if not results:
+        return False, "no search results (Brave/Exa unkeyed AND Anthropic fallback returned empty?)"
+
+    # Compact snippet bundle for Haiku evaluation. Trim aggressively.
+    snippet_text = "\n".join(
+        f"[{i+1}] {r.get('title','')[:140]} — {r.get('snippet','')[:240]} ({r.get('url','')})"
+        for i, r in enumerate(results[:5])
+    )
     prompt = (
-        f"Verify whether '{row['first_name']} {row['last_name']}' currently holds the title "
-        f"'{row['title']}' at {row['company']}. Search the web. Return STRICT JSON: "
-        f'{{"is_verified": true|false, "reason": "1 sentence with the source URL or what you found"}}'
+        f"Does the public web confirm that {full} currently holds the title "
+        f"'{row['title']}' at {row['company']}? Be skeptical — only mark verified "
+        f"if a result explicitly mentions both the person AND the role at the "
+        f"company. A LinkedIn profile or company press release counts. Wrong-person "
+        f"matches (different industry, different role, different company) = NOT verified.\n\n"
+        f"Search results:\n{snippet_text}\n\n"
+        f'Return STRICT JSON: {{"is_verified": true|false, "reason": "1 sentence with the source URL"}}'
     )
     try:
         msg = CLIENT.messages.create(
-            model=VERIFY_MODEL,
-            max_tokens=512,
-            tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 2}],
+            model=MODEL,
+            max_tokens=256,
             messages=[{"role": "user", "content": prompt}],
         )
-        # Find the final text block (after tool calls)
-        text = ""
-        for block in msg.content:
-            if getattr(block, "type", None) == "text":
-                text = block.text.strip()
+        text = msg.content[0].text.strip()
         if text.startswith("```"):
             text = text.split("\n", 1)[1].rsplit("```", 1)[0]
         data = json.loads(text)
         return bool(data.get("is_verified")), data.get("reason", "")
     except Exception as e:
-        return False, f"verification failed: {e}"
+        return False, f"haiku eval failed: {e}"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--verify", action="store_true",
                     help="Verify each name+title via web search before writing to leads.csv. "
-                         "Costs ~$0.01/lead in Anthropic credits. Without this flag, output "
-                         "lands in leads_unverified.csv and the drafter refuses to read it.")
+                         "Free when BRAVE_SEARCH_API_KEY is set in ~/cmo-agent/.env (Brave free "
+                         "tier covers 2000 queries/mo). Falls back to Exa or Anthropic web_search "
+                         "(~$0.01/lead) if no key. Without --verify, output lands in "
+                         "leads_unverified.csv and the drafter refuses to read it.")
     args = ap.parse_args()
 
     seeds = json.loads(SEEDS.read_text())["seeds"]
@@ -169,7 +190,8 @@ def main() -> None:
         sys.exit(1)
 
     if args.verify:
-        print(f"\n🔎 Verifying {len(rows)} rows via Claude Sonnet web_search…")
+        provider = "Brave/Exa (free)" if has_provider() else "Anthropic web_search fallback (paid)"
+        print(f"\n🔎 Verifying {len(rows)} rows via {provider}…")
         verified: list[dict] = []
         for r in rows:
             ok, reason = verify_row(r)
