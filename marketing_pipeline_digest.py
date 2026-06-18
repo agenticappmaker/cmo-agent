@@ -586,10 +586,24 @@ def main():
         except Exception:
             pass
 
-    hr_sent_24h = sum(1 for r in load_csv(HR_LOG, yesterday) if r.get("status") == "sent")
+    hr_sent_24h_rows = [r for r in load_csv(HR_LOG, yesterday) if r.get("status") == "sent"]
     hr_sent_7d  = sum(1 for r in load_csv(HR_LOG, week_ago) if r.get("status") == "sent")
+    hr_sent_24h = len(hr_sent_24h_rows)
+    hr_sent_lifetime_log = sum(1 for r in load_csv(HR_LOG) if r.get("status") == "sent") if HR_LOG.exists() else 0
 
-    if hr_leads_n or hr_drafts_queued or hr_sent_7d:
+    # Build a {email → "First Last"} map from leads.csv so the digest can show
+    # who actually got the email yesterday, not just a count.
+    hr_name_by_email: dict[str, str] = {}
+    if HR_LEADS.exists():
+        try:
+            for row in csv.DictReader(open(HR_LEADS)):
+                addr = (row.get("email") or "").lower()
+                if addr:
+                    hr_name_by_email[addr] = f"{row.get('first_name','')} {row.get('last_name','')}".strip()
+        except Exception:
+            pass
+
+    if hr_leads_n or hr_drafts_queued or hr_sent_7d or hr_sent_lifetime_log:
         lines.append("<h2>🧑‍💼 HR Advisory lane</h2>")
         refresh_age = ""
         if hr_leads_mtime:
@@ -602,12 +616,35 @@ def main():
         lines.append(f"<tr><td>Verified leads in pool</td><td><b>{hr_leads_n}</b>{refresh_age}</td><td class='muted'>Brave-discovered HR execs at F500 + mid-market + consulting firms</td></tr>")
         lines.append(f"<tr><td>Drafts queued (awaiting review)</td><td><b>{hr_drafts_queued}</b></td><td class='muted'>{HR_DRAFTS.relative_to(ROOT) if HR_DRAFTS.exists() else 'outreach/hr_advisory_drafts.json'}</td></tr>")
         lines.append(f"<tr><td>Sends — last 24h / 7d</td><td><b>{hr_sent_24h}</b> / <b>{hr_sent_7d}</b></td><td class='muted'>From claudesonnet111@gmail.com · sub-brand 'Smore Labs AI Advisory'</td></tr>")
-        lines.append(f"<tr><td>Drafts sent (lifetime)</td><td><b>{hr_drafts_sent_lifetime}</b></td><td class='muted'></td></tr>")
+        lines.append(f"<tr><td>Total sent (lifetime)</td><td><b>{hr_sent_lifetime_log}</b></td><td class='muted'>From the engine's send log</td></tr>")
         lines.append(f"<tr><td>Next monthly refresh</td><td>{HR_NEXT_REFRESH}</td><td class='muted'>Aligned with Brave $5 free-credit anniversary</td></tr>")
         lines.append("</table>")
+
+        # Yesterday's actual sends — name, company, subject variant. This is
+        # the "who got hit today" view Steven asked for so the lane isn't a
+        # black box once auto-send goes live.
+        if hr_sent_24h_rows:
+            lines.append("<p style='margin-top:14px'><b>Yesterday's sends</b></p>")
+            lines.append("<table>")
+            lines.append("<tr><th>Sent at</th><th>Recipient</th><th>Company</th><th class='muted'>Subject variant</th></tr>")
+            for r in hr_sent_24h_rows[-10:]:
+                ts = r.get("timestamp_utc", "")[:16].replace("T", " ")
+                addr = (r.get("email") or "").lower()
+                nm = hr_name_by_email.get(addr, "")
+                co = r.get("company", "")
+                subj = r.get("subject_variant", "")
+                lines.append(f"<tr><td class='muted' style='font-size:12px'>{ts}</td>"
+                             f"<td><b>{nm}</b><br><code style='font-size:11px'>{addr}</code></td>"
+                             f"<td>{co}</td>"
+                             f"<td class='muted' style='font-size:12px'>{subj}</td></tr>")
+            lines.append("</table>")
+        else:
+            lines.append("<p class='muted' style='font-size:12px'>No HR Advisory sends in the last 24h "
+                         "(next batch fires daily at 13:00 ET via <code>com.smorelabs.hr-advisory-send</code>).</p>")
+
         lines.append("<p class='muted' style='font-size:12px'>"
                      "Approve drafts: edit <code>outreach/hr_advisory_drafts.json</code> set status drafted → approved. "
-                     "Flip auto-send: <code>senders/hr_advisory.json</code> approval.auto_send → true.</p>")
+                     "Auto-send is ON for hr_advisory as of 2026-06-17.</p>")
 
     # ─── Social ───────────────────────────────────────────────────
     lines.append("<h2>📱 Social posts (last 24h)</h2>")
