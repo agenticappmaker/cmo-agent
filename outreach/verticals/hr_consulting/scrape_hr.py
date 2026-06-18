@@ -169,9 +169,10 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--verify", action="store_true",
                     help="Verify each name+title via web search before writing to leads.csv. "
-                         "Free when BRAVE_SEARCH_API_KEY is set in ~/cmo-agent/.env (Brave free "
-                         "tier covers 2000 queries/mo). Falls back to Exa or Anthropic web_search "
-                         "(~$0.01/lead) if no key. Without --verify, output lands in "
+                         "Effectively free when BRAVE_SEARCH_API_KEY is set in ~/cmo-agent/.env "
+                         "— Brave gives $5/mo auto-credit at $5/1000 requests, so the first ~1000 "
+                         "verifications per month cost $0. Falls back to Exa or Anthropic "
+                         "web_search (~$0.01/lead) if no key. Without --verify, output lands in "
                          "leads_unverified.csv and the drafter refuses to read it.")
     args = ap.parse_args()
 
