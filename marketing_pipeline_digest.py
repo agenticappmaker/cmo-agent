@@ -288,6 +288,53 @@ def main():
         for a in actions: lines.append(f"<li>{a}</li>")
         lines.append("</ol></div>")
 
+    # ─── Users (Spirit Library, via PostHog DAU pipeline) ─────────
+    import sqlite3 as _sq
+    DAU_DB = Path.home() / "spirit-library-dau" / "history.sqlite"
+    lines.append("<h2>👥 Users — Spirit Library (PostHog)</h2>")
+    if DAU_DB.exists():
+        try:
+            _c = _sq.connect(str(DAU_DB))
+            _daily = _c.execute("select day,dau from daily order by day desc limit 1").fetchone()
+            _rm = _c.execute("select mau_30d,lifetime_installs,lifetime_users from run_meta order by run_at desc limit 1").fetchone()
+            _new24 = _c.execute("select count(*) from seen_users where first_seen>=?", ((now - timedelta(hours=24)).isoformat(),)).fetchone()[0]
+            _new7 = _c.execute("select count(*) from seen_users where first_seen>=?", ((now - timedelta(days=7)).isoformat(),)).fetchone()[0]
+            # Instacart events live in daily.events_json (DAU pipeline records every
+            # event name per day). Sum across the 2 most recent snapshot days.
+            _ic_clicks = _ic_carts = 0
+            _ic_seen = False
+            for _row in _c.execute("select events_json from daily order by day desc limit 2").fetchall():
+                try:
+                    _ev = json.loads(_row[0] or "{}")
+                except Exception:
+                    _ev = {}
+                if "instacart_clicked" in _ev or "instacart_cart_created" in _ev:
+                    _ic_seen = True
+                _ic_clicks += int(_ev.get("instacart_clicked", 0))
+                _ic_carts += int(_ev.get("instacart_cart_created", 0))
+            _c.close()
+            dau_now = _daily[1] if _daily else 0
+            dau_day = _daily[0] if _daily else "—"
+            mau, installs, users = (_rm if _rm else (0, 0, 0))
+            stale = ""
+            try:
+                if _daily and (datetime.now().date() - datetime.fromisoformat(_daily[0]).date()).days > 2:
+                    stale = f" <span class='muted' style='font-weight:400'>(snapshot {dau_day})</span>"
+            except Exception:
+                pass
+            lines.append("<table>")
+            lines.append(f"<tr><th>DAU{stale}</th><th>MAU 30d</th><th>New 24h</th><th>New 7d</th><th>Lifetime users</th><th>Installs</th></tr>")
+            lines.append(f"<tr><td><b>{dau_now}</b></td><td><b>{mau}</b></td><td><b style='color:#0a6'>{_new24}</b></td><td>{_new7}</td><td>{users}</td><td>{installs}</td></tr>")
+            lines.append("</table>")
+            if not _ic_seen:
+                lines.append("<p class='muted'>🛒 Instacart: tracking instrumented — events appear here once the app OTA ships.</p>")
+            else:
+                lines.append(f"<p>🛒 Instacart (recent): <b>{_ic_clicks}</b> taps · <b>{_ic_carts}</b> carts created</p>")
+        except Exception as e:
+            lines.append(f"<p class='muted'>DAU read error: {e}</p>")
+    else:
+        lines.append("<p class='muted'>DAU history not found — check ~/spirit-library-dau</p>")
+
     # ─── Outbound ─────────────────────────────────────────────────
     lines.append("<h2>📤 Outbound (last 24h)</h2>")
     lines.append("<table>")
@@ -295,6 +342,81 @@ def main():
     lines.append(f"<tr><td><span class='biz'>Spirit Library</span> bars/restaurants/brands</td><td><b>{sl_24h_ok}</b></td><td>{sl_24h_stages.get('cold',0)}</td><td>{sl_24h_stages.get('followup',0)}</td><td>{sum(1 for r in sl_7d if r.get('status')=='sent')}</td></tr>")
     lines.append(f"<tr><td><span class='biz'>Westchester</span> AI consulting</td><td><b>{wx_24h_ok}</b></td><td>{wx_24h_stages.get('cold',0)}</td><td>{wx_24h_stages.get('followup',0)}</td><td>{sum(1 for r in wx_7d if r.get('status')=='sent')}</td></tr>")
     lines.append("</table>")
+
+    # ─── Brand Collective (co-branding campaign) ──────────────────
+    import glob as _glob
+    BC = Path.home() / "cmo-agent" / "outreach"
+
+    def _bc_csv(path, since=None):
+        if not path.exists():
+            return []
+        rows = list(csv.DictReader(open(path)))
+        if since:
+            rows = [r for r in rows if (d := parse_iso(r.get("ts_utc", ""))) and d >= since]
+        return rows
+
+    bc_sent_24 = [r for r in _bc_csv(BC / "logs" / "brand_collective_sent.csv", yesterday) if r.get("status") == "sent"]
+    bc_sent_7 = [r for r in _bc_csv(BC / "logs" / "brand_collective_sent.csv", week_ago) if r.get("status") == "sent"]
+    bc_by_vert = Counter(r.get("vertical", "?") for r in bc_sent_24)
+    bc_q = []
+    try:
+        bc_q = json.load(open(BC / "brand_collective_queue.json"))
+    except Exception:
+        pass
+    bc_status = Counter(r.get("status") for r in bc_q)
+    bc_bounce_24 = _bc_csv(BC / "logs" / "brand_collective_bounces.csv", yesterday)
+    bc_bounced_addrs = sorted({r["email"] for r in bc_bounce_24 if "bounced" in (r.get("action") or "")})
+    _td = datetime.now().strftime("%Y-%m-%d")
+    scrape_files = _glob.glob(str(BC / "staged" / f"*-nightly-{_td}.json"))
+    scrape_leads = 0
+    for sf in scrape_files:
+        try:
+            scrape_leads += len(json.load(open(sf)))
+        except Exception:
+            pass
+
+    lines.append("<h2>🥃 Brand Collective (co-branding)</h2>")
+    lines.append(
+        f"<p>Delivered <b>{len(bc_sent_24)}</b> in 24h · <b>{len(bc_sent_7)}</b> in 7d "
+        f"&nbsp;·&nbsp; queue: <b>{bc_status.get('pending',0)}</b> pending / "
+        f"{bc_status.get('sent',0)} sent / <b style='color:#b00020'>{bc_status.get('bounced',0)}</b> bounced</p>"
+    )
+    if bc_by_vert:
+        lines.append("<table><tr><th>Vertical</th><th>Delivered 24h</th></tr>")
+        for v, n in bc_by_vert.most_common():
+            lines.append(f"<tr><td>{v}</td><td><b>{n}</b></td></tr>")
+        lines.append("</table>")
+    _bnote = " — auto-deleted from Sent + replacement fired" if bc_bounced_addrs else ""
+    lines.append(
+        f"<p>↩️ Bounced: <b style='color:#b00020'>{len(bc_bounced_addrs)}</b> of "
+        f"<b>{len(bc_sent_24)}</b> sent (24h){_bnote}</p>"
+    )
+    if scrape_files:
+        lines.append(f"<p>🌙 Nightly scrape: <b>{scrape_leads}</b> new leads added ✓</p>")
+    else:
+        lines.append("<p>🌙 Nightly scrape: <b style='color:#b00020'>no file today</b> — check <code>nightly_scrape.log</code></p>")
+
+    # ─── Smore Labs SMB outreach (claudesonnet111 — "activate Claude for SMBs") ──
+    SMB = Path.home() / "cmo-agent" / "outreach" / "smb_national"
+    smb_sent_24 = [r for r in _bc_csv(SMB / "logs" / "sent.csv", yesterday) if r.get("status") == "sent"]
+    smb_sent_7 = [r for r in _bc_csv(SMB / "logs" / "sent.csv", week_ago) if r.get("status") == "sent"]
+    smb_by_v = Counter(r.get("vertical", "?") for r in smb_sent_24)
+    smb_q = []
+    try:
+        smb_q = json.load(open(SMB / "queue.json"))
+    except Exception:
+        pass
+    smb_status = Counter(r.get("status") for r in smb_q)
+    lines.append("<h2>🤖 Smore Labs SMB — national (claudesonnet111)</h2>")
+    lines.append(
+        f"<p>“Activate Claude for SMBs” &nbsp;·&nbsp; Delivered <b>{len(smb_sent_24)}</b> in 24h · "
+        f"<b>{len(smb_sent_7)}</b> in 7d &nbsp;·&nbsp; queue: <b>{smb_status.get('pending',0)}</b> pending / "
+        f"{smb_status.get('sent',0)} sent</p>"
+    )
+    if smb_by_v:
+        lines.append("<p class='muted'>verticals (24h): " + ", ".join(f"{v}:{n}" for v, n in smb_by_v.most_common()) + "</p>")
+    elif not smb_q:
+        lines.append("<p class='muted'>national vertical×metro sweep arming — first leads land after tonight's scrape.</p>")
 
     # ─── Inbound ──────────────────────────────────────────────────
     lines.append("<h2>📥 Inbound (last 24h)</h2>")
@@ -438,6 +560,55 @@ def main():
                 lines.append("<p style='margin-top:10px'><b>Vertical playbook</b></p><ul>" + "".join(v_rows) + "</ul>")
         lines.append("<p class='muted' style='font-size:12px'>Trigger more: <code>~/cmo-agent/morning_pitch_sequence.sh [N]</code> · drafts only — review + send</p>")
 
+    # ─── HR Advisory lane (shipped 2026-06-17) ────────────────────
+    # AI consulting to F500 in-house HR + HR-tech mid-market + HR consulting
+    # firms. Discovery: Brave-driven monthly drain (free $5/mo credit, ~1000
+    # queries). Sender: claudesonnet111 sub-branded "Smore Labs · AI Advisory".
+    HR_LEADS = ROOT / "outreach" / "verticals" / "hr_consulting" / "leads.csv"
+    HR_DRAFTS = ROOT / "outreach" / "hr_advisory_drafts.json"
+    HR_LOG = WX_DIR / "logs" / "hr_advisory_emails.csv"
+    HR_NEXT_REFRESH = "17th of each month at 09:00 ET (launchd com.smorelabs.hr-advisory-refresh)"
+
+    hr_leads_n = 0
+    hr_leads_mtime = None
+    if HR_LEADS.exists():
+        with HR_LEADS.open() as f:
+            hr_leads_n = max(0, sum(1 for _ in f) - 1)  # minus header
+        hr_leads_mtime = datetime.fromtimestamp(HR_LEADS.stat().st_mtime, tz=timezone.utc)
+
+    hr_drafts_queued = 0
+    hr_drafts_sent_lifetime = 0
+    if HR_DRAFTS.exists():
+        try:
+            ds = json.load(open(HR_DRAFTS))
+            hr_drafts_queued = sum(1 for d in ds if d.get("status") == "drafted")
+            hr_drafts_sent_lifetime = sum(1 for d in ds if d.get("status") == "sent")
+        except Exception:
+            pass
+
+    hr_sent_24h = sum(1 for r in load_csv(HR_LOG, yesterday) if r.get("status") == "sent")
+    hr_sent_7d  = sum(1 for r in load_csv(HR_LOG, week_ago) if r.get("status") == "sent")
+
+    if hr_leads_n or hr_drafts_queued or hr_sent_7d:
+        lines.append("<h2>🧑‍💼 HR Advisory lane</h2>")
+        refresh_age = ""
+        if hr_leads_mtime:
+            age_h = (now - hr_leads_mtime).total_seconds() / 3600.0
+            refresh_age = (f" <span class='muted'>(last refresh {age_h:.0f}h ago)</span>"
+                           if age_h < 240 else
+                           f" <span style='color:#b00020'>(last refresh {age_h/24:.0f}d ago — cron may be broken)</span>")
+        lines.append("<table>")
+        lines.append("<tr><th>Metric</th><th>Value</th><th class='muted'>Notes</th></tr>")
+        lines.append(f"<tr><td>Verified leads in pool</td><td><b>{hr_leads_n}</b>{refresh_age}</td><td class='muted'>Brave-discovered HR execs at F500 + mid-market + consulting firms</td></tr>")
+        lines.append(f"<tr><td>Drafts queued (awaiting review)</td><td><b>{hr_drafts_queued}</b></td><td class='muted'>{HR_DRAFTS.relative_to(ROOT) if HR_DRAFTS.exists() else 'outreach/hr_advisory_drafts.json'}</td></tr>")
+        lines.append(f"<tr><td>Sends — last 24h / 7d</td><td><b>{hr_sent_24h}</b> / <b>{hr_sent_7d}</b></td><td class='muted'>From claudesonnet111@gmail.com · sub-brand 'Smore Labs AI Advisory'</td></tr>")
+        lines.append(f"<tr><td>Drafts sent (lifetime)</td><td><b>{hr_drafts_sent_lifetime}</b></td><td class='muted'></td></tr>")
+        lines.append(f"<tr><td>Next monthly refresh</td><td>{HR_NEXT_REFRESH}</td><td class='muted'>Aligned with Brave $5 free-credit anniversary</td></tr>")
+        lines.append("</table>")
+        lines.append("<p class='muted' style='font-size:12px'>"
+                     "Approve drafts: edit <code>outreach/hr_advisory_drafts.json</code> set status drafted → approved. "
+                     "Flip auto-send: <code>senders/hr_advisory.json</code> approval.auto_send → true.</p>")
+
     # ─── Social ───────────────────────────────────────────────────
     lines.append("<h2>📱 Social posts (last 24h)</h2>")
     lines.append(f"<p>Spirit Library IG/FB: <b>{len(sl_posts_24h)}</b> &nbsp; · &nbsp; Pair: <b>{len(pair_posts_24h)}</b></p>")
@@ -459,7 +630,7 @@ def main():
     # ─── Send ─────────────────────────────────────────────────────
     user, pw = env("GMAIL_USER"), env("GMAIL_APP_PASSWORD")
     msg = MIMEMultipart("alternative")
-    headline = f"📊 Marketing daily — {sl_24h_ok+wx_24h_ok} sent, {len(interesting_24h)} hot, {open_drafts} drafts waiting"
+    headline = f"📊 Marketing daily — {sl_24h_ok+wx_24h_ok+len(bc_sent_24)} sent, {len(interesting_24h)} hot, {open_drafts} drafts waiting"
     msg["Subject"] = headline
     msg["From"] = f"Marketing Pipeline <{user}>"
     msg["To"] = DIGEST_TO

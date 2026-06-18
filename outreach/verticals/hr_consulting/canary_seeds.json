@@ -1,6 +1,6 @@
 {
-  "_comment": "Initial canary list — 12 companies across all three lanes Steven greenlit on 2026-06-17. scrape_hr.py enriches each with a likely HR exec (name + LinkedIn URL + email guess via public domain pattern). NO hand-picked individual names here; the scraper fills in via LinkedIn public search so the lane gets fresh real-time contacts instead of stale memorized ones. Volume is intentionally tiny — F500 is brand-sensitive, batch 1 is for Steven to review the actual outbound text before anything sends.",
-  "_lane_priority": "f500_inhouse and hr_tech_midmarket are lane_priority=1 (primary buyers). hr_consulting_firm is lane_priority=2 (could be competitor — only test 1 in the canary).",
+  "_comment": "Initial canary list \u2014 12 companies across all three lanes Steven greenlit on 2026-06-17. scrape_hr.py enriches each with a likely HR exec (name + LinkedIn URL + email guess via public domain pattern). NO hand-picked individual names here; the scraper fills in via LinkedIn public search so the lane gets fresh real-time contacts instead of stale memorized ones. Volume is intentionally tiny \u2014 F500 is brand-sensitive, batch 1 is for Steven to review the actual outbound text before anything sends.",
+  "_lane_priority": "f500_inhouse and hr_tech_midmarket are lane_priority=1 (primary buyers). hr_consulting_firm is lane_priority=2 (could be competitor \u2014 only test 1 in the canary).",
   "_target_titles": [
     "Chief Human Resources Officer (CHRO)",
     "Chief People Officer (CPO)",
@@ -14,19 +14,2051 @@
     "Workforce Transformation Partner (HR consulting firms only)"
   ],
   "seeds": [
-    { "company": "Microsoft",   "domain": "microsoft.com",    "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Massive HR org, known public AI investment culture, plausible openness to AI-on-workflow audit." },
-    { "company": "Adobe",       "domain": "adobe.com",        "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Public AI-product narrative; HR ops likely to be modernizing." },
-    { "company": "Salesforce",  "domain": "salesforce.com",   "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Big people-ops function; Einstein/Agentforce gives them AI-vocab familiarity." },
-    { "company": "Cisco",       "domain": "cisco.com",        "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Talent transformation has been on their public agenda." },
-    { "company": "ServiceNow",  "domain": "servicenow.com",   "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Sells HR-workflow software but also has its own HR ops — they buy AI for themselves." },
-
-    { "company": "Datadog",     "domain": "datadoghq.com",    "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Fast-growing engineering org, VP People role is named publicly, decision velocity is mid-market not F500." },
-    { "company": "Plaid",       "domain": "plaid.com",        "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Series D-era people-ops; AI-curious, smaller decision loop than F500." },
-    { "company": "Brex",        "domain": "brex.com",         "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "AI-positive culture (Brex has public AI bets), VP People role." },
-    { "company": "Notion",      "domain": "notion.so",        "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Product-led, AI-native company; HR ops is small + nimble." },
-    { "company": "Rippling",    "domain": "rippling.com",     "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Sells HR-tech but also has internal HR ops; they buy from us as an AI-on-top-of-their-own-stack play." },
-
-    { "company": "Mercer",      "domain": "mercer.com",       "lane": "hr_consulting_firm","lane_priority": 2, "rationale": "Tests whether a consulting partner buys AI capability or sees us as competition. Only 1 firm in canary." },
-    { "company": "Aon",         "domain": "aon.com",          "lane": "hr_consulting_firm","lane_priority": 2, "rationale": "Backup seed in case Mercer doesn't surface a contact via LinkedIn public search." }
-  ]
+    {
+      "company": "Microsoft",
+      "domain": "microsoft.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Massive HR org, known public AI investment culture, plausible openness to AI-on-workflow audit."
+    },
+    {
+      "company": "Adobe",
+      "domain": "adobe.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Public AI-product narrative; HR ops likely to be modernizing."
+    },
+    {
+      "company": "Salesforce",
+      "domain": "salesforce.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Big people-ops function; Einstein/Agentforce gives them AI-vocab familiarity."
+    },
+    {
+      "company": "Cisco",
+      "domain": "cisco.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Talent transformation has been on their public agenda."
+    },
+    {
+      "company": "ServiceNow",
+      "domain": "servicenow.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Sells HR-workflow software but also has its own HR ops \u2014 they buy AI for themselves."
+    },
+    {
+      "company": "Datadog",
+      "domain": "datadoghq.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Fast-growing engineering org, VP People role is named publicly, decision velocity is mid-market not F500."
+    },
+    {
+      "company": "Plaid",
+      "domain": "plaid.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Series D-era people-ops; AI-curious, smaller decision loop than F500."
+    },
+    {
+      "company": "Brex",
+      "domain": "brex.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "AI-positive culture (Brex has public AI bets), VP People role."
+    },
+    {
+      "company": "Notion",
+      "domain": "notion.so",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Product-led, AI-native company; HR ops is small + nimble."
+    },
+    {
+      "company": "Rippling",
+      "domain": "rippling.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Sells HR-tech but also has internal HR ops; they buy from us as an AI-on-top-of-their-own-stack play."
+    },
+    {
+      "company": "Mercer",
+      "domain": "mercer.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Tests whether a consulting partner buys AI capability or sees us as competition. Only 1 firm in canary."
+    },
+    {
+      "company": "Aon",
+      "domain": "aon.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Backup seed in case Mercer doesn't surface a contact via LinkedIn public search."
+    },
+    {
+      "company": "Apple Inc.",
+      "domain": "apple.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Amazon.com Inc.",
+      "domain": "amazon.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Alphabet Inc.",
+      "domain": "alphabet.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Meta Platforms Inc.",
+      "domain": "meta.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Tesla Inc.",
+      "domain": "tesla.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "JPMorgan Chase & Co.",
+      "domain": "jpmorganchase.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Bank of America Corporation",
+      "domain": "bankofamerica.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Wells Fargo & Company",
+      "domain": "wellsfargo.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Citigroup Inc.",
+      "domain": "citigroup.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Goldman Sachs Group Inc.",
+      "domain": "goldmansachs.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Morgan Stanley",
+      "domain": "morganstanley.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "American Express Company",
+      "domain": "americanexpress.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "UnitedHealth Group Incorporated",
+      "domain": "unitedhealthgroup.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Pfizer Inc.",
+      "domain": "pfizer.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Johnson & Johnson",
+      "domain": "jnj.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Merck & Co. Inc.",
+      "domain": "merck.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "AbbVie Inc.",
+      "domain": "abbvie.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Bristol Myers Squibb Company",
+      "domain": "bms.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Eli Lilly and Company",
+      "domain": "lilly.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Walmart Inc.",
+      "domain": "walmart.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "The Home Depot Inc.",
+      "domain": "homedepot.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Amazon Retail",
+      "domain": "amazon.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Target Corporation",
+      "domain": "target.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Costco Wholesale Corporation",
+      "domain": "costco.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "The Kroger Co.",
+      "domain": "kroger.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Walgreens Boots Alliance Inc.",
+      "domain": "walgreensbootsalliance.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "CVS Health Corporation",
+      "domain": "cvshealth.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Procter & Gamble Company",
+      "domain": "pg.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Coca-Cola Company",
+      "domain": "coca-cola.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "PepsiCo Inc.",
+      "domain": "pepsico.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Nestl\u00e9 USA",
+      "domain": "nestle.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "General Motors Company",
+      "domain": "gm.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ford Motor Company",
+      "domain": "ford.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Boeing Company",
+      "domain": "boeing.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Lockheed Martin Corporation",
+      "domain": "lockheedmartin.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Raytheon Technologies Corporation",
+      "domain": "rtx.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "General Dynamics Corporation",
+      "domain": "generaldynamics.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Northrop Grumman Corporation",
+      "domain": "northropgrumman.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "AT&T Inc.",
+      "domain": "att.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Verizon Communications Inc.",
+      "domain": "verizon.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "T-Mobile US Inc.",
+      "domain": "t-mobile.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Chevron Corporation",
+      "domain": "chevron.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "ExxonMobil Corporation",
+      "domain": "exxonmobil.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "ConocoPhillips",
+      "domain": "conocophillips.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "NextEra Energy Inc.",
+      "domain": "next\u00e9raenergy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Marriott International Inc.",
+      "domain": "marriott.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "United Airlines Holdings Inc.",
+      "domain": "united.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Delta Air Lines Inc.",
+      "domain": "delta.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "FedEx Corporation",
+      "domain": "fedex.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Union Pacific Corporation",
+      "domain": "unionpacific.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "International Business Machines Corporation",
+      "domain": "ibm.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Intel Corporation",
+      "domain": "intel.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Oracle Corporation",
+      "domain": "oracle.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Accenture plc",
+      "domain": "accenture.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "U.S. Bancorp",
+      "domain": "usbank.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Capital One Financial Corporation",
+      "domain": "capitalone.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Charles Schwab Corporation",
+      "domain": "schwab.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Humana Inc.",
+      "domain": "humana.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Anthem Inc.",
+      "domain": "anthem.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Centene Corporation",
+      "domain": "centene.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Thermo Fisher Scientific Inc.",
+      "domain": "thermofisher.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Amgen Inc.",
+      "domain": "amgen.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Gilead Sciences Inc.",
+      "domain": "gilead.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Best Buy Co. Inc.",
+      "domain": "bestbuy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Lowe's Companies Inc.",
+      "domain": "lowes.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Macy's Inc.",
+      "domain": "macys.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Gap Inc.",
+      "domain": "gap.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Nike Inc.",
+      "domain": "nike.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "General Electric Company",
+      "domain": "ge.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Caterpillar Inc.",
+      "domain": "caterpillar.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Deere & Company",
+      "domain": "deere.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Textron Inc.",
+      "domain": "textron.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Comcast Corporation",
+      "domain": "comcast.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Charter Communications Inc.",
+      "domain": "charter.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Constellation Energy Corporation",
+      "domain": "constellationenergy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Duke Energy Corporation",
+      "domain": "duke-energy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "American Electric Power Company Inc.",
+      "domain": "aep.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Southern Company",
+      "domain": "southerncompany.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Dominion Energy Inc.",
+      "domain": "dominionenergy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Colgate-Palmolive Company",
+      "domain": "colgatepalmolive.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Mondelez International Inc.",
+      "domain": "mondelezinternational.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Kraft Heinz Company",
+      "domain": "kraftheinzcompany.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Campbell Soup Company",
+      "domain": "campbellsoupcompany.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "L3Harris Technologies Inc.",
+      "domain": "l3harris.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Huntington Ingalls Industries Inc.",
+      "domain": "huntingtoningalls.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Southwest Airlines Co.",
+      "domain": "southwest.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Spirit AeroSystems Holdings Inc.",
+      "domain": "spiritaero.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Uber Technologies Inc.",
+      "domain": "uber.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Lyft Inc.",
+      "domain": "lyft.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Hilton Worldwide Holdings Inc.",
+      "domain": "hiltonworldwide.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Hyatt Hotels Corporation",
+      "domain": "hyatt.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Wynn Resorts Limited",
+      "domain": "wynnresorts.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Las Vegas Sands Corporation",
+      "domain": "lasvegassands.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Berkshire Hathaway Inc.",
+      "domain": "berkshirehathaway.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Synchrony Financial",
+      "domain": "synchronyfinancial.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Moody's Corporation",
+      "domain": "moodys.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Microsoft Corporation",
+      "domain": "microsoft.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "MetLife Inc.",
+      "domain": "metlife.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Home Depot Inc.",
+      "domain": "homedepot.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Visa Inc.",
+      "domain": "visa.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Mastercard Incorporated",
+      "domain": "mastercard.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Starbucks Corporation",
+      "domain": "starbucks.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "McDonald's Corporation",
+      "domain": "mcdonalds.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Salesforce Inc.",
+      "domain": "salesforce.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "General Atomics",
+      "domain": "ga.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "American Airlines Group Inc.",
+      "domain": "aa.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Albertsons Companies Inc.",
+      "domain": "albertsons.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Kroger Co.",
+      "domain": "kroger.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Moderna Inc.",
+      "domain": "modernatx.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Regeneron Pharmaceuticals Inc.",
+      "domain": "regeneron.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Nestl\u00e9 USA Inc.",
+      "domain": "nestleusa.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Est\u00e9e Lauder Companies Inc.",
+      "domain": "esteelauder.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Lululemon Athletica Inc.",
+      "domain": "lululemon.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Booking Holdings Inc.",
+      "domain": "bookingholdings.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Wyndham Hotels and Resorts Inc.",
+      "domain": "wyndhamhotels.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "DoorDash Inc.",
+      "domain": "doordash.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Netflix Inc.",
+      "domain": "netflix.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "PayPal Holdings Inc.",
+      "domain": "paypal.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Block Inc.",
+      "domain": "block.xyz",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Broadcom Inc.",
+      "domain": "broadcom.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Danaher Corporation",
+      "domain": "danaher.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "PNC Financial Services Group Inc.",
+      "domain": "pnc.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Truist Financial Corporation",
+      "domain": "truist.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Nvidia Corporation",
+      "domain": "nvidia.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Qualcomm Incorporated",
+      "domain": "qualcomm.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Advanced Micro Devices Inc.",
+      "domain": "amd.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "ServiceNow Inc.",
+      "domain": "servicenow.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "CSX Corporation",
+      "domain": "csx.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Norfolk Southern Corporation",
+      "domain": "norfolksouthern.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Occidental Petroleum Corporation",
+      "domain": "oxy.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "EOG Resources Inc.",
+      "domain": "eogresources.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Arch Capital Group Ltd.",
+      "domain": "archcapgroup.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Walmart de M\u00e9xico y Centroam\u00e9rica",
+      "domain": "walmartmexico.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Honeywell International Inc.",
+      "domain": "honeywell.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "3M Company",
+      "domain": "3m.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Emerson Electric Co.",
+      "domain": "emerson.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Illinois Tool Works Inc.",
+      "domain": "itw.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Stanley Black & Decker Inc.",
+      "domain": "stanleyblackanddecker.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Parker Hannifin Corporation",
+      "domain": "parker.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ingersoll Rand Inc.",
+      "domain": "ingersollrand.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Sempra Energy",
+      "domain": "sempra.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "American Water Works Company Inc.",
+      "domain": "amwater.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Public Service Enterprise Group Incorporated",
+      "domain": "pseg.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Exelon Corporation",
+      "domain": "exelon.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "General Mills Inc.",
+      "domain": "generalmills.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Mondel\u0113z International",
+      "domain": "mondelezinternational.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Kellogg Company",
+      "domain": "kelloggcompany.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Stellantis N.V.",
+      "domain": "stellantis.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Kimberly-Clark Corporation",
+      "domain": "kimberly-clark.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Scotts Miracle-Gro Company",
+      "domain": "scotts.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Roper Technologies Inc.",
+      "domain": "ropertech.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Kansas City Southern",
+      "domain": "kcsouthern.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Yum! Brands Inc.",
+      "domain": "yum.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "United Parcel Service Inc.",
+      "domain": "ups.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Philip Morris International Inc.",
+      "domain": "pmi.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Altria Group Inc.",
+      "domain": "altria.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Slack Technologies Inc.",
+      "domain": "slack.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "The Walt Disney Company",
+      "domain": "disney.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Norfolk Southern Railway Company",
+      "domain": "nscorp.com",
+      "lane": "f500_inhouse",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Stripe Inc.",
+      "domain": "stripe.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Canva Pty Ltd.",
+      "domain": "canva.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Figma Inc.",
+      "domain": "figma.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Notion Labs Inc.",
+      "domain": "notion.so",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Chime Financial Inc.",
+      "domain": "chime.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Robinhood Markets Inc.",
+      "domain": "robinhood.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Rippling Inc.",
+      "domain": "rippling.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Gong.io Inc.",
+      "domain": "gong.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "CrowdStrike Holdings Inc.",
+      "domain": "crowdstrike.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Cloudflare Inc.",
+      "domain": "cloudflare.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Okta Inc.",
+      "domain": "okta.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Palo Alto Networks Inc.",
+      "domain": "paloaltonetworks.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "SentinelOne Inc.",
+      "domain": "sentinelone.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Fastly Inc.",
+      "domain": "fastly.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "HashiCorp Inc.",
+      "domain": "hashicorp.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "JFrog Ltd.",
+      "domain": "jfrog.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "GitLab Inc.",
+      "domain": "gitlab.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "HubSpot Inc.",
+      "domain": "hubspot.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Twilio Inc.",
+      "domain": "twilio.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Amplitude Inc.",
+      "domain": "amplitude.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Snapchat Inc.",
+      "domain": "snapchat.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Airbnb Inc.",
+      "domain": "airbnb.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Instacart Inc.",
+      "domain": "instacart.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Shopify Inc.",
+      "domain": "shopify.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Asana Inc.",
+      "domain": "asana.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Monday.com Ltd.",
+      "domain": "monday.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Zoom Video Communications Inc.",
+      "domain": "zoom.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Workiva Inc.",
+      "domain": "workiva.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "ServiceTitan Inc.",
+      "domain": "servicetitan.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Toast Inc.",
+      "domain": "toast.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "SailPoint Technologies Holdings Inc.",
+      "domain": "sailpoint.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ping Identity Holding Corp.",
+      "domain": "pingidentity.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "ForgeRock Inc.",
+      "domain": "forgerock.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "BigCommerce Holdings Inc.",
+      "domain": "bigcommerce.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Elastic N.V.",
+      "domain": "elastic.co",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "MongoDB Inc.",
+      "domain": "mongodb.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Datadog Inc.",
+      "domain": "datadoghq.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Sumo Logic Inc.",
+      "domain": "sumologic.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Splunk Inc.",
+      "domain": "splunk.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "New Relic Inc.",
+      "domain": "newrelic.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Upland Software Inc.",
+      "domain": "uplandsoftware.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Alteryx Inc.",
+      "domain": "alteryx.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Palantir Technologies Inc.",
+      "domain": "palantir.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Confluent Inc.",
+      "domain": "confluent.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Databricks Inc.",
+      "domain": "databricks.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Scale AI Inc.",
+      "domain": "scale.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Hugging Face Inc.",
+      "domain": "huggingface.co",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "OpenAI LP",
+      "domain": "openai.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Canva Inc.",
+      "domain": "canva.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Flexport Inc.",
+      "domain": "flexport.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Affinity Inc.",
+      "domain": "affinity.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ramp Inc.",
+      "domain": "ramp.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "OpenAI Inc.",
+      "domain": "openai.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Anthropic Inc.",
+      "domain": "anthropic.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Cohere Inc.",
+      "domain": "cohere.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Wiz Inc.",
+      "domain": "wiz.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Snyk Inc.",
+      "domain": "snyk.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Grafana Labs Inc.",
+      "domain": "grafana.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "LaunchDarkly Inc.",
+      "domain": "launchdarkly.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "PagerDuty Inc.",
+      "domain": "pagerduty.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Zendesk Inc.",
+      "domain": "zendesk.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Rubrik Inc.",
+      "domain": "rubrik.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Cloudinary Inc.",
+      "domain": "cloudinary.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Guidepoint Inc.",
+      "domain": "guidepoint.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Accolade Inc.",
+      "domain": "accolade.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ro Inc.",
+      "domain": "ro.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Headspace Health Inc.",
+      "domain": "headspace.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Cerebral Inc.",
+      "domain": "cerebral.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Oscar Health Inc.",
+      "domain": "oscarhealth.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Teladoc Health Inc.",
+      "domain": "teladoc.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Fortive Corporation",
+      "domain": "fortive.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "AppLovin Corporation",
+      "domain": "applovin.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Improbable Worlds Limited",
+      "domain": "improbable.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Plaid Inc.",
+      "domain": "plaid.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Mercury Inc.",
+      "domain": "mercury.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Silvergate Capital Corporation",
+      "domain": "silvergate.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Chwy Inc.",
+      "domain": "chewy.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Stripe, Inc.",
+      "domain": "stripe.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Databricks, Inc.",
+      "domain": "databricks.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Figma, Inc.",
+      "domain": "figma.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Notion Labs, Inc.",
+      "domain": "notion.so",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Zapier, Inc.",
+      "domain": "zapier.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Miro, Inc.",
+      "domain": "miro.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Deel, Inc.",
+      "domain": "deel.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Chime Financial, Inc.",
+      "domain": "chime.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Nubank",
+      "domain": "nu.com.br",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ramp Corporation",
+      "domain": "ramp.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Wiz, Inc.",
+      "domain": "wiz.io",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Faire Holdings, Inc.",
+      "domain": "faire.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Instacart, Inc.",
+      "domain": "instacart.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Thrive Global, Inc.",
+      "domain": "thriveglobal.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Ro, Inc.",
+      "domain": "ro.co",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Rippling, Inc.",
+      "domain": "rippling.com",
+      "lane": "hr_tech_midmarket",
+      "lane_priority": 1,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Mercer LLC",
+      "domain": "mercer.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Willis Towers Watson Public Limited Company",
+      "domain": "willistowerswatson.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Korn Ferry",
+      "domain": "kornferry.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Russell Reynolds Associates",
+      "domain": "russellreynolds.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Heidrick & Struggles",
+      "domain": "heidrick.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Spencer Stuart",
+      "domain": "spencerstuart.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Egon Zehnder",
+      "domain": "egonzehnder.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Deloitte Consulting LLP",
+      "domain": "deloitte.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "McKinsey & Company",
+      "domain": "mckinsey.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Boston Consulting Group",
+      "domain": "bcg.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "EY",
+      "domain": "ey.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "KPMG LLP",
+      "domain": "kpmg.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Segal",
+      "domain": "segalco.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Buck Consultants LLC",
+      "domain": "buckconsultants.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Towers Perrin",
+      "domain": "towersperrin.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Pearl Meyer",
+      "domain": "pearlmeyer.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Semler Brossy",
+      "domain": "semlerbrossy.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Radford",
+      "domain": "radford.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Hay Group",
+      "domain": "haygroup.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "CEB Inc.",
+      "domain": "cebglobal.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Sibson Consulting",
+      "domain": "sibsonconsulting.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Hymans Robertson",
+      "domain": "hymans.co.uk",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Pension Consulting Alliance",
+      "domain": "pensionca.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Conduent HR Consulting",
+      "domain": "conduent.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Compensia Inc.",
+      "domain": "compensia.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "WorldatWork",
+      "domain": "worldatwork.org",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Everarc Consulting",
+      "domain": "everarcconsulting.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    },
+    {
+      "company": "Advisen",
+      "domain": "advisen.com",
+      "lane": "hr_consulting_firm",
+      "lane_priority": 2,
+      "rationale": "Auto-generated by expand_universe.py 2026-06-17 \u2014 vetted by Brave discovery at runtime."
+    }
+  ],
+  "_expanded_at": "2026-06-17",
+  "_expansion_note": "First 12 entries are Steven's hand-picked canary from 2026-06-17 AM. Remaining 280 were generated by expand_universe.py to fill out the ~330-company target so the monthly Brave drain hits the free-tier ceiling (~990 queries/mo). Brave-driven discovery in scrape_hr.py verifies every name + title at runtime; this seed list only commits to (company name, domain, lane)."
 }

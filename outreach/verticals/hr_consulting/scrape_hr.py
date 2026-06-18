@@ -74,7 +74,9 @@ def discover_via_brave(seed: dict) -> dict | None:
             break
     if not results:
         print(f"  ✗ {seed['company']}: no search results from Brave")
-        return None
+        # Sentinel so the caller can distinguish quota-style empties from
+        # Haiku rejecting an otherwise-valid Brave response.
+        return {"_brave_empty": True}
 
     # Dedupe by URL
     seen, dedup = set(), []
@@ -219,18 +221,41 @@ def main() -> None:
 
     seeds = json.loads(SEEDS.read_text())["seeds"]
     print(f"📋 Discovering HR execs for {len(seeds)} companies via Brave + Haiku…")
+    print(f"   Will stop early on 5 consecutive empty Brave responses (= quota likely hit).\n")
     rows: list[dict] = []
-    for s in seeds:
-        print(f"  · {s['company']:<14}  ({s['lane']}, p{s['lane_priority']})")
+    empty_streak = 0
+    stopped_at = None
+    for i, s in enumerate(seeds, start=1):
+        print(f"  [{i}/{len(seeds)}] {s['company'][:32]:<32}  ({s['lane']}, p{s['lane_priority']})")
         row = discover_via_brave(s)
-        if row:
-            print(f"    → {row['first_name']} {row['last_name']} | {row['title']} | conf={row['confidence']}")
+        if row and not row.get("_brave_empty"):
+            empty_streak = 0
+            print(f"    → {row['first_name']} {row['last_name']} | {row['title'][:50]} | conf={row['confidence']}")
             rows.append(row)
-        time.sleep(0.3)
+        elif row and row.get("_brave_empty"):
+            # Real signal: Brave returned nothing — this is the quota indicator.
+            empty_streak += 1
+            print(f"    ✗ Brave empty  (consecutive Brave-empties: {empty_streak})")
+            if empty_streak >= 5:
+                stopped_at = i
+                print(f"\n⚠ Five consecutive Brave-empty responses — free-tier quota likely "
+                      f"hit. Stopping at company {i}/{len(seeds)}. Monthly cron will "
+                      f"resume from the top next cycle.")
+                break
+        else:
+            # Haiku rejected (couldn't find a confirmed person in Brave's
+            # results). Common in mid-market HR-tech where public info on
+            # the People function is thin. NOT a quota signal.
+            print(f"    ⏭ no match — not a quota signal")
+        time.sleep(0.25)
 
     if not rows:
         print("\n✗ No rows discovered. Nothing written.")
         sys.exit(1)
+    if stopped_at:
+        print(f"\n📊 Drained the free tier — {len(rows)} verified rows from {stopped_at}/{len(seeds)} companies.")
+    else:
+        print(f"\n📊 Completed all {len(seeds)} seeds without hitting quota — {len(rows)} verified rows.")
 
     if args.double_check:
         print(f"\n🔎 Double-checking {len(rows)} discovered rows with an independent search…")
