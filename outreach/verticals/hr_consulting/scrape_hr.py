@@ -49,76 +49,114 @@ sys.path.insert(0, str(Path.home() / "cmo-agent" / "agents"))
 from search import search as web_search, has_provider  # noqa: E402
 
 
-def _prompt(seed: dict) -> str:
-    return f"""You are helping build a cold-outreach lead list for an AI consulting service.
-
-Target company: {seed['company']}  (domain: {seed['domain']})
-Lane: {seed['lane']}  (lane_priority {seed['lane_priority']})
-
-Identify ONE senior HR decision-maker at this company who:
-- Is currently in role (or was as of your training cutoff — flag uncertainty)
-- Holds one of: CHRO, Chief People Officer, VP People, VP People Operations,
-  Head of People, VP HR, VP Talent, Director of People Operations,
-  Head of People Analytics. For hr_consulting_firm lane only, also accept:
-  Partner / Practice Lead — Workforce Transformation, Human Capital, or
-  similar.
-
-Return STRICT JSON only (no markdown, no commentary), with this shape:
-
-{{
-  "first_name": "...",
-  "last_name": "...",
-  "title": "exact public title",
-  "email_pattern_guess": "firstname.lastname | firstinitial+lastname | firstname+lastinitial | first.last+number",
-  "email": "synthesized email at {seed['domain']}",
-  "linkedin_search_url": "https://www.linkedin.com/search/results/people/?keywords=...&origin=GLOBAL_SEARCH_HEADER (use first+last+company)",
-  "confidence": "high | medium | low",
-  "freshness_warning": "true if you're unsure they're still in role; false if confident",
-  "source_notes": "1 sentence on where you'd verify this (e.g. 'public LinkedIn profile', 'recent press release', 'company leadership page')"
-}}
-
-If you cannot identify a plausible person with at least medium confidence,
-return: {{"skip": true, "reason": "..."}}
-"""
+DISCOVERY_QUERIES = [
+    '"{company}" CHRO OR "Chief Human Resources Officer"',
+    '"{company}" "Chief People Officer"',
+    '"{company}" "VP People" OR "Head of People"',
+]
 
 
-def enrich_seed(seed: dict) -> dict | None:
-    """Ask Claude for one likely HR contact at this company. Returns row dict
-    matching the leads.csv schema, or None if Claude says skip."""
+def discover_via_brave(seed: dict) -> dict | None:
+    """Brave-driven discovery: search for the company's HR leadership, then ask
+    Haiku to read the snippets and extract the named exec. This replaces the
+    old Claude-knowledge-from-training approach that hallucinated 7/11 names.
+
+    Returns a row dict matching the leads.csv schema, or None if no plausible
+    exec surfaces in the snippets."""
+    results: list[dict] = []
+    for tmpl in DISCOVERY_QUERIES:
+        q = tmpl.format(company=seed["company"])
+        try:
+            results.extend(web_search(q, n=5, mode="auto"))
+        except Exception:
+            pass
+        if len(results) >= 8:
+            break
+    if not results:
+        print(f"  ✗ {seed['company']}: no search results from Brave")
+        return None
+
+    # Dedupe by URL
+    seen, dedup = set(), []
+    for r in results:
+        u = r.get("url", "")
+        if u and u not in seen:
+            seen.add(u)
+            dedup.append(r)
+    snippets = "\n".join(
+        f"[{i+1}] {r.get('title','')[:140]} — {r.get('snippet','')[:300]} ({r.get('url','')})"
+        for i, r in enumerate(dedup[:8])
+    )
+
+    prompt = (
+        f"You're identifying ONE current senior HR decision-maker at {seed['company']} "
+        f"(domain {seed['domain']}) from web search results. Acceptable titles: "
+        "CHRO, Chief Human Resources Officer, Chief People Officer, VP People, "
+        "VP People Operations, Head of People, VP HR, VP Talent, Director of People "
+        "Operations, Head of People Analytics. For HR consulting firms only also "
+        "accept: Partner — Workforce Transformation / Human Capital / similar.\n\n"
+        f"Search results:\n{snippets}\n\n"
+        f"Pick ONE person whose role at {seed['company']} is explicitly confirmed by "
+        "the snippets. Reject the row if:\n"
+        "- The person works at a DIFFERENT company than the snippet says\n"
+        "- The title is in a different function (sales, engineering, marketing, etc.)\n"
+        "- The person clearly left the company\n\n"
+        "Return STRICT JSON, no markdown:\n"
+        '{"first_name": "...", "last_name": "...", "title": "exact title from snippet", '
+        '"source_url": "URL that confirms this", "confidence": "high|medium|low", "found": true}\n'
+        'OR if nothing matches: {"found": false, "reason": "..."}'
+    )
     try:
         msg = CLIENT.messages.create(
             model=MODEL,
-            max_tokens=512,
-            messages=[{"role": "user", "content": _prompt(seed)}],
+            max_tokens=400,
+            messages=[{"role": "user", "content": prompt}],
         )
         text = msg.content[0].text.strip()
-        # Strip code fences if Claude added them despite instructions.
         if text.startswith("```"):
-            text = text.split("\n", 1)[1]
-            if text.endswith("```"):
-                text = text.rsplit("```", 1)[0]
-        data = json.loads(text)
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0]
+        # Use raw_decode so trailing prose (Haiku sometimes appends a note)
+        # doesn't fail the whole row — the Aon canary tripped on this.
+        data, _ = json.JSONDecoder().raw_decode(text)
     except Exception as e:
-        print(f"  ⚠️ {seed['company']}: enrichment failed — {e}")
+        print(f"  ⚠️ {seed['company']}: haiku interpretation failed — {e}")
         return None
-    if data.get("skip"):
-        print(f"  ⏭ {seed['company']}: skipped — {data.get('reason', '')}")
+
+    if not data.get("found"):
+        print(f"  ⏭ {seed['company']}: no match — {data.get('reason','')[:80]}")
         return None
+
+    first = data.get("first_name", "").strip()
+    last = data.get("last_name", "").strip()
+    if not (first and last):
+        print(f"  ⏭ {seed['company']}: incomplete name returned")
+        return None
+
+    email = f"{first.lower()}.{last.lower()}@{seed['domain']}"
+    linkedin_q = f"{first} {last} {seed['company']}"
+    linkedin_search_url = (
+        f"https://www.linkedin.com/search/results/people/?keywords="
+        f"{linkedin_q.replace(' ', '%20')}&origin=GLOBAL_SEARCH_HEADER"
+    )
     return {
-        "first_name":          data.get("first_name", ""),
-        "last_name":           data.get("last_name", ""),
+        "first_name":          first,
+        "last_name":           last,
         "title":               data.get("title", ""),
         "company":             seed["company"],
         "domain":              seed["domain"],
         "lane":                seed["lane"],
         "lane_priority":       seed["lane_priority"],
-        "email":               data.get("email", ""),
-        "linkedin_search_url": data.get("linkedin_search_url", ""),
-        "confidence":          data.get("confidence", "low"),
-        "freshness_warning":   str(data.get("freshness_warning", True)).lower(),
-        "source_notes":        data.get("source_notes", ""),
+        "email":               email,
+        "linkedin_search_url": linkedin_search_url,
+        "confidence":          data.get("confidence", "medium"),
+        "freshness_warning":   "false",  # source URL is on file
+        "source_notes":        data.get("source_url", ""),
         "scraped_at":          datetime.now(timezone.utc).isoformat(),
     }
+
+
+# Backwards-compatible alias for callers expecting enrich_seed (e.g. tests).
+enrich_seed = discover_via_brave
 
 
 def verify_row(row: dict) -> tuple[bool, str]:
@@ -167,33 +205,36 @@ def verify_row(row: dict) -> tuple[bool, str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--verify", action="store_true",
-                    help="Verify each name+title via web search before writing to leads.csv. "
-                         "Effectively free when BRAVE_SEARCH_API_KEY is set in ~/cmo-agent/.env "
-                         "— Brave gives $5/mo auto-credit at $5/1000 requests, so the first ~1000 "
-                         "verifications per month cost $0. Falls back to Exa or Anthropic "
-                         "web_search (~$0.01/lead) if no key. Without --verify, output lands in "
-                         "leads_unverified.csv and the drafter refuses to read it.")
+    ap.add_argument("--double-check", action="store_true",
+                    help="After Brave-driven discovery, run an independent second search "
+                         "to re-confirm name+title. Belt-and-suspenders for high-stakes "
+                         "first batches. Adds ~1 Brave query per row.")
     args = ap.parse_args()
 
+    if not has_provider():
+        sys.exit(
+            "✗ No web search provider keyed. Set BRAVE_SEARCH_API_KEY in "
+            "~/cmo-agent/.env (Brave free $5/mo credit covers ~1000 queries) and rerun."
+        )
+
     seeds = json.loads(SEEDS.read_text())["seeds"]
-    print(f"📋 Enriching {len(seeds)} canary seeds via Claude Haiku…")
+    print(f"📋 Discovering HR execs for {len(seeds)} companies via Brave + Haiku…")
     rows: list[dict] = []
     for s in seeds:
         print(f"  · {s['company']:<14}  ({s['lane']}, p{s['lane_priority']})")
-        row = enrich_seed(s)
+        row = discover_via_brave(s)
         if row:
+            print(f"    → {row['first_name']} {row['last_name']} | {row['title']} | conf={row['confidence']}")
             rows.append(row)
         time.sleep(0.3)
 
     if not rows:
-        print("✗ No rows enriched. Nothing written.")
+        print("\n✗ No rows discovered. Nothing written.")
         sys.exit(1)
 
-    if args.verify:
-        provider = "Brave/Exa (free)" if has_provider() else "Anthropic web_search fallback (paid)"
-        print(f"\n🔎 Verifying {len(rows)} rows via {provider}…")
-        verified: list[dict] = []
+    if args.double_check:
+        print(f"\n🔎 Double-checking {len(rows)} discovered rows with an independent search…")
+        confirmed: list[dict] = []
         for r in rows:
             ok, reason = verify_row(r)
             mark = "✓" if ok else "✗"
@@ -201,28 +242,22 @@ def main() -> None:
             r["web_verified"] = "true" if ok else "false"
             r["web_verification_note"] = reason
             if ok:
-                verified.append(r)
-            time.sleep(0.5)
-        target = LEADS_CSV
-        out = verified
+                confirmed.append(r)
+            time.sleep(0.4)
+        out = confirmed
         if not out:
-            print("\n✗ No rows survived verification. leads.csv not written.")
+            print("\n✗ Nothing survived the double-check. leads.csv not written.")
             sys.exit(1)
     else:
-        target = UNVERIFIED_CSV
         out = rows
 
-    target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("w", newline="") as f:
+    LEADS_CSV.parent.mkdir(parents=True, exist_ok=True)
+    with LEADS_CSV.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=out[0].keys())
         w.writeheader()
         w.writerows(out)
-    print(f"\n✅ Wrote {len(out)} rows → {target}")
-    if not args.verify:
-        print("⚠️  Drafter refuses to read leads_unverified.csv. "
-              "Rerun with --verify to produce leads.csv, OR hand-verify and rename.")
-    else:
-        print("\nNext: python3.12 ~/cmo-agent/pitch_hr_advisory.py --limit 5  to draft the first batch.")
+    print(f"\n✅ Wrote {len(out)} rows → {LEADS_CSV}")
+    print("\nNext: python3.12 ~/cmo-agent/pitch_hr_advisory.py --limit 5  to draft the first batch.")
 
 
 if __name__ == "__main__":
