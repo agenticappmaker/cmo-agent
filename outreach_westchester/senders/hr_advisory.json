@@ -1,0 +1,131 @@
+{
+  "name": "hr_advisory",
+  "version": 1,
+  "description": "AI consulting outreach to HR decision-makers at Fortune 500 in-house HR, HR consulting firms (Mercer/Aon/WTW), and mid-market HR-tech buyers. Soft-ask pitch: free 30-min HR workflow audit, no rate-card in cold. Rate ($1,000/hr) surfaces only if asked. Sub-brand 'Smore Labs · AI Advisory' from claudesonnet111@gmail.com until Steven adds a dedicated alias. Auto-send is GATED on Steven reviewing the first canary batch.",
+  "owner": "Steven Samori",
+  "created": "2026-06-17",
+  "updated": "2026-06-17",
+
+  "identity": {
+    "email": "claudesonnet111@gmail.com",
+    "from_name": "Steven Samori | Smore Labs AI Advisory",
+    "smtp_user_env": "GMAIL_USER",
+    "smtp_pass_env": "GMAIL_APP_PASSWORD",
+    "signature": "Best,\nSteven Samori\nSmore Labs · AI Advisory\nP.S. This note was drafted by my AI co-pilot and reviewed by me before send — it's also the demo.",
+    "persona_voice": "Founder-to-executive. Specific (names one workflow), low-stakes (audit, not pitch), transparent about AI co-authoring. Never list services. Never quote the $1,000/hr rate in cold or followup — only if recipient asks."
+  },
+
+  "audience": {
+    "source": {
+      "type": "csv",
+      "path": "/Users/claudecode/cmo-agent/outreach/verticals/hr_consulting/leads.csv",
+      "comment": "Built by scrape_hr.py. Three flavors mixed: F500 in-house HR, HR consulting firms, mid-market HR-tech buyers. Lead grade column not used (no axon grading on this audience)."
+    },
+    "filter": {
+      "require_email": true,
+      "skip_categories": [],
+      "skip_geo_tiers": []
+    },
+    "sort": [
+      {"field": "lane_priority", "desc": true},
+      {"field": "scraped_at", "desc": true}
+    ]
+  },
+
+  "pitch_pack": {
+    "subjects": [
+      "30-min AI workflow audit for {company} HR?",
+      "Quick AI audit for one {company} HR workflow",
+      "AI on one HR workflow at {company} — 30 min?"
+    ],
+    "subject_strategy": "rotate",
+    "body_template": "Hi {first_name},\n\nQuick note from Steven — I build production AI agents for companies that want measurable workflow wins (not slide decks). I've been mapping where AI quietly takes hours out of HR ops: req-to-offer routing, screening pre-pass, onboarding workflow generation, candidate comms, headcount-plan modeling. Most of it isn't a new tool — it's an agent sitting on top of whatever you already run (Workday, Greenhouse, Lattice, etc.).\n\nIf you're open to it, I'd run a free 30-min audit of one HR workflow at {company} — your pick — and walk you through what I'd ship, what it'd save, and what it'd cost. No deck. Actual mockups against your real flow.\n\nProof I ship production AI, not slideware:\n• Spirit Library — live iOS app, 1,700+ recipes, autonomous agents running it 24/7 (https://spiritlibrary.app)\n• 4 Seasons Organic — full ops calendar + drag-to-reschedule for an NYC cleaner (https://4seasons-ops.vercel.app)\n• Supreme Seams — 24/7 AI lead capture for an auto shop (https://supreme-seams.com)\n\nOpen to 30 min on Zoom this week or next?\n\nBest,\nSteven Samori\nSmore Labs · AI Advisory\nP.S. This note was drafted by my AI co-pilot and reviewed by me before send — it's also the demo.\n\n—\nOne-time intro. Reply 'unsubscribe' and you're off the list immediately.\nSmore Labs Inc · Westchester County, NY",
+    "followup_template": "Hi {first_name},\n\nCircling back on the free 30-min HR workflow audit.\n\nIf it's not the right time, just reply 'no' and I'll close the loop.\n\nIf it'd be more useful than a call — I can put together a quick before/after mock of one specific {company} HR workflow (you pick) and send it over, so you can decide without a meeting.\n\n— Steven\nSmore Labs · AI Advisory",
+    "personalization": {
+      "type": "template_var",
+      "vars": {
+        "first_name": "row.first_name",
+        "company": "row.company"
+      },
+      "fallback_opener": null
+    },
+    "proof_assets": {
+      "default": [
+        "https://spiritlibrary.app",
+        "https://4seasons-ops.vercel.app",
+        "https://supreme-seams.com"
+      ]
+    }
+  },
+
+  "demo_gate": {
+    "enabled": false,
+    "comment": "No per-lead Vercel demo for HR — pitch leads with shipped portfolio links instead. Reconsider if a hot lead asks for a tailored proof."
+  },
+
+  "cadence": {
+    "stages": ["cold", "followup"],
+    "intervals_days": {"cold_to_followup": 5},
+    "max_stages": 2,
+    "auto_pause_on_reply": true,
+    "auto_pause_on_optout": true,
+    "comment": "5 days instead of 4 — F500 HR inboxes are slow; don't crowd."
+  },
+
+  "rate_limits": {
+    "daily_max": 3,
+    "hourly_max": 1,
+    "seconds_between_sends": 3600,
+    "comment": "Start very conservative. F500 + HR is brand-sensitive; one bad batch tarnishes the sender. Ramp only after first batch lands a reply or week 2 with zero complaints."
+  },
+
+  "opt_out": {
+    "method": "reply_based",
+    "footer": "",
+    "suppression_list": "state/optout.txt",
+    "comment": "Shares the global suppression list. The body template already carries the soft CAN-SPAM footer."
+  },
+
+  "bounce_hygiene": {
+    "replenish_on_bounce": true,
+    "domain_blacklist_after_n_bounces": 3,
+    "blacklist_file": "state/bad_domains.txt"
+  },
+
+  "state": {
+    "file": "state/email_state.json",
+    "comment": "SHARED with claudesonnet111 + axon auto-sender. One pacing envelope across all three lanes from this Gmail."
+  },
+
+  "approval": {
+    "auto_send": false,
+    "review_required": true,
+    "comment": "Gated until Steven approves the first canary batch. Flip to true once drafts look right."
+  },
+
+  "integration": {
+    "queue_writer": "cmo-agent/pitch_hr_advisory.py (writes outreach/hr_advisory_drafts.json)",
+    "draft_review_path": "outreach/hr_advisory_drafts.json",
+    "morning_sequence_hook": "morning_pitch_sequence.sh"
+  },
+
+  "reply_classification": {
+    "delegates_to": "outreach_westchester/process_replies.py",
+    "delegates_drafter_to": "outreach_westchester/cmo_drafter.py",
+    "delegates_closer_to": "outreach_westchester/reply_closer.py"
+  },
+
+  "pricing_disclosure_policy": {
+    "cold_email": "never_mention_rate",
+    "followup_email": "never_mention_rate",
+    "audit_call": "share_$1000_per_hour_only_if_asked",
+    "comment": "Soft-ask pitch loses if rate hits before value. If recipient asks 'how much?' in reply, drafter quotes $1,000/hr advisory and offers a fixed-fee build alternative."
+  },
+
+  "metrics": {
+    "track_per_subject": true,
+    "track_per_lane": true,
+    "logging_file": "logs/hr_advisory_emails.csv",
+    "csv_columns": ["timestamp_utc", "email", "company", "lane", "stage", "status", "subject_variant"]
+  }
+}

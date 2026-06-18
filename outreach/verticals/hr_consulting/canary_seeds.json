@@ -1,0 +1,32 @@
+{
+  "_comment": "Initial canary list — 12 companies across all three lanes Steven greenlit on 2026-06-17. scrape_hr.py enriches each with a likely HR exec (name + LinkedIn URL + email guess via public domain pattern). NO hand-picked individual names here; the scraper fills in via LinkedIn public search so the lane gets fresh real-time contacts instead of stale memorized ones. Volume is intentionally tiny — F500 is brand-sensitive, batch 1 is for Steven to review the actual outbound text before anything sends.",
+  "_lane_priority": "f500_inhouse and hr_tech_midmarket are lane_priority=1 (primary buyers). hr_consulting_firm is lane_priority=2 (could be competitor — only test 1 in the canary).",
+  "_target_titles": [
+    "Chief Human Resources Officer (CHRO)",
+    "Chief People Officer (CPO)",
+    "VP People",
+    "VP People Operations",
+    "Head of People",
+    "VP HR",
+    "VP Talent",
+    "Director of People Operations",
+    "Head of People Analytics",
+    "Workforce Transformation Partner (HR consulting firms only)"
+  ],
+  "seeds": [
+    { "company": "Microsoft",   "domain": "microsoft.com",    "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Massive HR org, known public AI investment culture, plausible openness to AI-on-workflow audit." },
+    { "company": "Adobe",       "domain": "adobe.com",        "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Public AI-product narrative; HR ops likely to be modernizing." },
+    { "company": "Salesforce",  "domain": "salesforce.com",   "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Big people-ops function; Einstein/Agentforce gives them AI-vocab familiarity." },
+    { "company": "Cisco",       "domain": "cisco.com",        "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Talent transformation has been on their public agenda." },
+    { "company": "ServiceNow",  "domain": "servicenow.com",   "lane": "f500_inhouse",     "lane_priority": 1, "rationale": "Sells HR-workflow software but also has its own HR ops — they buy AI for themselves." },
+
+    { "company": "Datadog",     "domain": "datadoghq.com",    "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Fast-growing engineering org, VP People role is named publicly, decision velocity is mid-market not F500." },
+    { "company": "Plaid",       "domain": "plaid.com",        "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Series D-era people-ops; AI-curious, smaller decision loop than F500." },
+    { "company": "Brex",        "domain": "brex.com",         "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "AI-positive culture (Brex has public AI bets), VP People role." },
+    { "company": "Notion",      "domain": "notion.so",        "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Product-led, AI-native company; HR ops is small + nimble." },
+    { "company": "Rippling",    "domain": "rippling.com",     "lane": "hr_tech_midmarket","lane_priority": 1, "rationale": "Sells HR-tech but also has internal HR ops; they buy from us as an AI-on-top-of-their-own-stack play." },
+
+    { "company": "Mercer",      "domain": "mercer.com",       "lane": "hr_consulting_firm","lane_priority": 2, "rationale": "Tests whether a consulting partner buys AI capability or sees us as competition. Only 1 firm in canary." },
+    { "company": "Aon",         "domain": "aon.com",          "lane": "hr_consulting_firm","lane_priority": 2, "rationale": "Backup seed in case Mercer doesn't surface a contact via LinkedIn public search." }
+  ]
+}
