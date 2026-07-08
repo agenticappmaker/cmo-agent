@@ -288,6 +288,22 @@ def main():
         for a in actions: lines.append(f"<li>{a}</li>")
         lines.append("</ol></div>")
 
+    # ─── Email delivery — bounces / OOO on outbound mail ─────────
+    # Every send is logged (email_delivery.send_email/log_send); here we
+    # surface anything that bounced or auto-replied OOO so a "sent" email is
+    # never silently assumed delivered.
+    try:
+        import email_delivery
+        try:
+            email_delivery.verify_recent()  # refresh before rendering
+        except Exception:
+            pass
+        _eb = email_delivery.digest_block()
+        if _eb:
+            lines.append(_eb)
+    except Exception:
+        pass
+
     # ─── Users (Spirit Library, via PostHog DAU pipeline) ─────────
     import sqlite3 as _sq
     DAU_DB = Path.home() / "spirit-library-dau" / "history.sqlite"
@@ -330,6 +346,77 @@ def main():
                 lines.append("<p class='muted'>🛒 Instacart: tracking instrumented — events appear here once the app OTA ships.</p>")
             else:
                 lines.append(f"<p>🛒 Instacart (recent): <b>{_ic_clicks}</b> taps · <b>{_ic_carts}</b> carts created</p>")
+
+            # ─── Advertiser Metrics + Social Growth (metrics_daily table) ──
+            # Populated by ~/spirit-library-dau/metrics.py (advertiser-grade +
+            # viral-loop snapshot, one row/day, clean baseline). Wrapped so an
+            # older sqlite without this table can't break the digest.
+            try:
+                _mc = _sq.connect(str(DAU_DB))
+                _mc.row_factory = _sq.Row
+                _has = _mc.execute(
+                    "select name from sqlite_master where type='table' and name='metrics_daily'"
+                ).fetchone()
+                _mrow = _mc.execute(
+                    "select * from metrics_daily order by day desc limit 1"
+                ).fetchone() if _has else None
+                _mc.close()
+            except Exception:
+                _mrow = None
+
+            if _mrow:
+                m = dict(_mrow)
+                def _mj(key):
+                    try:
+                        return json.loads(m.get(key) or "{}")
+                    except Exception:
+                        return {}
+                _ret = _mj("retention_json")
+                def _rfmt(k):
+                    v = _ret.get(k)
+                    if not v or v.get("pct") is None:
+                        return "—"
+                    return f"{v['pct']}% <span class='muted'>({v['returned']}/{v['cohort']})</span>"
+                lines.append("<h3 style='margin:14px 0 4px'>📈 Advertiser Metrics "
+                             f"<span class='muted' style='font-weight:400'>(baseline {m.get('baseline','—')})</span></h3>")
+                lines.append("<table>")
+                lines.append("<tr><th>DAU</th><th>WAU</th><th>MAU</th><th>Stickiness</th>"
+                             "<th>New today</th><th>Avg session</th><th>Sess/user</th></tr>")
+                lines.append(
+                    f"<tr><td><b>{m.get('dau',0)}</b></td><td>{m.get('wau',0)}</td>"
+                    f"<td>{m.get('mau',0)}</td><td>{m.get('stickiness_pct',0)}%</td>"
+                    f"<td><b style='color:#0a6'>{m.get('new_users_today',0)}</b></td>"
+                    f"<td>{m.get('avg_session_seconds',0)}s</td>"
+                    f"<td>{m.get('sessions_per_user',0)}</td></tr>")
+                lines.append("</table>")
+                lines.append(
+                    f"<p class='muted' style='margin:2px 0 8px'>Retention "
+                    f"D1 {_rfmt('d1')} · D7 {_rfmt('d7')} · D30 {_rfmt('d30')}</p>")
+
+                # Social / viral growth
+                lines.append("<h3 style='margin:14px 0 4px'>🔁 Social Growth (viral loop)</h3>")
+                lines.append("<table>")
+                lines.append("<tr><th>Shares</th><th>Share-rate</th><th>Follows</th>"
+                             "<th>Follows/user</th><th>K-factor</th></tr>")
+                _kf = "—" if m.get("k_status") != "computed" else m.get("k_factor")
+                lines.append(
+                    f"<tr><td><b>{m.get('shares_sent',0)}</b></td>"
+                    f"<td>{m.get('share_rate_pct',0)}% of DAU</td>"
+                    f"<td>{m.get('follows',0)}</td>"
+                    f"<td>{m.get('follows_per_user',0)}</td>"
+                    f"<td>{_kf}</td></tr>")
+                lines.append("</table>")
+                _missing = _mj("convert_events_missing_json")
+                if isinstance(_missing, list) and _missing:
+                    lines.append(
+                        "<p class='muted' style='margin:2px 0 0'>⚠ Viral loop not fully "
+                        "instrumented — app must emit: <code>"
+                        + "</code>, <code>".join(_missing)
+                        + "</code> before K-factor computes.</p>")
+            else:
+                lines.append("<p class='muted'>📈 Advertiser/social metrics: run "
+                             "<code>~/spirit-library-dau/daily_report.py</code> once to "
+                             "populate <code>metrics_daily</code>.</p>")
         except Exception as e:
             lines.append(f"<p class='muted'>DAU read error: {e}</p>")
     else:

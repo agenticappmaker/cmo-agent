@@ -41,3 +41,8 @@ posts/videos/
 screenshots/
 marketing_assets/
 tiktok-dashboard/
+
+# vendored pure-python deps (installed via spirit_venv pip --target)
+vendor/
+state/sent_log.jsonl
+state/delivery_status.json

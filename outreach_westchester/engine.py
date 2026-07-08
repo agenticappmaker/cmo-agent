@@ -37,6 +37,38 @@ ENV_FILE = ROOT.parent / ".env"
 SENDERS_DIR = ROOT / "senders"
 STATE_DIR = ROOT / "state"
 LOGS_DIR = ROOT / "logs"
+
+# Pre-send email validation (format + MX) — dead/typo addresses are skipped
+# BEFORE they bounce. High bounce rate is half of what gets the Gmail sender
+# security-flagged (see the 534 block). Fail-open if the validator is missing.
+sys.path.insert(0, str(ROOT.parent))
+# Vendored pure-python deps (dnspython → real MX lookups). The system
+# python3.14's pip is broken (pyexpat/libexpat mismatch), so deps live here,
+# installed via spirit_venv's working pip: pip install --target vendor <pkg>.
+sys.path.insert(0, str(ROOT.parent / "vendor"))
+try:
+    from agents.email_validate import validate_email as _validate_email
+except Exception:
+    _validate_email = None
+_dead_domain_cache: set = set()
+
+
+def precheck_email(addr: str):
+    """Validator verdict, or None if validation is unavailable (never block a
+    send on validator trouble — fail open)."""
+    if _validate_email is None:
+        return None
+    dom = addr.split("@")[-1].lower()
+    if dom in _dead_domain_cache:
+        from types import SimpleNamespace
+        return SimpleNamespace(ok=False, risky=False, reason="no mail server (cached)")
+    try:
+        v = _validate_email(addr)
+    except Exception:
+        return None
+    if v is not None and not v.ok and "mail server" in (v.reason or ""):
+        _dead_domain_cache.add(dom)
+    return v
 DEMO_URL_FILE = STATE_DIR / "demo_urls.json"
 BAD_DOMAINS_FILE = STATE_DIR / "bad_domains.txt"
 OPTOUT_FILE = STATE_DIR / "optout.txt"
@@ -387,6 +419,39 @@ def send_smtp(profile: dict, to: str, subject: str, body: str) -> None:
         s.send_message(msg)
 
 
+# Gmail auth/security-block signatures. 534 "5.7.9 Please log in with your web
+# browser" is Google's security challenge (was previously NOT detected, so the
+# loop retried every lead and hammered Gmail — escalating the block).
+AUTH_FAIL_SIGNS = ("5.7.8", "5.7.9", "534", "535", "badcredentials",
+                   "web browser", "please log in", "account disabled")
+
+
+def is_auth_failure(err: str) -> bool:
+    e = err.lower()
+    return any(t in e for t in AUTH_FAIL_SIGNS)
+
+
+def alert_ops(subject: str, body: str) -> None:
+    """Send an ops alert from claudesonnet111 (unaffected by a spiritlibraryapp
+    block) so send failures are noticed immediately, not the hard way."""
+    try:
+        import ssl as _ssl
+        from email.mime.text import MIMEText as _MT
+        user = load_env_pair("GMAIL_USER")
+        pw = load_env_pair("GMAIL_APP_PASSWORD")
+        to = "claudesonnet111@gmail.com"
+        m = _MT(body)
+        m["Subject"] = subject
+        m["From"] = user
+        m["To"] = to
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=_ssl.create_default_context()) as s:
+            s.login(user, pw)
+            s.sendmail(user, [to], m.as_string())
+        print(f"  📨 ops alert sent: {subject}")
+    except Exception as ex:
+        print(f"  (alert_ops failed: {ex})")
+
+
 def log_send(profile: dict, row: dict) -> None:
     log_rel = profile["metrics"]["logging_file"]
     cols = profile["metrics"].get("csv_columns", list(row.keys()))
@@ -494,6 +559,17 @@ def main() -> None:
             print(f"⏸ --limit {args.limit} hit. stop.")
             break
 
+        # Pre-send validation — skip dead/typo addresses so they never bounce
+        # (bounces flag the account). Treated like a bounce: domain blacklisted,
+        # not counted against the daily cap.
+        verdict = precheck_email(lead["_email"])
+        if verdict is not None and not verdict.ok:
+            record_bounce(state, lead["_email"], lead["_domain"], profile)
+            save_state(profile, state)
+            print(f"  ⊘ pre-send skip {lead['_email']}: {verdict.reason}")
+            bounced += 1
+            continue
+
         demo = demo_url_for(lead, profile, demo_urls)
         subj, sidx = render_subject(profile, lead, stage)
         body = render_body(profile, lead, stage, demo)
@@ -530,12 +606,37 @@ def main() -> None:
                 continue
             print(f"  ✗ {lead['_email']}: {err[:160]}")
             failed += 1
-            if any(t in err for t in ("5.7.8", "BadCredentials", "535")):
+            if is_auth_failure(err):
                 print("⛔ SMTP auth failure — stop.")
+                alert_ops(
+                    f"⛔ Outreach BLOCKED — {profile['name']} SMTP auth failure",
+                    f"The {profile['name']} sender was blocked by Gmail and stopped after "
+                    f"sending {sent} this run.\n\n"
+                    f"Error: {err[:300]}\n\n"
+                    f"This is almost always a Google security block (534 5.7.9 'please log in "
+                    f"with your web browser'). To unblock:\n"
+                    f"  1. Log into the sending Gmail account in a web browser.\n"
+                    f"  2. Visit accounts.google.com/DisplayUnlockCaptcha and click Continue.\n"
+                    f"  3. If it persists, regenerate the app password.\n\n"
+                    f"The sender will keep failing (sent=0) until this is cleared.\n"
+                )
                 break
             time.sleep(10)
 
     print(f"\n✅ [{profile['name']}] sent={sent} bounced={bounced} (replenished) skipped={skipped} failed={failed}")
+
+    # Safety-net notification: a run that failed to send anything while hitting
+    # real failures is a silent problem — alert so it isn't discovered the hard
+    # way. (Auth-failure already alerts above; this catches other 0-send modes
+    # like a spike of connection errors.)
+    if sent == 0 and failed >= 5:
+        alert_ops(
+            f"⚠ Outreach sent 0 — {profile['name']} ({failed} failures)",
+            f"The {profile['name']} sender completed but sent 0 emails this run "
+            f"(bounced={bounced}, skipped={skipped}, failed={failed}).\n\n"
+            f"If failed is high, the account may be blocked or the lead list is "
+            f"stale. Check outreach_westchester/logs/ for the error detail.\n"
+        )
 
 
 if __name__ == "__main__":
